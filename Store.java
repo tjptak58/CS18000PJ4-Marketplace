@@ -16,14 +16,22 @@ public class Store {
      */
     private ArrayList<Product> products;
 
+    /*
+     * A sale history of the store including
+     * customer information and revenue
+     */
+    private ArrayList<String> saleHistory;
+
     public Store(String storeName) {
         this.storeName = storeName;
         products = new ArrayList<Product>();
+        saleHistory = new ArrayList<String>();
     }
 
-    public Store(String storeName, ArrayList<Product> products) {
+    public Store(String storeName, ArrayList<Product> products , ArrayList<String> saleHistory) {
         this.storeName = storeName;
         this.products = products;
+        this.saleHistory = saleHistory;
     }
 
     public Store() {
@@ -45,5 +53,13 @@ public class Store {
 
     public void setProducts(ArrayList<Product> products) {
         this.products = products;
+    }
+
+    public ArrayList<String> getSaleHistory() {
+        return saleHistory;
+    }
+
+    public void setSaleHistory(ArrayList<String> saleHistory) {
+        this.saleHistory = saleHistory;
     }
 }
