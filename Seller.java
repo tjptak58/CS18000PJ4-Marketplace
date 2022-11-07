@@ -5,13 +5,14 @@ import java.util.ArrayList;
  * @authors Tyler, Vijay, Shreya, Rohan
  * @version rev1
  */
-public class Seller {
+public class Seller extends Person{
     /*
      * List of stores
      */
     private ArrayList<Store> stores;
 
-    public Seller() {
+    public Seller(String username , String password) {
+        super(username , password);
         stores = new ArrayList<Store>();
     }
 
