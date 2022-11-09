@@ -74,11 +74,11 @@ public class login {
                 System.out.println("Enter your username");
                 String username = scanner.nextLine();
                 // if username is not located in hasmap then show an error
-                if (sellerLogin.containsKey(username)){
+                if (buyerLogin.containsKey(username)){
                     System.out.println("Enter your password");
                     String password = scanner.nextLine();
                     // if password and username are not in hashmap, say password is incorrect
-                    if (sellerLogin.containsKey(username) && sellerLogin.containsValue(password)) {
+                    if (buyerLogin.containsKey(username) && sellerLogin.containsValue(password)) {
                         System.out.println("Login successful!");
                     } else {
                         System.out.println("Password is incorrect");
