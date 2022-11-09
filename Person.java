@@ -14,15 +14,19 @@ public class Person {
      * Password for a user
      */
     private String password;
+    
+    private String filePath;
 
-    public Person(String username , String password) {
+    public Person(String username , String password, String filePath) {
         this.username = username;
         this.password = password;
+        this.filePath = filePath;
     }
 
     public Person() {
         username = null;
         password = null;
+        filePath = null;
     }
 
     public String getUsername() {
