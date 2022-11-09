@@ -21,8 +21,8 @@ public class Buyer extends Person{
         shoppingCart = new ArrayList<Product>();
     }
     
-    public Buyer(String username , String password) {
-        super(username, password);
+    public Buyer(String username , String password, String filePath) {
+        super(username, password, filePath);
         purchased = new ArrayList<Product>();
         shoppingCart = new ArrayList<Product>();
     }

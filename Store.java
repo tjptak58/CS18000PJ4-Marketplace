@@ -55,6 +55,10 @@ public class Store {
         this.products = products;
     }
 
+    public void addProduct(Product p) {
+        products.add(p);
+    }
+
     public ArrayList<String> getSaleHistory() {
         return saleHistory;
     }
