@@ -67,7 +67,12 @@ public class Person {
 
     @Override
     public String toString() {
-        
+        String s = "";
+        s = s + String.format("Username: %s, " , username);
+        s = s + String.format("Password: %s, " , password);
+        s = s + String.format("Email: %s, " , email);
+        s = s + String.format("FilePath: %s, " , filePath);
+        return s;
     }
 
 }
