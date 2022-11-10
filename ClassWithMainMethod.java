@@ -39,7 +39,7 @@ public class ClassWithMainMethod {
                 String innerLine = loopbfr.readLine();
                 String sellerName = innerLine;
                 innerLine = loopbfr.readLine();
-
+                ArrayList<Product> productsInStore = new ArrayList<>();
 
 
 
@@ -67,10 +67,12 @@ public class ClassWithMainMethod {
                     }
                     Product loopProduct = new Product(productName, storeName, description, qty, price, unitsPurchased
                             , customerArrayList);
+                    productsInStore.add(loopProduct);
 
                 }
                 //End of storeFile
-                Store loopStore = new Store(sellerName, loopPro)
+                Store loopStore = new Store(sellerName, productsInStore);
+                marketPlace.add(loopStore);
 
 
 
