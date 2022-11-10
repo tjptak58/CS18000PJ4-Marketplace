@@ -30,11 +30,11 @@ public class Seller extends Person{
     }
 
     public void createProduct(String productName , String storeName , String description 
-    , int quantity , double price) {
+    , int quantity , double price, int unitsPurchased, ArrayList<String> customerList) {
         if (stores.size() == 0) {
             createStore(storeName);
             Store s = stores.get(0);
-            Product p = new Product(productName, storeName, description, quantity, price);
+            Product p = new Product(productName, storeName, description, quantity, price , unitsPurchased , customerList);
             s.addProduct(p);
         } else {
             int count = 0; 
@@ -44,7 +44,7 @@ public class Seller extends Person{
                 }
                 count++;
             }
-            Product p = new Product(productName, storeName, description, quantity, price);
+            Product p = new Product(productName, storeName, description, quantity, price , unitsPurchased , customerList);
             stores.get(count).addProduct(p);
         }
     }
@@ -65,17 +65,6 @@ public class Seller extends Person{
         } 
         if (! (price == -1.0)) {
             p.setPrice(price);
-        }
-    }
-
-    /*
-     * Decreases the quanity of a product in the store by an entered quantity
-     */
-    public void makeSale(String storeName, String productName , int quantity) {
-        for (Store store : stores) {
-            if (store.getStoreName().equals(storeName)) {
-                store.sale(productName, quantity);
-            }
         }
     }
 

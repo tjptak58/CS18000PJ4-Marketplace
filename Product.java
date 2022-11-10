@@ -62,6 +62,7 @@ public class Product {
         quantity = 0;
         price = 0.0;
         unitsPurchased = 0;
+        customerList = new ArrayList<String>();
 
     }
 

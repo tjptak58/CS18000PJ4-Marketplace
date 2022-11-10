@@ -59,16 +59,5 @@ public class Store {
         products.add(p);
     }
 
-    /*
-     * Changes the quanity of a product int the store
-     */
-    public void sale(String productName , int quantity) {
-        for (Product product : products) {
-            if (product.getProductName().equals(productName)) {
-                product.setQuantity(product.getQuantity() - quantity);
-            }
-        }
-    }
-
 
 }
