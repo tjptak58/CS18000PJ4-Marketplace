@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 /**
  * A product class
  * 
@@ -29,6 +31,18 @@ public class Product {
      * Price of the product
      */
     private double price;
+
+    /*
+     * Number of units purchased
+     */
+
+    private int unitsPurchased;
+
+    /*
+     *ArrayList of users who have purchased the item
+     */
+
+    private ArrayList<String> customerList;
 
     public Product(String productName , String storeName , String description 
     , int quantity , double price) {

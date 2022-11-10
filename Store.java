@@ -20,7 +20,7 @@ public class Store {
      * A sale history of the store including
      * customer information and revenue
      */
-    private ArrayList<String> saleHistory;
+
 
     public Store(String storeName) {
         this.storeName = storeName;
