@@ -101,8 +101,36 @@ public class Product {
         this.price = price;
     }
 
+    public ArrayList<String> getCustomerList() {
+        return customerList;
+    }
+
+    public void setCustomerList(ArrayList<String> customerList) {
+        this.customerList = customerList;
+    }
+
     public String toString() {
         String s = "";
-        
+        s = s + String.format("Product Name: %s, ", productName);
+        s = s + String.format("Store Name: %s, " , storeName);
+        s = s + String.format("Description: %s, " , description);
+        s = s + String.format("Quantity: %s, " , Integer.toString(quantity));
+        s = s + String.format("Price: %s, " , Double.toString(price));
+        return s;
+
+    }
+
+    public String getStatistics() {
+        String s = "";
+        s = s + String.format("Units Purchased: %s, " , Integer.toString(unitsPurchased));
+        s = s + "Customer List: ";
+        for (int i = 0 ; i < customerList.size() ; i++) {
+            if (i == 0) {
+                s = s + customerList.get(i);
+            } else {
+                s = s + "," + customerList.get(i);
+            }
+        }
+        return s;
     }
 }
