@@ -36,10 +36,16 @@ public class Seller extends Person{
             Store s = stores.get(0);
             Product p = new Product(productName, storeName, description, quantity, price);
             s.addProduct(p);
-        } else { 
-            Store s = stores.get(0);
+        } else {
+            int count = 0; 
+            for (Store s : stores) {
+                if (storeName.equals(s.getStoreName())) {
+                    break;
+                }
+                count++;
+            }
             Product p = new Product(productName, storeName, description, quantity, price);
-            s.addProduct(p);
+            stores.get(count).addProduct(p);
         }
     }
 
@@ -61,4 +67,6 @@ public class Seller extends Person{
             p.setPrice(price);
         }
     }
+
+    
 }
