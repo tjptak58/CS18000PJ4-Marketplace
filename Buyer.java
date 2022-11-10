@@ -348,17 +348,9 @@ public class Buyer extends Person{
                     oos.writeObject(ob);
                 }
                 oos.close();
-
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
-
-
-
-
-
             clearCart();
         } else {
             System.out.println("Item is out of stock");
