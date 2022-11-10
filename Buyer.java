@@ -7,10 +7,11 @@ import java.io.*;
  * @version rev1
  */
 public class Buyer extends Person{
+
     /*
-     * List of the products a person has purchased
+     * Items purchased by the buyer
      */
-    ArrayList<Product> purchased;
+    private ArrayList<Product> purchased;
 
     public Buyer() {
         purchased = new ArrayList<Product>();
@@ -25,8 +26,8 @@ public class Buyer extends Person{
         return purchased;
     }
 
-    public void setPurchased(ArrayList<Product> purchased) {
-        this.purchased = purchased;
+    public void addPurchased(Product product) {
+        purchased.add(product);
     }
 
     /*
@@ -214,15 +215,24 @@ public class Buyer extends Person{
     }
 
     /*
-     * Prints out a string representation of a customer's purchase history from the purchased arraylist
+     * Prints out a string representation of a customer's purchase history
+     * from sales.txt
+     * 
+     * Sales.txt is in format
+     * (CustomerID,StoreName,ProductName,QuantityPurchased,Price)
      */
     public void viewHistory() {
-        File f = new File("purchaseHistory.txt");  //LOCAL FILE
+        File f = new File("purchaseHistory.txt");  //GLOBAL FILE
+        System.out.println("Purchase History:");
+        System.out.println("(CustomerID,Store_Name,Product_Name,Quantity_Purchased,Price)");
         try {
             BufferedReader buf = new BufferedReader(new FileReader(f));
             String s = buf.readLine();
             while (s != null) {
-                System.out.println(s);
+                String[] split = s.split(",");
+                if (split[0].equals(this.getUsername())) {
+                    System.out.println(s);
+                }
                 s= buf.readLine();
             }
             buf.close();
@@ -240,7 +250,7 @@ public class Buyer extends Person{
      */
     public void addToCart(Product p) {
         try {
-            FileWriter fw = new FileWriter("shoppingCart.txt" , true);
+            FileWriter fw = new FileWriter("shoppingCart.txt" , true); //Local File
             BufferedWriter bw = new BufferedWriter(fw);
             PrintWriter pw = new PrintWriter(bw);
             pw.println(p.getProductName() + "," + p.getStoreName());
@@ -256,7 +266,7 @@ public class Buyer extends Person{
      */
     public void clearCart() {
         try {
-            FileWriter fw = new FileWriter("shoppingCart.txt" , false);
+            FileWriter fw = new FileWriter("shoppingCart.txt" , false); //Local File
             BufferedWriter bw = new BufferedWriter(fw);
             PrintWriter pw = new PrintWriter(bw);
             pw.println("");
@@ -273,10 +283,86 @@ public class Buyer extends Person{
      * Checks if the Store has enough to buy
      * Adds the product to the list of its purchased objects
      * Updates the purchase history
+     * Update the users.txt file with the updated Sellers and Buyers after the purchase
      * Clears the cart
      */
-    public void purchaseItem(String productName , String storeName , int quantity) {
+    public void purchaseItem(String storeName , String productName, int quantity) {
+        Product p = getProduct(storeName, productName); //Gets the product associated with this store and product name
+        if (p.getQuantity() >= quantity) { //Checks there's enough in stock to buy
+            purchased.add(p); //Adds product to list of purchased objects
+            File f = new File("purchaseHistory.txt");  //GLOBAL FILE
+            try {
+                FileWriter fw = new FileWriter(f, true);   //updates the purchase history with info from the transaction
+                BufferedWriter bw = new BufferedWriter(fw);
+                PrintWriter pw = new PrintWriter(bw);
+                String output = this.getUsername() + "," + storeName + "," + productName + "," 
+                + Integer.toString(quantity) + "," + Double.toString(p.getPrice());
+                pw.print(output);
+                pw.close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
+
+
+            try {
+                f = new File("users.txt"); //Changes the file to users file
+                ArrayList<Object> objectList = new ArrayList<Object>();
+                ObjectInputStream obj = new ObjectInputStream(new FileInputStream(f));
+                Object o = obj.readObject();
+                while (o != null) {             //Reads all the objects from users
+                    objectList.add(o);
+                    o = obj.readObject();
+                }
+                obj.close();
+
+                int index = 0;
+                for (Object object : objectList) {
+                    if (object instanceof Buyer) {     //If the object is a buyer 
+                        Buyer b = (Buyer) object;
+                        if (this.getUsername().equals(b.getUsername())) { //and it's the buyer doing the transaction
+                          b.addPurchased(p); 
+                          objectList.set(index,(Object) b);  //, replace the buyer with its updated version
+                        }
+                    } else if (o instanceof Seller) {  //If the object is a sesller
+                        Seller s = (Seller) object;
+                        ArrayList<Store> sStores = s.getStores();
+                        boolean flag = false;
+                        for (Store sStore : sStores) {
+                            if (sStore.equals(storeName)) {
+                                flag = true;
+                            }
+                        }
+                        if (flag) {  //and the seller has the store we're looking for
+                          s.makeSale(storeName, productName, quantity); //make the sale
+                          objectList.set(index, s); //, replace the seller with its updated version
+                    }
+                    index++;
+                    }
+                }
+
+                ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(f));  //Repopulate users.txt
+                for (Object ob : objectList) {
+                    oos.writeObject(ob);
+                }
+                oos.close();
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+
+
+
+
+            clearCart();
+        } else {
+            System.out.println("Item is out of stock");
+        }
 
     }
 

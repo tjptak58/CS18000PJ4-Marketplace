@@ -68,5 +68,16 @@ public class Seller extends Person{
         }
     }
 
+    /*
+     * Decreases the quanity of a product in the store by an entered quantity
+     */
+    public void makeSale(String storeName, String productName , int quantity) {
+        for (Store store : stores) {
+            if (store.getStoreName().equals(storeName)) {
+                store.sale(productName, quantity);
+            }
+        }
+    }
+
     
 }
