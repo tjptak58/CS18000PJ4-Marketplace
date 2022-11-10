@@ -12,20 +12,13 @@ public class Buyer extends Person{
      */
     ArrayList<Product> purchased;
 
-    /*
-     * List of products in a person's shopping cart
-     */
-    ArrayList<Product> shoppingCart;
-
     public Buyer() {
         purchased = new ArrayList<Product>();
-        shoppingCart = new ArrayList<Product>();
     }
     
     public Buyer(String username , String password, String filePath) {
         super(username, password, filePath);
         purchased = new ArrayList<Product>();
-        shoppingCart = new ArrayList<Product>();
     }
 
     public ArrayList<Product> getPurchased() {
@@ -34,14 +27,6 @@ public class Buyer extends Person{
 
     public void setPurchased(ArrayList<Product> purchased) {
         this.purchased = purchased;
-    }
-
-    public ArrayList<Product> getShoppingCart() {
-        return shoppingCart;
-    }
-
-    public void setShoppingCart(ArrayList<Product> shoppingCart) {
-        this.shoppingCart = shoppingCart;
     }
 
     /*
@@ -72,6 +57,7 @@ public class Buyer extends Person{
                 }
                 o = obj.readObject();
             }
+            obj.close();
             return products;
             
         } catch (FileNotFoundException e) {
@@ -111,6 +97,43 @@ public class Buyer extends Person{
                     }
                 }
                 o = obj.readObject();
+                obj.close();
+            }
+            return null;
+            
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /*
+     * Gets a store from the users.txt database given the 
+     * Name of the the store
+     */
+    public Store getStore(String storeName) {
+        File f = new File("users.txt"); //GLOBAL FILE
+        try {
+            ObjectInputStream obj = new ObjectInputStream(new FileInputStream(f));
+            Object o = obj.readObject();
+            while (o != null) {
+                if (o instanceof Seller) {
+                    Seller s = (Seller) o;
+                    ArrayList<Store> stores = s.getStores();
+                    for (Store store: stores) {
+                        if (store.getStoreName().equals(storeName)) {
+                            return store;
+                        }
+                    }
+                }
+                o = obj.readObject();
+                obj.close();
             }
             return null;
             
@@ -128,7 +151,7 @@ public class Buyer extends Person{
 
     /*
      * Sorts an Arraylist of products based on price
-     * Sorts highest price to lowest if highToLow = true
+     * Sorts highest price to lowest if highToLow = true    NOT SURE IF I EVEN NEED THIS
      * if it's false, sorts lowest to highest
      */
     public ArrayList<Product> sortPrice(ArrayList<Product> products , boolean highToLow) {
@@ -202,13 +225,64 @@ public class Buyer extends Person{
                 System.out.println(s);
                 s= buf.readLine();
             }
+            buf.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-        }
-        
+        }  
     }
+
+
+    /*
+     * Adds a product to a user's shopping cart in the 
+     * format (ProductName,StoreName)
+     */
+    public void addToCart(Product p) {
+        try {
+            FileWriter fw = new FileWriter("shoppingCart.txt" , true);
+            BufferedWriter bw = new BufferedWriter(fw);
+            PrintWriter pw = new PrintWriter(bw);
+            pw.println(p.getProductName() + "," + p.getStoreName());
+            pw.flush(); //Do I need both of these?
+            pw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /*
+     * Clears the shopping cart text file
+     */
+    public void clearCart() {
+        try {
+            FileWriter fw = new FileWriter("shoppingCart.txt" , false);
+            BufferedWriter bw = new BufferedWriter(fw);
+            PrintWriter pw = new PrintWriter(bw);
+            pw.println("");
+            pw.flush(); //Do I need both of these?
+            pw.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /*
+     * Purchases a product from the store
+     * 
+     * Checks if the Store has enough to buy
+     * Adds the product to the list of its purchased objects
+     * Updates the purchase history
+     * Clears the cart
+     */
+    public void purchaseItem(String productName , String storeName , int quantity) {
+
+
+    }
+
+    
+
+
 
 
 
