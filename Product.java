@@ -45,12 +45,14 @@ public class Product {
     private ArrayList<String> customerList;
 
     public Product(String productName , String storeName , String description 
-    , int quantity , double price) {
+    , int quantity , double price, int unitsPurchased, ArrayList<String> customerList) {
         this.productName = productName;
         this.storeName = storeName;
         this.description = description;
         this.quantity = quantity;
         this.price = price;
+        this.unitsPurchased = unitsPurchased;
+        this.customerList = customerList;
     }
 
     public Product() {
@@ -59,6 +61,8 @@ public class Product {
         description = null;
         quantity = 0;
         price = 0.0;
+        unitsPurchased = 0;
+
     }
 
     public String getProductName() {

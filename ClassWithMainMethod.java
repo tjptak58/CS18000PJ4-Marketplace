@@ -16,6 +16,7 @@ public class ClassWithMainMethod {
          */
         ArrayList<Store> marketPlace = new ArrayList<>();
         ArrayList<Product> shoppingCart = new ArrayList<>();
+
         /*
          *Read from storeListFile in the beginning of the program to create store objects and add them to marketPlace
          *  ArrayList
@@ -35,6 +36,41 @@ public class ClassWithMainMethod {
                 File loopFile = new File(storeFilePath);
                 FileReader loopfr = new FileReader(loopFile);
                 BufferedReader loopbfr = new BufferedReader(loopfr);
+                String innerLine = loopbfr.readLine();
+                String sellerName = innerLine;
+                innerLine = loopbfr.readLine();
+
+
+
+
+                while (innerLine != null) {
+                    String productName = innerLine.substring(0, innerLine.indexOf(';'));
+                    innerLine = innerLine.substring(innerLine.indexOf(';') + 1);
+                    String storeName = innerLine.substring(0, innerLine.indexOf(';'));
+                    innerLine = innerLine.substring(innerLine.indexOf(';') + 1);
+                    String description = innerLine.substring(0, innerLine.indexOf(';'));
+                    innerLine = innerLine.substring(innerLine.indexOf(';') + 1);
+                    String qtyString = innerLine.substring(0, innerLine.indexOf(';'));
+                    int qty = Integer.parseInt(qtyString);
+                    innerLine = innerLine.substring(innerLine.indexOf(';') + 1);
+                    String priceString = innerLine.substring(0, innerLine.indexOf(';'));
+                    double price = Double.parseDouble(priceString);
+                    innerLine = innerLine.substring(innerLine.indexOf(';') + 1);
+                    String unitsPurchasedString = innerLine.substring(0, innerLine.indexOf(';'));
+                    int unitsPurchased = Integer.parseInt(unitsPurchasedString);
+                    innerLine = innerLine.substring(innerLine.indexOf(';') + 1);
+                    String customerListString = innerLine;
+                    String[] customerList = customerListString.split(",");
+                    ArrayList<String> customerArrayList = new ArrayList<>();
+                    for (int i = 0; i < customerList.length; i++) {
+                        customerArrayList.add(customerList[i]);
+                    }
+                    Product loopProduct = new Product(productName, storeName, description, qty, price, unitsPurchased
+                            , customerArrayList);
+
+                }
+                //End of storeFile
+                Store loopStore = new Store(sellerName, loopPro)
 
 
 
