@@ -9,7 +9,7 @@ public class Store {
     /*
      * the name of the store
      */
-    private String storeName;
+    private String sellerName;
 
     /*
      * A list of products associated with the store
@@ -22,27 +22,29 @@ public class Store {
      */
 
 
-    public Store(String storeName) {
-        this.storeName = storeName;
+    public Store(String sellerName) {
+        this.sellerName = sellerName;
         products = new ArrayList<Product>();
+
     }
 
-    public Store(String storeName, ArrayList<Product> products , ArrayList<String> saleHistory) {
-        this.storeName = storeName;
+    public Store(String sellerName, ArrayList<Product> products) {
+        this.sellerName = sellerName;
         this.products = products;
+
     }
 
     public Store() {
-        storeName = null;
+        sellerName = null;
         products = null;
     }
 
-    public String getStoreName() {
-        return storeName;
+    public String getSellerName() {
+        return sellerName;
     }
 
-    public void setStoreName(String storeName) {
-        this.storeName = storeName;
+    public void setSellerName(String sellerName) {
+        this.sellerName = sellerName;
     }
 
     public ArrayList<Product> getProducts() {
@@ -67,4 +69,6 @@ public class Store {
             }
         }
     }
+
+
 }
