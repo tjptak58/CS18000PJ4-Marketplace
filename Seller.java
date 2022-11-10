@@ -11,8 +11,8 @@ public class Seller extends Person{
      */
     private ArrayList<Store> stores;
 
-    public Seller(String username , String password, String filePath) {
-        super(username , password, filePath);
+    public Seller(String username , String password, String email, String filePath) {
+        super(username , password, email, filePath);
         stores = new ArrayList<Store>();
     }
 
@@ -24,15 +24,15 @@ public class Seller extends Person{
         this.stores = stores;
     }
 
-    public void createStore(String storeName) {
-        Store store = new Store(storeName);
+    public void createStore(String sellerName , String storeName) {
+        Store store = new Store(sellerName , storeName);
         stores.add(store);
     }
 
-    public void createProduct(String productName , String storeName , String description 
+    public void createProduct(String productName , String sellerName, String storeName , String description 
     , int quantity , double price, int unitsPurchased, ArrayList<String> customerList) {
         if (stores.size() == 0) {
-            createStore(storeName);
+            createStore(sellerName , storeName);
             Store s = stores.get(0);
             Product p = new Product(productName, storeName, description, quantity, price , unitsPurchased , customerList);
             s.addProduct(p);

@@ -12,6 +12,11 @@ public class Store {
     private String sellerName;
 
     /*
+     * Name of the store
+     */
+    private String storeName;
+
+    /*
      * A list of products associated with the store
      */
     private ArrayList<Product> products;
@@ -22,13 +27,13 @@ public class Store {
      */
 
 
-    public Store(String sellerName) {
+    public Store(String sellerName , String storeName) {
         this.sellerName = sellerName;
         products = new ArrayList<Product>();
 
     }
 
-    public Store(String sellerName, ArrayList<Product> products) {
+    public Store(String sellerName, String storeName , ArrayList<Product> products) {
         this.sellerName = sellerName;
         this.products = products;
 
@@ -36,6 +41,7 @@ public class Store {
 
     public Store() {
         sellerName = null;
+        storeName = null;
         products = null;
     }
 
@@ -45,6 +51,14 @@ public class Store {
 
     public void setSellerName(String sellerName) {
         this.sellerName = sellerName;
+    }
+
+    public String getStoreName() {
+        return storeName;
+    }
+
+    public void setStoreName(String storeName) {
+        this.storeName = storeName;
     }
 
     public ArrayList<Product> getProducts() {
