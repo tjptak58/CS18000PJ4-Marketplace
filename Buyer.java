@@ -8,12 +8,19 @@ import java.io.*;
  */
 public class Buyer extends Person{
 
+    public ArrayList<Product> shoppingCart; 
+
+
     public Buyer() {
+        shoppingCart = new ArrayList<Product>();
     }
     
     public Buyer(String username , String password, String filePath) {
         super(username, password, filePath);
+        shoppingCart = new ArrayList<Product>();
     }
+
+    
 
     /*
      * Gets all product in users.txt that have a name, description, or store that matches the search parameter
@@ -95,40 +102,6 @@ public class Buyer extends Person{
             return reversed;
         }
     }
-
-    /*
-     * Adds a product to a user's shopping cart in the 
-     * format (ProductName,StoreName)
-     */
-    public void addToCart(Product p) {
-        try {
-            FileWriter fw = new FileWriter(this.getFilePath(), true); //Local File
-            BufferedWriter bw = new BufferedWriter(fw);
-            PrintWriter pw = new PrintWriter(bw);
-            pw.println(p.getProductName() + "," + p.getStoreName());
-            pw.flush(); //Do I need both of these?
-            pw.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /*
-     * Clears the shopping cart text file
-     */
-    public void clearCart() {
-        try {
-            FileWriter fw = new FileWriter(this.getFilePath() , false); //Local File
-            BufferedWriter bw = new BufferedWriter(fw);
-            PrintWriter pw = new PrintWriter(bw);
-            pw.println("");
-            pw.flush(); //Do I need both of these?
-            pw.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
 
 
 }
