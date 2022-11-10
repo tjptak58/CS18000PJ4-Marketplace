@@ -25,13 +25,11 @@ public class Store {
     public Store(String storeName) {
         this.storeName = storeName;
         products = new ArrayList<Product>();
-        saleHistory = new ArrayList<String>();
     }
 
     public Store(String storeName, ArrayList<Product> products , ArrayList<String> saleHistory) {
         this.storeName = storeName;
         this.products = products;
-        this.saleHistory = saleHistory;
     }
 
     public Store() {
@@ -68,13 +66,5 @@ public class Store {
                 product.setQuantity(product.getQuantity() - quantity);
             }
         }
-    }
-
-    public ArrayList<String> getSaleHistory() {
-        return saleHistory;
-    }
-
-    public void setSaleHistory(ArrayList<String> saleHistory) {
-        this.saleHistory = saleHistory;
     }
 }
