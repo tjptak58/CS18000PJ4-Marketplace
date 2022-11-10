@@ -68,5 +68,17 @@ public class Seller extends Person{
         }
     }
 
+    /*
+     * add to the buyer.txt and seller.txt via CSV file
+     * one for export as well
+     */
+    public void importProduct() {
+
+    }
+
+    public void exportProducts() {
+        
+    }
+
     
 }
