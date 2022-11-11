@@ -90,6 +90,9 @@ public class Store {
     public void addProduct(Product p) {
         products.add(p);
     }
+    public void removeProduct(Product p) {
+        products.remove(p);
+    }
 
 
 }
