@@ -10,7 +10,8 @@ import java.util.Collections;
 // check if username is there in txt file at index 0
 // if line at index 0 contains username
 public class Login {
-     ;
+
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         ArrayList<String> sellerArrayList = new ArrayList<>();
@@ -45,6 +46,7 @@ public class Login {
         boolean flag;
         boolean loginFailed;
         boolean usernameAlreadyExists;
+
         // if you create an account then go back to beginning and ask if they want to create a new account or login with existing one
         do {
             flag = false;
@@ -62,7 +64,7 @@ public class Login {
                 if (sellOrBuy.equalsIgnoreCase("Seller")) {
                     String usernameSeller = "";
                     do {
-                        usernameAlreadyExists=false;
+                        usernameAlreadyExists = false;
                         System.out.println("Enter your new username");
                         usernameSeller = scanner.nextLine();
                         // if this is empty then there are no accounts put in yet
@@ -82,17 +84,13 @@ public class Login {
                     sellerLogin.put(usernameSeller, sellerPassword);
                     System.out.println("Enter your e-mail");
                     String email = scanner.nextLine();
-                    System.out.println("Enter the stores (separate each store by a comma(,))");
-                    String stores = scanner.nextLine();
-                    System.out.println("What is the filepath?");
-                    String filePath = scanner.nextLine();
+                    System.out.println("What is the filepath for the statistics of the seller");
+                    String statisticsFilepath=scanner.nextLine();
 
-                    Collections.addAll(sellerArrayList, usernameSeller, sellerPassword, email, stores, filePath);
-                   // Seller seller = new Seller(usernameSeller, password);
+                    Collections.addAll(sellerArrayList, usernameSeller, sellerPassword, email,  statisticsFilepath);
+                    // Seller seller = new Seller(usernameSeller, password);
 
-                    if (stores.contains(",")) {
-                        String[] storesSplitByComma = stores.split(",");
-                    }
+
                     System.out.println("Account made!");
 
                     try {
@@ -110,7 +108,7 @@ public class Login {
                 } else if (sellOrBuy.equalsIgnoreCase("Buyer")) {
                     String usernameBuyer = "";
                     do {
-                        usernameAlreadyExists=false;
+                        usernameAlreadyExists = false;
                         System.out.println("Enter your new username");
                         usernameBuyer = scanner.nextLine();
                         for (int i = 0; i < usernameAndPasswordBuyer.size(); i++) {
@@ -126,18 +124,20 @@ public class Login {
                     String buyerPassword = scanner.nextLine();
                     System.out.println("Enter your e-mail");
                     String email = scanner.nextLine();
-                    System.out.println("What is the filepath for the account?");
-                    String fileName = scanner.nextLine();
                     buyerLogin.put(usernameBuyer, buyerPassword);
+                    System.out.println("What is the filepath to the purchase history of this account?");
+                    String purchaseHistoryFilepath=scanner.nextLine();
+                    System.out.println("What is the filepath to the shopping cart for this account?");
+                    String shoppingCartFilepath=scanner.nextLine();
                     System.out.println("Account made!");
-                    Collections.addAll(buyerArrayList, usernameBuyer, buyerPassword, email, fileName);
+                    Collections.addAll(buyerArrayList, usernameBuyer, buyerPassword, email, purchaseHistoryFilepath, shoppingCartFilepath);
 
 
                     try {
                         FileOutputStream fos = new FileOutputStream("/Users/vijayvittal/IdeaProjects/Project/Project4/src/Buyer.txt", true);
                         PrintWriter pw = new PrintWriter(fos);
-                      //  BufferedWriter bfw = new BufferedWriter
-                      //          (new FileWriter("/Users/vijayvittal/IdeaProjects/Project/Project4/src/Buyer.txt"));
+                        //  BufferedWriter bfw = new BufferedWriter
+                        //          (new FileWriter("/Users/vijayvittal/IdeaProjects/Project/Project4/src/Buyer.txt"));
                         pw.write(usernameBuyer + "; " + buyerPassword + "\n");
                         pw.close();
                     } catch (IOException e) {
@@ -152,31 +152,47 @@ public class Login {
                 System.out.println("Do you want to login as a Seller or Buyer");
                 String sellerOrBuyer = scanner.nextLine();
                 if (sellerOrBuyer.equalsIgnoreCase("Seller")) {
+
                     System.out.println("Enter your username");
                     String username = scanner.nextLine();
 //                    // of the array list username, password. If 0 index which is username contains username go to next step
                     for (int i = 0; i < usernameAndPasswordSeller.size(); i++) {
+                        boolean repeat = true;
+                        while (repeat){
+
+
                         if (usernameAndPasswordSeller.get(i).substring(0, usernameAndPasswordSeller.get(i).indexOf(";")).contains(username)) {
+                            repeat=false;
                             System.out.println("Enter your password");
                             String password = scanner.nextLine();
                             for (int j = 1; j < usernameAndPasswordSeller.size(); j++) {
-                                String[] split= usernameAndPasswordSeller.get(i).split(";");
-                                String passwordTrim=split[1].trim();
+
+                                String[] split = usernameAndPasswordSeller.get(i).split(";");
+                                String passwordTrim = split[1].trim();
 
 
                                 if (passwordTrim.contains(password)) {
                                     System.out.println("Login successful!");
-                                       loginFailed=false;
-                                       flag=false;
+                                    loginFailed = false;
+                                    flag = false;
+
+
+
+                                    //boolean goIntoElse=false;
                                 } else {
                                     System.out.println("Error: Password is incorrect");
                                     loginFailed = true;
+
                                 }
                             }
                         } else {
                             System.out.println("Username not found");
                             loginFailed = true;
+
                         }
+                    }
+
+
                     }
 
                 } else if (sellerOrBuyer.equalsIgnoreCase("Buyer")) {
@@ -189,12 +205,13 @@ public class Login {
                             System.out.println("Enter your password");
                             String password = scanner.nextLine();
                             for (int j = 1; j < usernameAndPasswordBuyer.size(); j++) {
-                                String[] split= usernameAndPasswordSeller.get(i).split(";");
-                                String passwordTrim=split[1].trim();
+                                String[] split = usernameAndPasswordSeller.get(i).split(";");
+                                String passwordTrim = split[1].trim();
                                 if (passwordTrim.contains(password)) {
                                     System.out.println("Login successful!");
-                                        loginFailed=false;
-                                        flag=false;
+                                    loginFailed = false;
+                                    flag = false;
+                                    break;
 
                                 } else {
                                     System.out.println("Error: Password is incorrect");
@@ -215,29 +232,32 @@ public class Login {
 
     }
 
-    public void deleteBuyer(ArrayList<Buyer> buyers, String usernameBuyer, String buyerPassowrd, String filepath) {
-        Buyer buyer=new Buyer(usernameBuyer, buyerPassowrd, filepath);
-        for (int i = 0; i < buyers.size() ; i++) {
+    public void deleteBuyer(ArrayList<Buyer> buyers, String usernameBuyer, String buyerPassowrd, String filepath, String email) {
+        Buyer buyer = new Buyer(usernameBuyer, buyerPassowrd, filepath, email);
+        for (int i = 0; i < buyers.size(); i++) {
             if (buyer.getUsername().equals(usernameBuyer)) {
                 buyers.remove(buyer);
             }
         }
     }
-    public void deleteSeller(ArrayList<Seller> sellers, String usernameSeller, String sellerPassword, String filepath) {
-        Seller seller=new Seller(usernameSeller, sellerPassword, filepath);
-        for (int i = 0; i < sellers.size() ; i++) {
+
+    public void deleteSeller(ArrayList<Seller> sellers, String usernameSeller, String sellerPassword, String filepath, String email) {
+        Seller seller = new Seller(usernameSeller, sellerPassword, filepath, email);
+        for (int i = 0; i < sellers.size(); i++) {
             if (seller.getUsername().equals(usernameSeller)) {
                 sellers.remove(seller);
             }
         }
     }
+
     public void createSeller(ArrayList<Seller> sellers, String usernameSeller, String sellerPassword, String email, String filepath) {
-        Seller seller=new Seller(usernameSeller, sellerPassword, email, filepath);
+        Seller seller = new Seller(usernameSeller, sellerPassword, email, filepath);
         sellers.add(seller);
 
     }
-    public void createBuyer(ArrayList<Buyer> buyers, String usernameBuyer, String buyerPassword,String email, String filepath) {
-        Buyer buyer=new Buyer(usernameBuyer, buyerPassword, email, filepath);
+
+    public void createBuyer(ArrayList<Buyer> buyers, String usernameBuyer, String buyerPassword, String email, String filepath) {
+        Buyer buyer = new Buyer(usernameBuyer, buyerPassword, email, filepath);
         buyers.add(buyer);
     }
 }
