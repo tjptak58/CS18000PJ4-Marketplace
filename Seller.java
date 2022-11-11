@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.io.*;
 /**
  * A seller class
  * 
@@ -11,8 +12,11 @@ public class Seller extends Person{
      */
     private ArrayList<Store> stores;
 
+    private String filePath;
+
     public Seller(String username , String password, String email, String filePath) {
-        super(username , password, email, filePath);
+        super(username , password, email);
+        this.filePath = filePath;
         stores = new ArrayList<Store>();
     }
 
@@ -22,6 +26,14 @@ public class Seller extends Person{
 
     public void setStores(ArrayList<Store> stores) {
         this.stores = stores;
+    }
+
+    public String getFilePath() {
+        return filePath;
+    }
+
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
     }
 
     public void createStore(String sellerName , String storeName, String filePath) {
@@ -71,13 +83,50 @@ public class Seller extends Person{
     /*
      * add to the buyer.txt and seller.txt via CSV file
      * one for export as well
+     * 
+     * In the format productName,storeName,description 
+    ,quantity,price
+     * 
      */
-    public void importProduct() {
+    public ArrayList<Product> importProducts(String path) {
+        try {
+            var output = new ArrayList<Product>();
+            BufferedReader buf = new BufferedReader(new FileReader(new File(path)));
+            String s = buf.readLine();
+            while (true) {
+                if (s == null) {
+                    break;
+                } else {
+                    String[] split = s.split(",");
+                    output.add(new Product(split[0], split[1], split[2], Integer.parseInt(split[3]), Double.parseDouble(split[4])));
+                    s = buf.readLine();
+                }  
+            }
+            return output;
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
 
     }
 
-    public void exportProducts() {
-        
+    public void exportProducts(String path , ArrayList<Product> products) {
+        try {
+            var output = new ArrayList<Product>();
+            PrintWriter pw = new PrintWriter(new FileWriter(new File(path)));
+            for (Product product : products) {
+                pw.print(product.getProductName());
+                
+            }
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     

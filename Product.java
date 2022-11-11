@@ -55,15 +55,15 @@ public class Product {
         this.customerList = customerList;
     }
 
-    public Product() {
-        productName = null;
-        storeName = null;
-        description = null;
-        quantity = 0;
-        price = 0.0;
-        unitsPurchased = 0;
-        customerList = new ArrayList<String>();
-
+    public Product(String productName , String storeName , String description 
+    , int quantity , double price) {
+        this.productName = productName;
+        this.storeName = storeName;
+        this.description = description;
+        this.quantity = quantity;
+        this.price = price;
+        this.unitsPurchased = 0;
+        this.customerList = new ArrayList<String>();
     }
 
     public String getProductName() {
@@ -104,6 +104,14 @@ public class Product {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public int getUnitsPurchased() {
+        return unitsPurchased;
+    }
+
+    public void setUnitsPurchased(int unitsPurchased) {
+        this.unitsPurchased = unitsPurchased;
     }
 
     public ArrayList<String> getCustomerList() {

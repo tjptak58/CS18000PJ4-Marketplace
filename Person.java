@@ -17,20 +17,16 @@ public class Person {
 
     private String email;
     
-    private String filePath;
-
-    public Person(String username , String password, String email, String filePath) {
+    public Person(String username , String password, String email) {
         this.username = username;
         this.password = password;
         this.email = email;
-        this.filePath = filePath;
     }
 
     public Person() {
         username = null;
         password = null;
         email = null;
-        filePath = null;
     }
 
     public String getUsername() {
@@ -57,21 +53,12 @@ public class Person {
         this.email = email;
     }
 
-    public String getFilePath() {
-        return filePath;
-    }
-
-    public void setFilePath(String filePath) {
-        this.filePath = filePath;
-    }
-
     @Override
     public String toString() {
         String s = "";
         s = s + String.format("Username: %s, " , username);
         s = s + String.format("Password: %s, " , password);
         s = s + String.format("Email: %s, " , email);
-        s = s + String.format("FilePath: %s, " , filePath);
         return s;
     }
 

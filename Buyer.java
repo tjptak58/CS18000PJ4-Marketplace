@@ -8,15 +8,20 @@ import java.io.*;
  */
 public class Buyer extends Person{
 
-    public ArrayList<Product> shoppingCart; 
+    private ArrayList<Product> shoppingCart; 
+
+    private String cart;
+    private String history;
 
 
     public Buyer() {
         shoppingCart = new ArrayList<Product>();
     }
     
-    public Buyer(String username , String password, String email, String filePath) {
-        super(username, password, email, filePath);
+    public Buyer(String username , String password, String email, String cart , String history) {
+        super(username, password, email);
+        this.cart = cart;
+        this.history = history;
         shoppingCart = new ArrayList<Product>();
     }
 
