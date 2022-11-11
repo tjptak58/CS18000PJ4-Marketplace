@@ -97,7 +97,7 @@ public class Seller extends Person{
                 if (s == null) {
                     break;
                 } else {
-                    String[] split = s.split(",");
+                    String[] split = s.split(";");
                     output.add(new Product(split[0], split[1], split[2], Integer.parseInt(split[3]), Double.parseDouble(split[4])));
                     s = buf.readLine();
                 }  
@@ -118,8 +118,12 @@ public class Seller extends Person{
             var output = new ArrayList<Product>();
             PrintWriter pw = new PrintWriter(new FileWriter(new File(path)));
             for (Product product : products) {
-                pw.print(product.getProductName());
-                
+                pw.print(product.getProductName() + ";");
+                pw.print(product.getStoreName() + ";");
+                pw.print(product.getDescription() + ";");
+                pw.print(Integer.toString(product.getQuantity()) + ",");
+                pw.print(Double.toString(product.getPrice()));
+
             }
 
         } catch (FileNotFoundException e) {
