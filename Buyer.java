@@ -159,6 +159,27 @@ public class Buyer extends Person{
         }
     }
 
+    public void removeFromCart(Product product) {
+        for (int i = 0 ; i < shoppingCart.size() ; i++) {
+            if (shoppingCart.get(i).getProductName().equals(product.getProductName())) {
+                shoppingCart.remove(i);
+            }
+        }
+        try {
+            PrintWriter pw = new PrintWriter(new FileWriter(new File(cart) , true));           
+            pw.print(product.getProductName() + ";");
+            pw.print(product.getStoreName() + ";");
+            pw.print(product.getDescription() + ";");
+            pw.print(Integer.toString(product.getQuantity()) + ",");
+            pw.print(Double.toString(product.getPrice()) + "\n");
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void exportHistory(String path) {
         try {
             BufferedReader buf = new BufferedReader(new FileReader(new File(history)));
