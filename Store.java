@@ -17,6 +17,11 @@ public class Store {
     private String storeName;
 
     /*
+     * Filepath to store file
+     */
+    private String filePath;
+
+    /*
      * A list of products associated with the store
      */
     private ArrayList<Product> products;
@@ -27,14 +32,18 @@ public class Store {
      */
 
 
-    public Store(String sellerName , String storeName) {
+    public Store(String sellerName , String storeName , String filePath) {
         this.sellerName = sellerName;
+        this.storeName = storeName;
+        this.filePath = filePath;
         products = new ArrayList<Product>();
 
     }
 
-    public Store(String sellerName, String storeName , ArrayList<Product> products) {
+    public Store(String sellerName, String storeName , String filePath, ArrayList<Product> products) {
         this.sellerName = sellerName;
+        this.storeName = storeName;
+        this.filePath = filePath;
         this.products = products;
 
     }
@@ -42,6 +51,7 @@ public class Store {
     public Store() {
         sellerName = null;
         storeName = null;
+        filePath = null;
         products = null;
     }
 
@@ -55,6 +65,14 @@ public class Store {
 
     public String getStoreName() {
         return storeName;
+    }
+
+    public String getFilePath() {
+        return filePath;
+    }
+
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
     }
 
     public void setStoreName(String storeName) {

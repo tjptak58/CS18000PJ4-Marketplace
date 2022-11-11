@@ -24,15 +24,15 @@ public class Seller extends Person{
         this.stores = stores;
     }
 
-    public void createStore(String sellerName , String storeName) {
-        Store store = new Store(sellerName , storeName);
+    public void createStore(String sellerName , String storeName, String filePath) {
+        Store store = new Store(sellerName , storeName , filePath);
         stores.add(store);
     }
 
-    public void createProduct(String productName , String sellerName, String storeName , String description 
+    public void createProduct(String productName , String sellerName, String storeName , String filePath,  String description 
     , int quantity , double price, int unitsPurchased, ArrayList<String> customerList) {
         if (stores.size() == 0) {
-            createStore(sellerName , storeName);
+            createStore(sellerName , storeName , filePath);
             Store s = stores.get(0);
             Product p = new Product(productName, storeName, description, quantity, price , unitsPurchased , customerList);
             s.addProduct(p);
