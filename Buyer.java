@@ -9,7 +9,7 @@ import java.io.*;
 public class Buyer extends Person{
 
     private ArrayList<Product> shoppingCart; 
-
+    private ArrayList<Product> purchased;
     private String cart;
     private String history;
 
@@ -21,7 +21,9 @@ public class Buyer extends Person{
         super(username, password, email);
         this.cart = cart;
         this.history = history;
-        var shoppingCart = new ArrayList<Product>();
+        this.shoppingCart = new ArrayList<Product>();
+        this.purchased = new ArrayList<Product>();
+
         try {
             BufferedReader buf = new BufferedReader(new FileReader(new File(cart)));
             String s = buf.readLine();
@@ -34,6 +36,20 @@ public class Buyer extends Person{
                     s = buf.readLine();
                 }  
             }
+            buf.close();
+
+            BufferedReader buftwo = new BufferedReader(new FileReader(new File(history)));
+            s = buftwo.readLine();
+            while (true) {
+                if (s == null) {
+                    break;
+                } else {
+                    String[] split = s.split(";");
+                    purchased.add(new Product(split[0], split[1], split[2], Integer.parseInt(split[3]), Double.parseDouble(split[4])));
+                    s = buftwo.readLine();
+                }  
+            }
+            buftwo.close();
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -126,5 +142,60 @@ public class Buyer extends Person{
         }
     }
 
+    public void updateHistory() {
+        try {
+            PrintWriter pw = new PrintWriter(new FileWriter(new File(history) , false));
+            for (Product product : purchased) {
+                pw.print(product.getProductName() + ";");
+                pw.print(product.getStoreName() + ";");
+                pw.print(product.getDescription() + ";");
+                pw.print(Integer.toString(product.getQuantity()) + ",");
+                pw.print(Double.toString(product.getPrice()) + "\n");
 
-}
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void addToCart(Product product) {
+        shoppingCart.add(product);
+        try {
+            PrintWriter pw = new PrintWriter(new FileWriter(new File(cart) , true));           
+            pw.print(product.getProductName() + ";");
+            pw.print(product.getStoreName() + ";");
+            pw.print(product.getDescription() + ";");
+            pw.print(Integer.toString(product.getQuantity()) + ",");
+            pw.print(Double.toString(product.getPrice()) + "\n");
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void exportHistory(String path) {
+        try {
+            BufferedReader buf = new BufferedReader(new FileReader(new File(history)));
+            PrintWriter pw = new PrintWriter(new FileWriter(new File(path) , true));           
+            String s = buf.readLine();
+            while (true) {
+                if (s == null) {
+                    break;
+                } else {
+                    String[] split = s.split(";");
+                    Product p = new Product(split[0], split[1], split[2], Integer.parseInt(split[3]), Double.parseDouble(split[4]));
+                    pw.println(p.toString());
+                    s = buf.readLine();
+                }  
+            }
+            buf.close();
+            pw.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    }
