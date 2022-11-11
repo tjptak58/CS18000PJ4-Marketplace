@@ -79,7 +79,15 @@ public class Seller extends Person{
             p.setPrice(price);
         }
     }
-
+    
+    public void deleteProduct(Product p, String storeName) {
+        for (Store s : stores) {
+            if (storeName.equals(s.getStoreName())) {
+                s.removeProduct(p);
+            }
+        }
+    }
+    
     /*
      * add to the buyer.txt and seller.txt via CSV file
      * one for export as well
