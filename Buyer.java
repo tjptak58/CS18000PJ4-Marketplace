@@ -142,24 +142,6 @@ public class Buyer extends Person{
         }
     }
 
-    public void updateHistory() {
-        try {
-            PrintWriter pw = new PrintWriter(new FileWriter(new File(history) , false));
-            for (Product product : purchased) {
-                pw.print(product.getProductName() + ";");
-                pw.print(product.getStoreName() + ";");
-                pw.print(product.getDescription() + ";");
-                pw.print(Integer.toString(product.getQuantity()) + ",");
-                pw.print(Double.toString(product.getPrice()) + "\n");
-
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     public void addToCart(Product product) {
         shoppingCart.add(product);
         try {
@@ -195,6 +177,25 @@ public class Buyer extends Person{
             buf.close();
             pw.close();
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void purchase(Product p) {
+        purchased.add(p);
+        try {
+            PrintWriter pw = new PrintWriter(new FileWriter(new File(history) , false));
+            for (Product product : purchased) {
+                pw.print(product.getProductName() + ";");
+                pw.print(product.getStoreName() + ";");
+                pw.print(product.getDescription() + ";");
+                pw.print(Integer.toString(product.getQuantity()) + ",");
+                pw.print(Double.toString(product.getPrice()) + "\n");
+
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
