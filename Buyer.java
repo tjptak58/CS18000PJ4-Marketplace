@@ -15,14 +15,32 @@ public class Buyer extends Person{
 
 
     public Buyer() {
-        shoppingCart = new ArrayList<Product>();
     }
     
     public Buyer(String username , String password, String email, String cart , String history) {
         super(username, password, email);
         this.cart = cart;
         this.history = history;
-        shoppingCart = new ArrayList<Product>();
+        var shoppingCart = new ArrayList<Product>();
+        try {
+            BufferedReader buf = new BufferedReader(new FileReader(new File(cart)));
+            String s = buf.readLine();
+            while (true) {
+                if (s == null) {
+                    break;
+                } else {
+                    String[] split = s.split(";");
+                    shoppingCart.add(new Product(split[0], split[1], split[2], Integer.parseInt(split[3]), Double.parseDouble(split[4])));
+                    s = buf.readLine();
+                }  
+            }
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
     }
 
     
