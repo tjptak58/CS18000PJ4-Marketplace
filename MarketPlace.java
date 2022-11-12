@@ -531,6 +531,16 @@ public class MarketPlace {
                                         System.out.println("2. Go back");
                                         int specCartChoice = scanner.nextInt();
                                         if (specCartChoice == 1) {
+                                            for (int i = 0; i < superListOfProducts.size(); i++) {
+                                                if (superListOfProducts.get(i).equals(matchArray.get(productNum - 1))) {
+                                                    for (int j = 0; j < buyerList.size(); j++) {
+                                                        if (buyerList.get(j).getUsername().equals(user)) {
+                                                            buyerList.get(j).addToCart(superListOfProducts.get(i));
+                                                            superListOfProducts.get(i).setQuantity(superListOfProducts.get(i).getQuantity() - 1);
+                                                        }
+                                                    }
+                                                }
+                                            }
 
                                         }
 
@@ -564,6 +574,13 @@ public class MarketPlace {
                         checkoutChoice = scanner.nextInt();
                         scanner.nextLine();
                         if (checkoutChoice == 1) {
+                            for (int i = 0; i < buyerList.size(); i++) {
+                                if (buyerList.get(i).getUsername().equals(user)) {
+                                    for (int j = 0; j < buyerList.get(i).getShoppingCart().size(); j++) {
+
+                                    }
+                                }
+                            }
 
 
                         } else if (checkoutChoice == 2) {
@@ -657,12 +674,16 @@ public class MarketPlace {
                         if (sellerList.get(i).getUsername().equals(user)) {
                             for (int j = 0; j < sellerList.get(i).getStores().size(); j++) {
 
+
+
                             }
 
                         }
 
                     }
 
+
+                } else if (choice == 2) {
 
                 }
 
@@ -691,8 +712,23 @@ public class MarketPlace {
             File f = new File("buyer.txt");
             PrintWriter pw = new PrintWriter(f);
             for (int i = 0; i < buyerList.size(); i++) {
+                System.out.println(buyerList.get(i).getUsername() + ";" + buyerList.get(i).getPassword() + ";" + buyerList.get(i).getEmail() + ";" + buyerList.get(i).getCart() + ";" + buyerList.get(i).getHistory());
 
             }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        //Write back into storeListFile.txt
+        try {
+            File f = new File("storeListFile.txt");
+            PrintWriter pw = new PrintWriter(f);
+            for (int i = 0 ; i < marketPlace.size(); i++) {
+                System.out.println(marketPlace.get(i).getSellerName() + ";" + marketPlace.get(i).getStoreName() + ";" + marketPlace.get(i).getStoreRevenue() + ";" + marketPlace.get(i).getFilePath());
+
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
