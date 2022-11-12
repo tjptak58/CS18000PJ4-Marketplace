@@ -235,6 +235,14 @@ public class Buyer extends Person{
         this.cart = cart;
     }
 
+    public String getCart() {
+        return cart;
+    }
+
+    public String getHistory() {
+        return history;
+    }
+
     public void setPathToHistory(String history) {
         this.history = history;
     }

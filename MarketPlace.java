@@ -1,4 +1,5 @@
 import java.io.*;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -405,7 +406,7 @@ public class MarketPlace {
 
         ArrayList<Seller> sellerList = new ArrayList<>();
         try {
-            File f = new File("Seller.txt");
+            File f = new File("seller.txt");
             FileReader fr = new FileReader(f);
             BufferedReader bfr = new BufferedReader(fr);
             String line = bfr.readLine();
@@ -652,6 +653,15 @@ public class MarketPlace {
                 int choice = scanner.nextInt();
                 scanner.nextLine();
                 if (choice == 1) {
+                    for (int i  = 0; i < sellerList.size(); i++) {
+                        if (sellerList.get(i).getUsername().equals(user)) {
+                            for (int j = 0; j < sellerList.get(i).getStores().size(); j++) {
+
+                            }
+
+                        }
+
+                    }
 
 
                 }
@@ -664,10 +674,25 @@ public class MarketPlace {
         try {
             File f = new File ("Seller.txt");
             PrintWriter pw = new PrintWriter(f);
+            for (int i = 0; i < sellerList.size(); i++) {
+                pw.println(sellerList.get(i).getUsername() + ";" + sellerList.get(i).getPassword() + ";" + sellerList.get(i).getEmail() + ";" + sellerList.get(i).getFilePath());
+            }
+            pw.flush();
+            pw.close();
 
 
         } catch (IOException e) {
             e.printStackTrace();
+        }
+
+
+        //Write back onto buyer.txt
+        try {
+            File f = new File("buyer.txt");
+            PrintWriter pw = new PrintWriter(f);
+            for (int i = 0; i < buyerList.size(); i++) {
+
+            }
         }
     }
 }
