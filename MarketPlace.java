@@ -435,8 +435,9 @@ public class MarketPlace {
                     buyerList.get(i).modify();
                 }
             } //Processing buyer objects format **/
+            System.out.println("Welcome to the marketplace!");
             while (loggedInAsBuyer) {
-                System.out.println("Welcome to the marketplace!");
+
                 System.out.println("1. View product listings");
                 System.out.println("2. View shopping cart");
                 System.out.println("3. View previously purchased items");
@@ -473,6 +474,7 @@ public class MarketPlace {
                                 for (int i = 0; i < buyerList.size(); i++) {
                                     if (buyerList.get(i).getUsername().equals(user)) {
                                         buyerList.get(i).addToCart(superListOfProducts.get(productNumber - 1));
+                                        superListOfProducts.get(productNumber - 1).setQuantity(superListOfProducts.get(productNumber - 1).getQuantity() - 1);
                                     }
                                 }
 
@@ -487,6 +489,39 @@ public class MarketPlace {
                         } else if (secondChoice == 5) {
                             superListOfProducts = Buyer.sortPrice(superListOfProducts, false);
                         } else if (secondChoice == 6) {
+                            System.out.println("Enter the search word");
+                            String searchParam = scanner.nextLine();
+                            ArrayList<Product> matchArray = Buyer.searchProducts(searchParam, superListOfProducts);
+                            if (matchArray.size() == 0) {
+                                System.out.println("No products found!");
+                            } else {
+                                for (int i = 0; i < matchArray.size(); i++) {
+                                    System.out.println("----------------");
+                                    //Printout product number as well TODO
+                                    System.out.println(matchArray.get(i).initialToString());
+                                }
+                                int specSearchChoice = -1;
+                                while (specSearchChoice != 2) {
+                                    System.out.println("1. Select a product");
+                                    System.out.println("2. Go back");
+                                    specSearchChoice = scanner.nextInt();
+                                    scanner.nextLine();
+                                    if (specSearchChoice == 1) {
+                                        System.out.println("Enter the product number:");
+                                        int productNum = scanner.nextInt();
+                                        scanner.nextLine();
+                                        System.out.println(matchArray.get(productNum - 1).toString());
+                                        System.out.println("1. Add to cart");
+                                        System.out.println("2. Go back");
+                                        int specCartChoice = scanner.nextInt();
+
+
+
+                                    }
+
+                                }
+
+                            }
 
 
                         }
@@ -495,18 +530,47 @@ public class MarketPlace {
 
                 } else if (choice == 2) {
                     int checkoutChoice = -1;
-                    while (checkoutChoice != 4) {
+                    while (checkoutChoice != 3) {
                         for (int i = 0; i < buyerList.size(); i++) {
                             if (buyerList.get(i).getUsername().equals(user)) {
-                                for (int j = 0; j < buyerList.get(i).sh)
+                                for (int j = 0; j < buyerList.get(i).getShoppingCart().size(); j++) {
+                                    System.out.println("----------------");
+                                    System.out.println(buyerList.get(i).getShoppingCart().get(j).initialToString());
+                                }
                             }
                         }
+                        System.out.println("1. Purchase all items in shopping cart");
+                        System.out.println("2. Remove an item from shopping cart");
+                        System.out.println("3. Go back");
+                        checkoutChoice = scanner.nextInt();
+                        scanner.nextLine();
+                        if (checkoutChoice == 1) {
+
+
+                        } else if (checkoutChoice == 2) {
+                            System.out.println("1. Edit info");
+                            System.out.println("2. Delete account");
+
+
+                        }
+
                     }
 
 
 
 
                 } else if (choice == 3) {
+                    System.out.println("Enter file path to which you would like to export your purchase history");
+                    String exportPath = scanner.nextLine();
+                    for (int i = 0; i < buyerList.size(); i++) {
+                        if (buyerList.get(i).getUsername().equals(user)) {
+                            if (buyerList.get(i).exportHistory(exportPath)) {
+                                System.out.println("Exported successfully!");
+                            } else {
+                                System.out.println("There was an error writing to the file!");
+                            }
+                        }
+                    }
 
                 } else if (choice == 4) {
 

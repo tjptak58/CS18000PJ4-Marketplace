@@ -64,7 +64,7 @@ public class Buyer extends Person{
     /*
      * Gets all product in users.txt that have a name, description, or store that matches the search parameter
      */
-    public ArrayList<Product> searchProducts(String searchParameter , ArrayList<Product> market) {
+    public static ArrayList<Product> searchProducts(String searchParameter , ArrayList<Product> market) {
         ArrayList<Product> products = new ArrayList<Product>();
         for (Product p : market) {
             if (p.getProductName().contains(searchParameter)) {
@@ -180,7 +180,7 @@ public class Buyer extends Person{
         }
     }
 
-    public void exportHistory(String path) {
+    public boolean exportHistory(String path) {
         try {
             BufferedReader buf = new BufferedReader(new FileReader(new File(history)));
             PrintWriter pw = new PrintWriter(new FileWriter(new File(path) , true));           
@@ -197,8 +197,10 @@ public class Buyer extends Person{
             }
             buf.close();
             pw.close();
+            return true;
         } catch (Exception e) {
             e.printStackTrace();
+            return false;
         }
     }
 
