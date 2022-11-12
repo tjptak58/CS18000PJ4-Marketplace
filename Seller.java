@@ -87,10 +87,7 @@ public class Seller extends Person{
             }
         }
     }
-    
-    public void listSales(Store store) {
-
-    }
+   
     
     /*
      * add to the buyer.txt and seller.txt via CSV file
