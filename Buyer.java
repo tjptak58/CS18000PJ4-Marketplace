@@ -220,4 +220,14 @@ public class Buyer extends Person{
             e.printStackTrace();
         }
     }
+
+    public ArrayList<Product> getShoppingCart() {
+        return shoppingCart;
     }
+
+    public void setShoppingCart(ArrayList<Product> newShoppingCart) {
+        this.shoppingCart = newShoppingCart;
+    }
+
+
+}

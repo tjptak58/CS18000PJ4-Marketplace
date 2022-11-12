@@ -155,4 +155,20 @@ public class Product {
         }
         return s;
     }
+
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Product)) {
+            return false;
+        }
+        Product product = (Product) o;
+        if (product.productName.equals(productName) && product.storeName.equals(storeName) && product.description.equals(description) && product.quantity == quantity && product.price == price && product.unitsPurchased == unitsPurchased && product.customerList.equals(customerList)) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
 }

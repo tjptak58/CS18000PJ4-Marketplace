@@ -377,7 +377,7 @@ public class MarketPlace {
             }
         }
 
-        //Read from users.txt to create an array of buyer objects
+        //Read from buyer.txt to create an array of buyer objects
         ArrayList<Buyer> buyerList = new ArrayList<>();
         try {
             File f = new File("buyer.txt");
@@ -406,10 +406,19 @@ public class MarketPlace {
         ArrayList<Seller> sellerList = new ArrayList<>();
         try {
             File f = new File("Seller.txt");
-            FilterReader fr = new FileReader(f);
+            FileReader fr = new FileReader(f);
+            BufferedReader bfr = new BufferedReader(fr);
+            String line = bfr.readLine();
+            while (line != null) {
+                String[] lineArray = line.split(";");
+
+
+            }
 
 
 
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
 
@@ -453,13 +462,19 @@ public class MarketPlace {
                             System.out.println("Enter the product number :");
                             int productNumber = scanner.nextInt();
                             scanner.nextLine();
+                            //TODO: Check if product number is valid
                             System.out.println(superListOfProducts.get(productNumber - 1).toString());
                             System.out.println("1. Add to cart");
                             System.out.println("2. Go back");
                             int purchaseChoice = scanner.nextInt();
                             scanner.nextLine();
                             if (purchaseChoice == 1) {
-                                //Buy the product
+                                //Add to cart
+                                for (int i = 0; i < buyerList.size(); i++) {
+                                    if (buyerList.get(i).getUsername().equals(user)) {
+                                        buyerList.get(i).addToCart(superListOfProducts.get(productNumber - 1));
+                                    }
+                                }
 
                             }
 
@@ -473,15 +488,27 @@ public class MarketPlace {
                             superListOfProducts = Buyer.sortPrice(superListOfProducts, false);
                         } else if (secondChoice == 6) {
 
+
                         }
 
                     }
 
                 } else if (choice == 2) {
+                    int checkoutChoice = -1;
+                    while (checkoutChoice != 4) {
+                        for (int i = 0; i < buyerList.size(); i++) {
+                            if (buyerList.get(i).getUsername().equals(user)) {
+                                for (int j = 0; j < buyerList.get(i).sh)
+                            }
+                        }
+                    }
+
 
 
 
                 } else if (choice == 3) {
+
+                } else if (choice == 4) {
 
                 }
 
