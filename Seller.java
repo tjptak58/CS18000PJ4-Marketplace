@@ -142,5 +142,9 @@ public class Seller extends Person{
         }
     }
 
+    public void addStore(Store store) {
+        this.stores.add(store);
+    }
+
     
 }

@@ -411,6 +411,12 @@ public class MarketPlace {
             String line = bfr.readLine();
             while (line != null) {
                 String[] lineArray = line.split(";");
+                Seller loopSeller = new Seller(lineArray[0], lineArray[1], lineArray[2], lineArray[3]);
+                sellerList.add(loopSeller);
+                line = bfr.readLine();
+
+
+
 
 
             }
@@ -419,6 +425,15 @@ public class MarketPlace {
 
         } catch (IOException e) {
             e.printStackTrace();
+        }
+
+        for (int i = 0; i < marketPlace.size(); i++) {
+            for (int j = 0; j < sellerList.size(); j++) {
+                if (marketPlace.get(i).getSellerName().equals(sellerList.get(j).getUsername())) {
+                    sellerList.get(j).addStore(marketPlace.get(i));
+                }
+
+            }
         }
 
 
@@ -514,6 +529,9 @@ public class MarketPlace {
                                         System.out.println("1. Add to cart");
                                         System.out.println("2. Go back");
                                         int specCartChoice = scanner.nextInt();
+                                        if (specCartChoice == 1) {
+
+                                        }
 
 
 
@@ -548,8 +566,8 @@ public class MarketPlace {
 
 
                         } else if (checkoutChoice == 2) {
-                            System.out.println("1. Edit info");
-                            System.out.println("2. Delete account");
+
+
 
 
                         }
@@ -573,6 +591,37 @@ public class MarketPlace {
                     }
 
                 } else if (choice == 4) {
+                    System.out.println("1. Edit info");
+                    System.out.println("2. Delete account");
+                    int choiceFour = scanner.nextInt();
+                    if (choiceFour == 1) {
+                        System.out.println("Enter your new email ID: ");
+                        String newEmail = scanner.nextLine();
+                        System.out.println("Enter your new password: ");
+                        String newPassword = scanner.nextLine();
+                        System.out.println("Enter new path to shopping cart: ");
+                        String newPathToCart = scanner.nextLine();
+                        System.out.println("Enter new path to purchase history: ");
+                        String newPathToHistory = scanner.nextLine();
+                        for (int i = 0; i < buyerList.size(); i++) {
+                            if (buyerList.get(i).getUsername().equals(user)) {
+                                buyerList.get(i).setEmail(newEmail);
+                                buyerList.get(i).setPassword(newPassword);
+                                buyerList.get(i).setPathToCart(newPathToCart);
+                                buyerList.get(i).setPathToHistory(newPathToHistory);
+                                System.out.println("Successfully changed account information");
+                            }
+                        }
+
+                    } else if (choiceFour == 2) {
+                        for (int i = 0; i < buyerList.size(); i++) {
+                            if (buyerList.get(i).getUsername().equals(user)) {
+                                buyerList.remove(i);
+                                System.out.println("Account deleted successfully");
+                                break;
+                            }
+                        }
+                    }
 
                 }
 
@@ -583,15 +632,42 @@ public class MarketPlace {
         }
 
         if (loggedInAsSeller) {
+            /**
+             * Sellers can create, edit, or delete products associated with their stores.
+             * Sellers can view a list of their sales by store, including customer information and revenues from the sale.
+             * Sellers can import or export products for their stores using a csv file.
+             * All product details should be included, with one row per product.
+             * Sellers can view a dashboard that lists statistics for each of their stores.
+             * Data will include a list of customers with the number of items that they have purchased and a list of products with the number of sales.
+             * Sellers can choose to sort the dashboard.
+             * Sellers can view the number of products currently in customer shopping carts, along with the store and details associated with the products.
+             */
+            System.out.println("Welcome to the marketplace");
             while (loggedInAsSeller) {
-                System.out.println("Welcome to the marketplace");
+
                 System.out.println("1. View your stores");
-                System.out.println("2. Add a store");
-                System.out.println("3. Delete a store");
-                System.out.println("4. ");
+                System.out.println("2. View your dashboard");
+                System.out.println("3. View products from your store customers have in their carts");
+                System.out.println("4. Logout ");
+                int choice = scanner.nextInt();
+                scanner.nextLine();
+                if (choice == 1) {
+
+
+                }
 
             }
 
+        }
+
+        //Write back onto seller.txt, buyer.txt and storeFileInfo.txt
+        try {
+            File f = new File ("Seller.txt");
+            PrintWriter pw = new PrintWriter(f);
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
