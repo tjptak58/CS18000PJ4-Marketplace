@@ -10,6 +10,6 @@ username;password;email;filePath
 
 storeListFile.txt
 Stores info in format:
-sellerName;storeName;filePathToStore
+sellerName;storeName;storeRevenue;filePathToStore
 
 
