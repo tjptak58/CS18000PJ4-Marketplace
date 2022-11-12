@@ -30,6 +30,7 @@ public class Store {
      * A sale history of the store including
      * customer information and revenue
      */
+    private double storeRevenue;
 
 
     public Store(String sellerName , String storeName , String filePath) {
@@ -37,14 +38,16 @@ public class Store {
         this.storeName = storeName;
         this.filePath = filePath;
         products = new ArrayList<Product>();
+        storeRevenue = 0;
 
     }
 
-    public Store(String sellerName, String storeName , String filePath, ArrayList<Product> products) {
+    public Store(String sellerName, String storeName , String filePath, ArrayList<Product> products, double storeRevenue) {
         this.sellerName = sellerName;
         this.storeName = storeName;
         this.filePath = filePath;
         this.products = products;
+        this.storeRevenue = storeRevenue;
 
     }
 
@@ -53,6 +56,7 @@ public class Store {
         storeName = null;
         filePath = null;
         products = null;
+        storeRevenue = 0;
     }
 
     public String getSellerName() {
@@ -93,6 +97,14 @@ public class Store {
     
     public void removeProduct(Product p) {
         products.remove(p);
+    }
+
+    public double getStoreRevenue() {
+        return storeRevenue;
+    }
+
+    public void setStoreRevenue(double storeRevenue) {
+        this.storeRevenue = storeRevenue;
     }
 
 

@@ -133,6 +133,15 @@ public class Product {
 
     }
 
+    public String initialToString() {
+        String s = "";
+        s += String.format("Product Name: %s, ", productName);
+        s += String.format("Store Name: %s, " , storeName);
+        s += String.format("Price: %s, " , Double.toString(price));
+        return s;
+
+    }
+
     public String getStatistics() {
         String s = "";
         s = s + String.format("Units Purchased: %s, " , Integer.toString(unitsPurchased));

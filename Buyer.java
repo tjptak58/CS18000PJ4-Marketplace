@@ -83,7 +83,7 @@ public class Buyer extends Person{
      * Sorts highest price to lowest if highToLow = true    NOT SURE IF I EVEN NEED THIS
      * if it's false, sorts lowest to highest
      */
-    public ArrayList<Product> sortPrice(ArrayList<Product> products , boolean highToLow) {
+    public static ArrayList<Product> sortPrice(ArrayList<Product> products , boolean highToLow) {
         ArrayList<Product> output = new ArrayList<Product>();
         ArrayList<Product> p = products;
         while (p.size() > 0) {
@@ -115,7 +115,7 @@ public class Buyer extends Person{
      * Sorts highest price to lowest if highToLow = true
      * if it's false, sorts lowest to highest
      */
-    public ArrayList<Product> sortQuantity(ArrayList<Product> products , boolean highToLow) {
+    public static ArrayList<Product> sortQuantity(ArrayList<Product> products , boolean highToLow) {
         ArrayList<Product> output = new ArrayList<Product>();
         ArrayList<Product> p = products;
         while (p.size() > 0) {

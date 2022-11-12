@@ -1,13 +1,14 @@
 import java.io.*;
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Scanner;
 
-public class ClassWithMainMethod {
+public class MarketPlace {
 
     static String user;
+
+
 
     public void deleteBuyer(ArrayList<Buyer> buyers, String usernameBuyer, String buyerPassowrd, String filepath, String email) {
         Buyer buyer = new Buyer(usernameBuyer, buyerPassowrd, filepath, email);
@@ -38,16 +39,17 @@ public class ClassWithMainMethod {
         buyers.add(buyer);
     }
 
-    public void printMarketPlace (ArrayList<Store> marketPlace) {
-        for (int i = 0; i < marketPlace.size(); i++) {
+    public  static void printMarketPlace (ArrayList<Product> superListOfProducts) {
+        for (int i = 0; i <superListOfProducts.size(); i++) {
             System.out.println("--------------------");
-            Store loopStore = marketPlace.get(i);
-            for (int j = 0; j < loopStore.getProducts().size(); j++) {
-                System.out.println(loopStore.getProducts().get(j).toString());
-            }
+            System.out.println(superListOfProducts.get(i).toString());
 
 
         }
+
+    }
+
+    public ArrayList<Product> processStoreFile(String filePath) {
 
     }
 
@@ -279,17 +281,23 @@ public class ClassWithMainMethod {
         } while (flag || loginFailed);
 
         /**
-         * Everytime program runs create -
-         * Read from marketplace file to create an array of products
-         * Read from shoppingcart file to create an array of products
+         * Login part of program must return a static string user
+         * which is username of buyer if logged in as buyer
+         * and is username of seller if logged in as seller
+         *
+         * Login part must also set loggedInAsBuyer or loggedInAsSeller to true
+         *
+         *
          *
          */
+
+        //ArrayList of Stores that stores information from storeListFile
         ArrayList<Store> marketPlace = new ArrayList<>();
-        ArrayList<Product> shoppingCart = new ArrayList<>();
 
 
-        /*
-         *Read from storeListFile in the beginning of the program to create store objects and add them to marketPlace
+        /**
+         *Read from storeListFile in the beginning of the program to create
+         * store objects and add them to marketPlace
          *  ArrayList
          */
 
@@ -304,7 +312,9 @@ public class ClassWithMainMethod {
                 line = line.substring(line.indexOf(';') + 1);
                 String storeName = line.substring(0, line.indexOf(';'));
                 line = line.substring(line.indexOf(';') + 1);
-                String storeFilePath = line;
+                String storeFilePath = line.substring(0, line.indexOf(';'));
+                line = line.substring(line.indexOf(';') + 1);
+                double storeRevenue = Double.parseDouble(line);
                 File loopFile = new File(storeFilePath);
                 FileReader loopfr = new FileReader(loopFile);
                 BufferedReader loopbfr = new BufferedReader(loopfr);
@@ -342,7 +352,7 @@ public class ClassWithMainMethod {
 
                 }
                 //End of storeFile
-                Store loopStore = new Store(sellerName, storeName, storeFilePath, productsInStore );
+                Store loopStore = new Store(sellerName, storeName, storeFilePath, productsInStore, storeRevenue );
                 marketPlace.add(loopStore);
 
 
@@ -355,6 +365,16 @@ public class ClassWithMainMethod {
         } catch (IOException e) {
             e.printStackTrace();
 
+        }
+
+        /**
+         * Creating an ArrayList of products to implement features and printout to terminal
+         */
+        ArrayList<Product> superListOfProducts = new ArrayList<>();
+        for (int i = 0; i < marketPlace.size(); i++ ) {
+            for (int j = 0; j < marketPlace.get(i).getProducts().size(); j++) {
+                superListOfProducts.add(marketPlace.get(i).getProducts().get(j));
+            }
         }
 
         //Read from users.txt to create an array of buyer objects
@@ -384,6 +404,14 @@ public class ClassWithMainMethod {
 
 
         ArrayList<Seller> sellerList = new ArrayList<>();
+        try {
+            File f = new File("Seller.txt");
+            FilterReader fr = new FileReader(f);
+
+
+
+        }
+
 
 
 
@@ -393,23 +421,65 @@ public class ClassWithMainMethod {
         boolean loggedInAsBuyer = true;
         boolean loggedInAsSeller = false;
         if (loggedInAsBuyer) {
-            for (int i = 0; i < buyerList.size(); i ++) {
+            /**for (int i = 0; i < buyerList.size(); i ++) {
                 if (buyerList.get(i).getUsername().equals(user)) {
                     buyerList.get(i).modify();
                 }
-            }
+            } //Processing buyer objects format **/
             while (loggedInAsBuyer) {
                 System.out.println("Welcome to the marketplace!");
                 System.out.println("1. View product listings");
                 System.out.println("2. View shopping cart");
-                System.out.println("3. Sort and view items by price");
-                System.out.println("4. Sort and ");
-                System.out.println("3. Logout");
+                System.out.println("3. View previously purchased items");
+                System.out.println("4. Edit your account info");
+                System.out.println("5. Logout");
                 int choice = scanner.nextInt();
                 scanner.nextLine();
                 if (choice == 1) {
 
+                    int secondChoice = -1;
+                    while (secondChoice != 7) {
+                        MarketPlace.printMarketPlace(superListOfProducts);
+                        System.out.println("1. Select a product");
+                        System.out.println("2. Sort by price from high to low");
+                        System.out.println("3. Sort by price from low to high");
+                        System.out.println("4. Sort by quantity from high to low");
+                        System.out.println("5. Sort by quantity from low to high");
+                        System.out.println("6. Search for a specific product");
+                        System.out.println("7. Go back");
+                        secondChoice = scanner.nextInt();
+                        scanner.nextLine();
+                        if (secondChoice == 1) {
+                            System.out.println("Enter the product number :");
+                            int productNumber = scanner.nextInt();
+                            scanner.nextLine();
+                            System.out.println(superListOfProducts.get(productNumber - 1).toString());
+                            System.out.println("1. Add to cart");
+                            System.out.println("2. Go back");
+                            int purchaseChoice = scanner.nextInt();
+                            scanner.nextLine();
+                            if (purchaseChoice == 1) {
+                                //Buy the product
+
+                            }
+
+                        } else if (secondChoice == 2) {
+                            superListOfProducts = Buyer.sortQuantity(superListOfProducts, true );
+                        } else if (secondChoice == 3) {
+                            superListOfProducts = Buyer.sortQuantity(superListOfProducts, false);
+                        } else if (secondChoice == 4) {
+                            superListOfProducts = Buyer.sortPrice(superListOfProducts, true);
+                        } else if (secondChoice == 5) {
+                            superListOfProducts = Buyer.sortPrice(superListOfProducts, false);
+                        } else if (secondChoice == 6) {
+
+                        }
+
+                    }
+
                 } else if (choice == 2) {
+
+
 
                 } else if (choice == 3) {
 
