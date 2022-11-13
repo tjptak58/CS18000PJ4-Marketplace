@@ -40,10 +40,6 @@ The Product class hold sthe information for a store. Accessor and mutator
 methods are written for each parameter. There are also methods which 
 allow a user to see statistics about a specific product.
 
-
-
-
-
 Files used:
 buyer.txt
 Stores buyer info in format:
