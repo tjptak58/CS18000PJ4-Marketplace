@@ -325,9 +325,9 @@ public class MarketPlace {
                 line = line.substring(line.indexOf(';') + 1);
                 String storeName = line.substring(0, line.indexOf(';'));
                 line = line.substring(line.indexOf(';') + 1);
-                String storeFilePath = line.substring(0, line.indexOf(';'));
+                double storeRevenue = Double.parseDouble(line.substring(0, line.indexOf(';')));
                 line = line.substring(line.indexOf(';') + 1);
-                double storeRevenue = Double.parseDouble(line);
+                String storeFilePath = line;
                 File loopFile = new File(storeFilePath);
                 FileReader loopfr = new FileReader(loopFile);
                 BufferedReader loopbfr = new BufferedReader(loopfr);
@@ -377,6 +377,7 @@ public class MarketPlace {
 
         } catch (IOException e) {
             e.printStackTrace();
+            System.out.println("There was an error while running the program!");
 
         }
 
@@ -412,6 +413,7 @@ public class MarketPlace {
 
         } catch (IOException e) {
             e.printStackTrace();
+            System.out.println("There was an error while running the program!");
 
         }
 
@@ -438,6 +440,7 @@ public class MarketPlace {
 
         } catch (IOException e) {
             e.printStackTrace();
+            System.out.println("There was an error while running the program!");
         }
 
         for (int i = 0; i < marketPlace.size(); i++) {
