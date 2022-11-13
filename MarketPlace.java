@@ -1024,12 +1024,20 @@ public class MarketPlace {
         //Farewell message
         System.out.println("Goodbye! Thank you for using our marketplace");
 
-       /** //Make changes made in seller store array reflect in marketplace array TODO
+        //Since all changes in menu interactions make changes to sellerList in place need to make changes reflect in
+        // marketplace array list as well
+        //Make changes made in seller store array reflect in marketplace array TODO
         for (int i = 0; i < sellerList.size(); i++) {
             if (sellerList.get(i).getUsername().equals(user)) {
-                for (int j = 0; )
+                for (int j = 0; j < sellerList.get(i).getStores().size(); j++) {
+                    for (int k = 0; k < marketPlace.size(); k++) {
+                        if (marketPlace.get(k).getStoreName().equals(sellerList.get(i).getStores().get(j).getStoreName())) {
+                            marketPlace.get(k).setProducts(sellerList.get(i).getStores().get(j).getProducts());
+                        }
+                    }
+                }
             }
-        } **/
+        }
         //Write back onto seller.txt, buyer.txt and storeFileInfo.txt
         try {
             File f = new File ("seller.txt");
