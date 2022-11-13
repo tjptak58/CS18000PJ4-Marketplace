@@ -13,6 +13,7 @@ public class Store {
 
     /*
      * Name of the store
+     * Must be a unique identifier
      */
     private String storeName;
 

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 public class Product {
     /*
      * Name of the product
+     * Must be a unique identifier for the product
      */
     private String productName;
 

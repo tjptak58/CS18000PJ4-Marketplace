@@ -232,14 +232,15 @@ public class Login {
 
     }
 
-    public void deleteBuyer(ArrayList<Buyer> buyers, String usernameBuyer, String buyerPassowrd, String filepath, String email) {
+   /** public void deleteBuyer(ArrayList<Buyer> buyers, String usernameBuyer, String buyerPassowrd, String filepath,
+                             String email) {
         Buyer buyer = new Buyer(usernameBuyer, buyerPassowrd, filepath, email);
         for (int i = 0; i < buyers.size(); i++) {
             if (buyer.getUsername().equals(usernameBuyer)) {
                 buyers.remove(buyer);
             }
         }
-    }
+    } **/
 
     public void deleteSeller(ArrayList<Seller> sellers, String usernameSeller, String sellerPassword, String filepath, String email) {
         Seller seller = new Seller(usernameSeller, sellerPassword, filepath, email);
@@ -256,10 +257,11 @@ public class Login {
 
     }
 
-    public void createBuyer(ArrayList<Buyer> buyers, String usernameBuyer, String buyerPassword, String email, String filepath) {
+    /**public void createBuyer(ArrayList<Buyer> buyers, String usernameBuyer, String buyerPassword, String email,
+                             String filepath) {
         Buyer buyer = new Buyer(usernameBuyer, buyerPassword, email, filepath);
         buyers.add(buyer);
-    }
+    } **/
 }
 
 // write file to buyer or seller depending and make an array list of username and password.

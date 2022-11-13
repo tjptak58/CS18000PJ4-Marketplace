@@ -72,10 +72,10 @@ public class Seller extends Person{
         if (! (description == null)){
             p.setDescription(description);
         }
-        if (! (quantity == -1)){
+        if (! (quantity == -1)){ //CONDITIONAL ALLOWS QUANTITY TO BE NEGATIVE!!!
             p.setQuantity(quantity);
         } 
-        if (! (price == -1.0)) {
+        if (! (price == -1.0)) { //CONDITIONAL ALLOWS PRICE TO BE NEGATIVE!!!
             p.setPrice(price);
         }
     }
