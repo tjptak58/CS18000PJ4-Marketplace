@@ -11,6 +11,9 @@ import java.util.Collections;
 // if line at index 0 contains username
 public class Login {
 
+    static String user;
+    static boolean loggedInAsBuyer;
+    static boolean loggedInAsSeller;
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -110,9 +113,10 @@ public class Login {
                     do {
                         usernameAlreadyExists = false;
                         System.out.println("Enter your new username");
-                        usernameBuyer = scanner.nextLine();
+                        String username= scanner.nextLine();
+                        user=username;
                         for (int i = 0; i < usernameAndPasswordBuyer.size(); i++) {
-                            if (usernameAndPasswordBuyer.get(i).substring(0, usernameAndPasswordSeller.get(i).indexOf(";")).contains(usernameBuyer)) {
+                            if (usernameAndPasswordBuyer.get(i).substring(0, usernameAndPasswordSeller.get(i).indexOf(";")).contains(username)) {
                                 System.out.println("Error: Username already exists. Pick a new username");
                                 usernameAlreadyExists = true;
                             }
@@ -155,6 +159,7 @@ public class Login {
 
                     System.out.println("Enter your username");
                     String username = scanner.nextLine();
+                    user=username;
 //                    // of the array list username, password. If 0 index which is username contains username go to next step
                     for (int i = 0; i < usernameAndPasswordSeller.size(); i++) {
 
@@ -174,6 +179,7 @@ public class Login {
                                     System.out.println("Login successful!");
                                     loginFailed = false;
                                     flag = false;
+                                    loggedInAsSeller=true;
 
 
 
@@ -211,7 +217,8 @@ public class Login {
                                     System.out.println("Login successful!");
                                     loginFailed = false;
                                     flag = false;
-                                    break;
+                                    loggedInAsBuyer=true;
+                                   
 
                                 } else {
                                     System.out.println("Error: Password is incorrect");
@@ -261,7 +268,6 @@ public class Login {
         buyers.add(buyer);
     }
 }
-
 
 // write file to buyer or seller depending and make an array list of username and password.
 // For login read through username ArrayList and then password Arraylist
