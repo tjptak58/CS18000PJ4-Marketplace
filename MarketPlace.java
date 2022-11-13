@@ -432,6 +432,7 @@ public class MarketPlace {
             for (int j = 0; j < sellerList.size(); j++) {
                 if (marketPlace.get(i).getSellerName().equals(sellerList.get(j).getUsername())) {
                     sellerList.get(j).addStore(marketPlace.get(i));
+
                 }
 
             }
@@ -577,13 +578,33 @@ public class MarketPlace {
                             for (int i = 0; i < buyerList.size(); i++) {
                                 if (buyerList.get(i).getUsername().equals(user)) {
                                     for (int j = 0; j < buyerList.get(i).getShoppingCart().size(); j++) {
+                                        buyerList.get(i).purchase(buyerList.get(i).getShoppingCart().get(j));
 
                                     }
+                                    //Empty shopping cart after purchase
+                                    buyerList.get(i).setShoppingCart(new ArrayList<Product>());
                                 }
                             }
 
 
                         } else if (checkoutChoice == 2) {
+                            for (int i = 0; i < buyerList.size(); i++) {
+                                if (buyerList.get(i).getUsername().equals(user)) {
+                                    for (int j = 0; j < buyerList.get(i).getShoppingCart().size(); j++ ) {
+                                        System.out.println("----------------");
+                                        System.out.println("Product Number " + (j + 1));
+                                        System.out.println(buyerList.get(i).getShoppingCart().get(j).initialToString());
+                                    }
+                                    System.out.println("Enter the product number of the product you would like to " +
+                                            "remove from cart:");
+                                    int rmvNum = scanner.nextInt();
+                                    scanner.nextLine();
+                                    //Check for bounds TODO
+                                    buyerList.get(i).removeFromCart(buyerList.get(i).getShoppingCart().get(rmvNum - 1));
+
+                                }
+
+                            }
 
 
 
@@ -673,6 +694,7 @@ public class MarketPlace {
                     for (int i  = 0; i < sellerList.size(); i++) {
                         if (sellerList.get(i).getUsername().equals(user)) {
                             for (int j = 0; j < sellerList.get(i).getStores().size(); j++) {
+
 
 
 
