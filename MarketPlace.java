@@ -889,13 +889,7 @@ public class MarketPlace {
                                                 }
                                                 
                                             }
-
-
                                         }
-
-
-
-
                                     }
                                 } else if (sellerChoice == 2) {
                                     System.out.println("Enter the store name:");
@@ -911,9 +905,9 @@ public class MarketPlace {
                                     if (!storeNameExists) {
                                         System.out.println("Enter the file path to the store");
                                         String filePathToStore = scanner.nextLine();
-                                        System.out.println("Enter the existing revenue for this store");
+                                        /**System.out.println("Enter the existing revenue for this store");
                                         int currentRevenue = scanner.nextInt();
-                                        scanner.nextLine();
+                                        scanner.nextLine(); **/
                                         marketPlace.add(new Store(user, newStoreName, filePathToStore));
                                         for (int p = 0; p < sellerList.size(); p++) {
                                             if (sellerList.get(p).getUsername().equals(user)) {
