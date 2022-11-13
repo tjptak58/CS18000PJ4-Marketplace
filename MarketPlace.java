@@ -959,7 +959,20 @@ public class MarketPlace {
                     for (int h = 0; h < sellerList.size(); h++ ) {
                         if (sellerList.get(h).getUsername().equals(user)) {
                             for (int i = 0; i < sellerList.get(h).getStores().size(); i++) {
-                                //TODO IMPLEMENT SELLER DASHBOARD
+                                //TODO IMPLEMENT sorting of SELLER DASHBOARD
+                                if (sellerList.get(h).getStores().get(i).getStoreName().equals(dashboardStore)) {
+                                    storeFound = true;
+                                    System.out.println("Store name: " + dashboardStore);
+                                    System.out.println("Store revenue: " + sellerList.get(h).getStores().get(i).getStoreRevenue());
+                                    for (int b = 0; b < sellerList.get(h).getStores().get(i).getProducts().size(); b++) {
+                                        System.out.println("----------------");
+                                        System.out.println("Product Number :" + (b + 1));
+                                        System.out.println(sellerList.get(h).getStores().get(i).getProducts().get(b).getStatistics());
+                                    }
+
+
+
+                                }
 
                                 
 
@@ -1011,7 +1024,7 @@ public class MarketPlace {
         //Farewell message
         System.out.println("Goodbye! Thank you for using our marketplace");
 
-       /** //Make changes made in seller store array reflect in marketplace array
+       /** //Make changes made in seller store array reflect in marketplace array TODO
         for (int i = 0; i < sellerList.size(); i++) {
             if (sellerList.get(i).getUsername().equals(user)) {
                 for (int j = 0; )

@@ -108,5 +108,7 @@ public class Store {
         this.storeRevenue = storeRevenue;
     }
 
+    //Create a getNumberOfSales method that sums up number of units sold for each product in that store
+
 
 }

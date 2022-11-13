@@ -123,12 +123,14 @@ public class Product {
         this.customerList = customerList;
     }
 
+    //Added newline characters to toString methods
+
     public String toString() {
         String s = "";
-        s = s + String.format("Product Name: %s, ", productName);
-        s = s + String.format("Store Name: %s, " , storeName);
-        s = s + String.format("Description: %s, " , description);
-        s = s + String.format("Quantity: %s, " , Integer.toString(quantity));
+        s = s + String.format("Product Name: %s, \n", productName);
+        s = s + String.format("Store Name: %s, \n" , storeName);
+        s = s + String.format("Description: %s, \n" , description);
+        s = s + String.format("Quantity: %s, \n" , Integer.toString(quantity));
         s = s + String.format("Price: %s, " , Double.toString(price));
         return s;
 
@@ -136,8 +138,8 @@ public class Product {
 
     public String initialToString() {
         String s = "";
-        s += String.format("Product Name: %s, ", productName);
-        s += String.format("Store Name: %s, " , storeName);
+        s += String.format("Product Name: %s, \n", productName);
+        s += String.format("Store Name: %s, \n" , storeName);
         s += String.format("Price: %s, " , Double.toString(price));
         return s;
 
@@ -145,15 +147,43 @@ public class Product {
 
     public String getStatistics() {
         String s = "";
-        s = s + String.format("Units Purchased: %s, " , Integer.toString(unitsPurchased));
+        s = s + String.format("Units Purchased: %s, \n" , Integer.toString(unitsPurchased));
         s = s + "Customer List: ";
-        for (int i = 0 ; i < customerList.size() ; i++) {
+        ArrayList<String> masterList = new ArrayList<>();
+        //Edited method so that customer list prints out a list of customers who have purchased it along with the
+        // number of units
+
+        for (int i = 0; i < customerList.size(); i++) {
+            if (masterList.indexOf(customerList.get(i)) == -1) {
+                masterList.add(customerList.get(i));
+            }
+
+        }
+        for (int j = 0; j < masterList.size(); j++) {
+            int counter = 0;
+            for (int k = 0; k < customerList.size(); k++) {
+                if (masterList.get(j).equals(customerList.get(k))) {
+                    counter++;
+                }
+            }
+
+            if (counter > 1) {
+                s += masterList.get(j) + ":" + counter + " units,";
+            } else {
+                s += masterList.get(j) + ":" + counter + "unit,";
+            }
+
+            return s.substring(0, s.length() - 1); //Removes string without comma at end
+
+        }
+
+        /**for (int i = 0 ; i < customerList.size() ; i++) {
             if (i == 0) {
                 s = s + customerList.get(i);
             } else {
                 s = s + "," + customerList.get(i);
             }
-        }
+        } **/
         return s;
     }
 
