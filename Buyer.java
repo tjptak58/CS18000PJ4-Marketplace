@@ -142,24 +142,35 @@ public class Buyer extends Person{
         }
     }
 
-    public void addToCart(Product product) {
-        shoppingCart.add(product);
-        try {
-            PrintWriter pw = new PrintWriter(new FileWriter(new File(cart) , true));           
-            pw.print(product.getProductName() + ";");
-            pw.print(product.getStoreName() + ";");
-            pw.print(product.getDescription() + ";");
-            pw.print(Integer.toString(product.getQuantity()) + ",");
-            pw.print(Double.toString(product.getPrice()) + "\n");
+    //CHANGED RETURN TYPE FROM VOID TO BOOLEAN 11/12/22 TO HANDLE OUT OF STOCK EDGE CASE
 
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+    public boolean addToCart(Product product) {
+        if (product.getQuantity() > 0) {
+            shoppingCart.add(product);
+            product.setQuantity(product.getQuantity() - 1);
+            try {
+                PrintWriter pw = new PrintWriter(new FileWriter(new File(cart) , true));
+                pw.print(product.getProductName() + ";");
+                pw.print(product.getStoreName() + ";");
+                pw.print(product.getDescription() + ";");
+                pw.print(Integer.toString(product.getQuantity()) + ",");
+                pw.print(Double.toString(product.getPrice()) + "\n");
+
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return true;
+        } else {
+            return false;
         }
+
     }
 
     public void removeFromCart(Product product) {
+        product.setQuantity(product.getQuantity() + 1);
+
         for (int i = 0 ; i < shoppingCart.size() ; i++) {
             if (shoppingCart.get(i).getProductName().equals(product.getProductName())) {
                 shoppingCart.remove(i);

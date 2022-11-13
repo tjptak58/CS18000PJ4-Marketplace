@@ -11,8 +11,9 @@ public class MarketPlace {
 
 
 
-    public void deleteBuyer(ArrayList<Buyer> buyers, String usernameBuyer, String buyerPassowrd, String filepath, String email) {
-        Buyer buyer = new Buyer(usernameBuyer, buyerPassowrd, filepath, email);
+    public void deleteBuyer(ArrayList<Buyer> buyers, String usernameBuyer, String buyerPassword, String email,
+                            String cart, String history) {
+        Buyer buyer = new Buyer(usernameBuyer, buyerPassword, email, cart, history);
         for (int i = 0; i < buyers.size(); i++) {
             if (buyer.getUsername().equals(usernameBuyer)) {
                 buyers.remove(buyer);
@@ -35,8 +36,9 @@ public class MarketPlace {
 
     }
 
-    public void createBuyer(ArrayList<Buyer> buyers, String usernameBuyer, String buyerPassword, String email, String filepath) {
-        Buyer buyer = new Buyer(usernameBuyer, buyerPassword, email, filepath);
+    public void createBuyer(ArrayList<Buyer> buyers, String usernameBuyer, String buyerPassword, String email,
+                            String cart, String history) {
+        Buyer buyer = new Buyer(usernameBuyer, buyerPassword, email, cart, history);
         buyers.add(buyer);
     }
 
@@ -50,9 +52,9 @@ public class MarketPlace {
 
     }
 
-    public ArrayList<Product> processStoreFile(String filePath) {
+    /** public ArrayList<Product> processStoreFile(String filePath) {
 
-    }
+    } **/
 
 
     /*public Product processFileString(String fileLine) {
@@ -74,7 +76,7 @@ public class MarketPlace {
 
 
         try {
-            BufferedReader bfr = new BufferedReader(new FileReader("/Users/vijayvittal/IdeaProjects/Project/Project4/src/Seller.txt"));
+            BufferedReader bfr = new BufferedReader(new FileReader("seller.txt"));
             String line = "";
             while ((line = bfr.readLine()) != null) {
                 usernameAndPasswordSeller.add(line);
@@ -84,7 +86,7 @@ public class MarketPlace {
             e.printStackTrace();
         }
         try {
-            BufferedReader bfr = new BufferedReader(new FileReader("/Users/vijayvittal/IdeaProjects/Project/Project4/src/Buyer.txt"));
+            BufferedReader bfr = new BufferedReader(new FileReader("buyer.txt"));
             String line = "";
             while ((line = bfr.readLine()) != null) {
                 usernameAndPasswordBuyer.add(line);
@@ -206,6 +208,7 @@ public class MarketPlace {
 
                     System.out.println("Enter your username");
                     String username = scanner.nextLine();
+                    user = username; //ADDED LINE 12/11/22 ***
 //                    // of the array list username, password. If 0 index which is username contains username go to next step
                     for (int i = 0; i < usernameAndPasswordSeller.size(); i++) {
                         boolean repeat = true;
@@ -249,6 +252,7 @@ public class MarketPlace {
                 } else if (sellerOrBuyer.equalsIgnoreCase("Buyer")) {
                     System.out.println("Enter your username");
                     String username = scanner.nextLine();
+                    user = username; //ADDED LINE 11/12/22 ***
 //                    // of the array list username, password. If 0 index which is username contains username go to next step
 
                     for (int i = 0; i < usernameAndPasswordBuyer.size(); i++) {
@@ -262,6 +266,7 @@ public class MarketPlace {
                                     System.out.println("Login successful!");
                                     loginFailed = false;
                                     flag = false;
+                                    boolean loggedInAsBuyer = true;
                                     break;
 
                                 } else {
@@ -490,8 +495,13 @@ public class MarketPlace {
                                 //Add to cart
                                 for (int i = 0; i < buyerList.size(); i++) {
                                     if (buyerList.get(i).getUsername().equals(user)) {
-                                        buyerList.get(i).addToCart(superListOfProducts.get(productNumber - 1));
-                                        superListOfProducts.get(productNumber - 1).setQuantity(superListOfProducts.get(productNumber - 1).getQuantity() - 1);
+                                        if (buyerList.get(i).addToCart(superListOfProducts.get(productNumber - 1))) {
+                                            System.out.println("Added to cart!");
+                                        } else {
+                                            System.out.println("This item is out of stock!");
+                                        }
+                                        //superListOfProducts.get(productNumber - 1).setQuantity(superListOfProducts
+                                        // .get(productNumber - 1).getQuantity() - 1);
                                     }
                                 }
 
@@ -536,8 +546,13 @@ public class MarketPlace {
                                                 if (superListOfProducts.get(i).equals(matchArray.get(productNum - 1))) {
                                                     for (int j = 0; j < buyerList.size(); j++) {
                                                         if (buyerList.get(j).getUsername().equals(user)) {
-                                                            buyerList.get(j).addToCart(superListOfProducts.get(i));
-                                                            superListOfProducts.get(i).setQuantity(superListOfProducts.get(i).getQuantity() - 1);
+                                                            if (buyerList.get(j).addToCart(superListOfProducts.get(i))) {
+                                                                System.out.println("Added to cart!");
+                                                            } else {
+                                                                System.out.println("This item is out of stock!");
+                                                            }
+                                                            //superListOfProducts.get(i).setQuantity
+                                                            // (superListOfProducts.get(i).getQuantity() - 1);
                                                         }
                                                     }
                                                 }
@@ -694,19 +709,49 @@ public class MarketPlace {
                     for (int i  = 0; i < sellerList.size(); i++) {
                         if (sellerList.get(i).getUsername().equals(user)) {
                             for (int j = 0; j < sellerList.get(i).getStores().size(); j++) {
+                                System.out.println( (j + 1) + " " + sellerList.get(i).getStores().get(j).getStoreName());
+
+                            }
+                            int sellerChoice = -1;
+                            while (sellerChoice != 4) {
+                                System.out.println("1. Select a store to view more information");
+                                System.out.println("2. Add a store");
+                                System.out.println("3. Delete a store");
+                                System.out.println("4. Go back");
+                                sellerChoice = scanner.nextInt();
+                                scanner.nextLine();
+                                if (sellerChoice == 1) {
+                                    System.out.println("Enter store number :");
+                                    //CHECK FOR BOUNDS TODO
+                                    int storeNum = scanner.nextInt();
+                                    scanner.nextLine();
+                                    if (storeNum > sellerList.get(i).getStores().size()) {
+                                        System.out.println("Invalid input!");
+                                    } else {
 
 
-
+                                    }
+                                }
 
                             }
 
+
+
+
                         }
+
+
+
 
                     }
 
 
                 } else if (choice == 2) {
 
+                } else if (choice == 3 ) {
+
+                } else if (choice == 4) {
+                    loggedInAsSeller = false;
                 }
 
             }
@@ -715,7 +760,7 @@ public class MarketPlace {
 
         //Write back onto seller.txt, buyer.txt and storeFileInfo.txt
         try {
-            File f = new File ("Seller.txt");
+            File f = new File ("seller.txt");
             PrintWriter pw = new PrintWriter(f);
             for (int i = 0; i < sellerList.size(); i++) {
                 pw.println(sellerList.get(i).getUsername() + ";" + sellerList.get(i).getPassword() + ";" + sellerList.get(i).getEmail() + ";" + sellerList.get(i).getFilePath());
