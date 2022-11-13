@@ -41,7 +41,8 @@ public class Seller extends Person{
         stores.add(store);
     }
 
-    public void createProduct(String productName , String sellerName, String storeName , String filePath,  String description 
+    public void createProduct(String productName , String sellerName, String storeName , String filePath,
+                               String description
     , int quantity , double price, int unitsPurchased, ArrayList<String> customerList) {
         if (stores.size() == 0) {
             createStore(sellerName , storeName , filePath);
@@ -97,7 +98,7 @@ public class Seller extends Person{
     ,quantity,price
      * 
      */
-    public ArrayList<Product> importProducts(String path) {
+    public static ArrayList<Product> importProducts(String path) {
         try {
             var output = new ArrayList<Product>();
             BufferedReader buf = new BufferedReader(new FileReader(new File(path)));
@@ -122,7 +123,8 @@ public class Seller extends Person{
 
     }
 
-    public void exportProducts(String path , ArrayList<Product> products) {
+    //Changed return type from void to boolean 11/13/22
+    public static boolean exportProducts(String path , ArrayList<Product> products) {
         try {
             var output = new ArrayList<Product>();
             PrintWriter pw = new PrintWriter(new FileWriter(new File(path)));
@@ -134,11 +136,14 @@ public class Seller extends Person{
                 pw.print(Double.toString(product.getPrice()) + "\n");
 
             }
+            return true;
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+            return false;
         } catch (IOException e) {
             e.printStackTrace();
+            return false;
         }
     }
 

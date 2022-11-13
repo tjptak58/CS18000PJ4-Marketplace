@@ -172,4 +172,14 @@ public class Product {
         }
 
     }
+
+    public String fileString() {
+        String s =
+                this.getProductName() + ";" + this.storeName + ";" + this.description + ";" + this.quantity + ";" + this.price +
+                ";" + this.unitsPurchased + ";" ;
+        for (int i = 0; i < this.customerList.size(); i++) {
+            s += this.customerList.get(i) + ",";
+        }
+        return s.substring(0, s.length() - 1);
+    }
 }

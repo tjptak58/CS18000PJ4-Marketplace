@@ -150,11 +150,12 @@ public class MarketPlace {
                     System.out.println("Account made!");
 
                     try {
-                        FileOutputStream fos = new FileOutputStream("/Users/vijayvittal/IdeaProjects/Project/Project4/src/Seller.txt", true);
+                        FileOutputStream fos = new FileOutputStream("seller.txt", true);
                         PrintWriter pw = new PrintWriter(fos);
                         //BufferedWriter bfw = new BufferedWriter
                         //        (new FileWriter("/Users/vijayvittal/IdeaProjects/Project/Project4/src/Seller.txt"));
-                        pw.write(usernameSeller + "; " + sellerPassword + "\n");
+                        pw.write(usernameSeller + "; " + sellerPassword + ";" + email + ";" + statisticsFilepath +
+                                "\n");
                         pw.close();
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -194,7 +195,8 @@ public class MarketPlace {
                         PrintWriter pw = new PrintWriter(fos);
                         //  BufferedWriter bfw = new BufferedWriter
                         //          (new FileWriter("/Users/vijayvittal/IdeaProjects/Project/Project4/src/Buyer.txt"));
-                        pw.write(usernameBuyer + "; " + buyerPassword + "\n");
+                        pw.write(usernameBuyer + "; " + buyerPassword + ";" + email + ";" + shoppingCartFilepath + ";" +
+                                purchaseHistoryFilepath + "\n");
                         pw.close();
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -467,7 +469,8 @@ public class MarketPlace {
                 System.out.println("2. View shopping cart");
                 System.out.println("3. View previously purchased items");
                 System.out.println("4. Edit your account info");
-                System.out.println("5. Logout");
+                System.out.println("5. Contact a seller");
+                System.out.println("6. Logout");
                 int choice = scanner.nextInt();
                 scanner.nextLine();
                 if (choice == 1) {
@@ -695,7 +698,24 @@ public class MarketPlace {
                     }
 
                 } else if (choice == 5) {
+                    System.out.println("Enter the name of the store whose seller you would like to contact");
+                    String contactStore = scanner.nextLine();
+                    boolean sellerFound = false;
+                    for (int i = 0; i < sellerList.size(); i++) {
+                        for (int j = 0; j < sellerList.get(i).getStores().size(); j++) {
+                            if (sellerList.get(i).getStores().get(j).getStoreName().equals(contactStore)) {
+                                System.out.println("The seller of this store can be contacted at this email :" + sellerList.get(i).getEmail());
+                                sellerFound = true;
+                            }
+                        }
+                    }
+                    if (!sellerFound) {
+                        System.out.println("Could not find store specified!");
+                    }
+
+                } else if (choice == 6) {
                     loggedInAsBuyer = false;
+
                 }
 
 
@@ -712,7 +732,7 @@ public class MarketPlace {
              * All product details should be included, with one row per product.
              * Sellers can view a dashboard that lists statistics for each of their stores.
              * Data will include a list of customers with the number of items that they have purchased and a list of products with the number of sales.
-             * Sellers can choose to sort the dashboard.
+             * Sellers can choose to sort the dashboard. TODO
              * Sellers can view the number of products currently in customer shopping carts, along with the store and details associated with the products.
              */
             System.out.println("Welcome to the marketplace");
@@ -728,7 +748,7 @@ public class MarketPlace {
                     for (int i  = 0; i < sellerList.size(); i++) {
                         if (sellerList.get(i).getUsername().equals(user)) {
                             for (int j = 0; j < sellerList.get(i).getStores().size(); j++) {
-                                System.out.println( (j + 1) + " " + sellerList.get(i).getStores().get(j).getStoreName());
+                                System.out.println( (j + 1) + ". " + sellerList.get(i).getStores().get(j).getStoreName());
 
                             }
                             int sellerChoice = -1;
@@ -741,48 +761,136 @@ public class MarketPlace {
                                 scanner.nextLine();
                                 if (sellerChoice == 1) {
                                     System.out.println("Enter store number :");
-                                    //CHECK FOR BOUNDS TODO
+
                                     int storeNum = scanner.nextInt();
+
                                     scanner.nextLine();
                                     if (storeNum > sellerList.get(i).getStores().size()) {
                                         System.out.println("Invalid input!");
                                     } else {
                                         int modifyStoreChoice = -1;
                                         while (modifyStoreChoice != 4) {
-                                            for (int k = 0; k < sellerList.get(i).getStores().size(); k++) {
-                                                System.out.println("Store Name : " + sellerList.get(i).getStores().get(k).getStoreName());
-                                                System.out.println("Store Revenue: " + sellerList.get(i).getStores().get(k).getStoreRevenue());
-                                                System.out.println("Product information for this store: ");
-                                                for (int j = 0; j < sellerList.get(i).getStores().get(k).getProducts().size(); j++) {
-                                                    System.out.println("----------------");
-                                                    System.out.println("Product Number " + (k + 1));
-                                                    System.out.println(sellerList.get(i).getStores().get(k).getProducts().get(j).toString());
-                                                    System.out.println(sellerList.get(i).getStores().get(k).getProducts().get(j).getStatistics());
+                                            for (int k = 0; k < sellerList.get(i).getStores().get(storeNum - 1).getProducts().size(); k++) {
+                                                System.out.println("----------------");
+                                                System.out.println("Product Number " + (k + 1));
+                                                System.out.println(sellerList.get(i).getStores().get(storeNum - 1).getProducts().get(k).toString());
+                                                System.out.println(sellerList.get(i).getStores().get(storeNum - 1).getProducts().get(k).getStatistics());
+
+                                            }
+                                            System.out.println("----------------");
+
+                                            System.out.println("1. Add a product for this store");
+                                            System.out.println("2. Remove a product for this store");
+                                            System.out.println("3. Modify information for an existing product");
+                                            System.out.println("4. Import products for this store using a csv file");
+                                            System.out.println("5. Export products for this store using a csv file");
+                                            System.out.println("6. Go back");
+                                            modifyStoreChoice = scanner.nextInt();
+                                            scanner.nextLine();
+                                            if (modifyStoreChoice == 1) {
+                                                System.out.println("Enter the product name: ");
+                                                String newProdName = scanner.nextLine();
+                                                System.out.println("Enter the description for this product");
+                                                String description = scanner.nextLine();
+                                                System.out.println("Enter the quantity of this product");
+                                                int qty = scanner.nextInt();
+                                                scanner.nextLine();
+                                                System.out.println("Enter the price of this product");
+                                                double price = scanner.nextDouble();
+                                                scanner.nextLine();
+                                                sellerList.get(i).getStores().get(storeNum - 1).addProduct(new Product(newProdName, sellerList.get(i).getStores().get(storeNum - 1).getStoreName(), description, qty, price, 0, new ArrayList<String>()));
+                                                for (int j = 0; j < sellerList.get(i).getStores().size(); j++) {
 
                                                 }
 
 
-                                            }
-                                            System.out.println("1. Add a product for this store");
-                                            System.out.println("2. Remove a product for this store");
-                                            System.out.println("3. Modify information for an existing product");
-                                            System.out.println("4. Go back");
-                                            modifyStoreChoice = scanner.nextInt();
-                                            scanner.nextLine();
-                                            if (modifyStoreChoice == 1) {
-
                                             } else if (modifyStoreChoice == 2) {
+                                                System.out.println("Enter the name of the product you would like to " +
+                                                        "remove");
+                                                String rmvProdName = scanner.nextLine();
+                                                boolean prodFound = false;
+                                                for (int k = 0; k < sellerList.get(i).getStores().get(storeNum - 1).getProducts().size(); k++) {
+                                                    if (sellerList.get(i).getStores().get(storeNum - 1).getProducts().get(k).getProductName().equals(rmvProdName)) {
+                                                        prodFound = true;
+                                                        sellerList.get(i).getStores().get(storeNum - 1).getProducts().remove(k);
+                                                        System.out.println("Removed product successfully!");
+                                                    }
+                                                }
+                                                if (!prodFound) {
+                                                    System.out.println("Could not find specified product!");
+                                                }
+
+
 
                                             } else if (modifyStoreChoice == 3) {
+                                                System.out.println("Enter the name of the product you would like to " +
+                                                        "modify");
+                                                String changeProdName = scanner.nextLine();
+                                                boolean prodFound = false;
+                                                for (int k = 0; k < sellerList.get(i).getStores().get(storeNum - 1).getProducts().size(); k++) {
+                                                    if (sellerList.get(i).getStores().get(storeNum - 1).getProducts().get(k).getProductName().equals(changeProdName)) {
+                                                        System.out.println("Enter the new description");
+                                                        String description = scanner.nextLine();
+                                                        System.out.println("Enter the new quantity");
+                                                        int qty = scanner.nextInt();
+                                                        scanner.nextLine();
+                                                        double price = scanner.nextDouble();
+                                                        scanner.nextLine();
+                                                        sellerList.get(i).editProduct(sellerList.get(i).getStores().get(storeNum - 1).getProducts().get(k), changeProdName, sellerList.get(i).getStores().get(storeNum - 1).getStoreName(), description, qty, price);
+                                                        System.out.println("Edited product successfully!");
+                                                    }
 
+                                                }
+                                                if (!prodFound) {
+                                                    System.out.println("Could not find specified product!");
+                                                }
+
+
+                                            } else if (modifyStoreChoice == 4) {
+                                                System.out.println("Enter the file path from which you would like to " +
+                                                        "import products: ");
+                                                String importPath = scanner.nextLine();
+                                                ArrayList<Product> importArray = Seller.importProducts(importPath);
+                                                boolean errorMsg = false;
+                                                for (int k = 0; k < importArray.size(); k++) {
+                                                    //Checking if kth products product name does not already exist
+                                                    //Since product name must be a unique identifier
+                                                    boolean productExistsAlready = false;
+                                                   for (int j = 0; j < sellerList.get(i).getStores().get(storeNum - 1).getProducts().size(); j++) {
+                                                       if (sellerList.get(i).getStores().get(storeNum - 1).getProducts().get(j).getProductName().equals(importArray.get(k).getProductName())) {
+                                                           productExistsAlready = true;
+                                                           errorMsg = true;
+                                                       }
+
+                                                   }
+                                                   if (!productExistsAlready) {
+                                                       sellerList.get(i).getStores().get(storeNum - 1).addProduct(importArray.get(k));
+                                                   }
+                                                }
+                                                System.out.println("Imported products successfully");
+                                                if (errorMsg) {
+                                                    System.out.println("One or more of the products on the file " +
+                                                            "already exists in the store and could not be imported");
+                                                    System.out.println("Choose the modify product information option " +
+                                                            "on the menu to change product info");
+                                                }
+                                                
+                                            } else if (modifyStoreChoice == 5) {
+                                                System.out.println("Enter the file path to which you would like to " +
+                                                        "export the products of this store");
+                                                String exportPath = scanner.nextLine();
+                                                if (Seller.exportProducts(exportPath,
+                                                        sellerList.get(i).getStores().get(storeNum - 1).getProducts())) {
+                                                    System.out.println("Exported product info successfully!");
+                                                } else {
+                                                    System.out.println("There was an error writing to the file!");
+                                                }
+                                                
                                             }
-
 
 
                                         }
-                                        //Add a product for that store
-                                        //Remove a product for that store
-                                        //Change info for an existing product
+
 
 
 
@@ -843,6 +951,33 @@ public class MarketPlace {
 
 
                 } else if (choice == 2) {
+                    System.out.println("Enter store for which you would like to view dashboard");
+                    String dashboardStore = scanner.nextLine();
+                    boolean storeFound = false;
+                    for (int h = 0; h < sellerList.size(); h++ ) {
+                        if (sellerList.get(h).getUsername().equals(user)) {
+                            for (int i = 0; i < sellerList.get(h).getStores().size(); i++) {
+                                
+
+                            }
+
+                        }
+                    }
+                    /**
+                    for (int k = 0; k < sellerList.get(i).getStores().size(); k++) {
+                        System.out.println("Store Name : " + sellerList.get(i).getStores().get(k).getStoreName());
+                        System.out.println("Store Revenue: " + sellerList.get(i).getStores().get(k).getStoreRevenue());
+                        System.out.println("Product information for this store: ");
+                        for (int j = 0; j < sellerList.get(i).getStores().get(k).getProducts().size(); j++) {
+                            System.out.println("----------------");
+                            System.out.println("Product Number " + (k + 1));
+                            System.out.println(sellerList.get(i).getStores().get(k).getProducts().get(j).toString());
+                            System.out.println(sellerList.get(i).getStores().get(k).getProducts().get(j).getStatistics());
+
+                        }
+
+
+                    } **/
 
 
 
@@ -853,7 +988,7 @@ public class MarketPlace {
                             for (int i = 0; i < buyerList.size(); i++) {
                                 for (int j = 0; j < buyerList.get(i).getShoppingCart().size(); j++) {
                                     if (buyerList.get(i).getShoppingCart().get(j).getStoreName().equals(sellerList.get(p).getUsername())) {
-                                        System.out.println();
+                                        System.out.println(buyerList.get(i).getUsername() + " has the item " + buyerList.get(i).getShoppingCart().get(j).getProductName() + "from your store " + buyerList.get(i).getShoppingCart().get(j).getStoreName());
                                     }
                                 }
                             }
@@ -872,6 +1007,12 @@ public class MarketPlace {
         //Farewell message
         System.out.println("Goodbye! Thank you for using our marketplace");
 
+       /** //Make changes made in seller store array reflect in marketplace array
+        for (int i = 0; i < sellerList.size(); i++) {
+            if (sellerList.get(i).getUsername().equals(user)) {
+                for (int j = 0; )
+            }
+        } **/
         //Write back onto seller.txt, buyer.txt and storeFileInfo.txt
         try {
             File f = new File ("seller.txt");
@@ -906,7 +1047,11 @@ public class MarketPlace {
             PrintWriter pw = new PrintWriter(f);
             for (int i = 0 ; i < marketPlace.size(); i++) {
                 System.out.println(marketPlace.get(i).getSellerName() + ";" + marketPlace.get(i).getStoreName() + ";" + marketPlace.get(i).getStoreRevenue() + ";" + marketPlace.get(i).getFilePath());
-
+                File loopf = new File(marketPlace.get(i).getFilePath());
+                PrintWriter loopPw = new PrintWriter(loopf);
+                for (int j = 0; j < marketPlace.get(i).getProducts().size(); j++) {
+                    loopPw.println(marketPlace.get(i).getProducts().get(j).fileString());
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
