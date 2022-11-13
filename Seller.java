@@ -88,6 +88,15 @@ public class Seller extends Person{
             }
         }
     }
+    
+    public static ArrayList<Product> listSales(ArrayList<Product> Store) {
+        ArrayList<Product> sales = new ArrayList<Product>();
+        for (Product p : Store) {
+            if (p.getCustomerList() != null)
+                sales.add(p);
+        }
+        return sales;
+    }
    
     
     /*
