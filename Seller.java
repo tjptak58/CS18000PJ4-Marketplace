@@ -36,14 +36,20 @@ public class Seller extends Person{
         this.filePath = filePath;
     }
 
+    /*
+     * Creates a new store for a seller and adds that store
+     * to an arraylist of its current stores
+     */
     public void createStore(String sellerName , String storeName, String filePath) {
         Store store = new Store(sellerName , storeName , filePath);
         stores.add(store);
     }
 
+    /*
+     * Creates a product and adds that product to the appropriate store
+     */
     public void createProduct(String productName , String sellerName, String storeName , String filePath,
-                               String description
-    , int quantity , double price, int unitsPurchased, ArrayList<String> customerList) {
+    String description, int quantity , double price, int unitsPurchased, ArrayList<String> customerList) {
         if (stores.size() == 0) {
             createStore(sellerName , storeName , filePath);
             Store s = stores.get(0);
@@ -62,6 +68,9 @@ public class Seller extends Person{
         }
     }
 
+    /*
+     * Allows a seller to edit a product in one of their stores
+     */
     public void editProduct(Product p, String productName , String storeName , String description 
     , int quantity , double price) {
         if (! (productName == null)){
@@ -73,14 +82,17 @@ public class Seller extends Person{
         if (! (description == null)){
             p.setDescription(description);
         }
-        if (! (quantity == -1)){ //CONDITIONAL ALLOWS QUANTITY TO BE NEGATIVE!!!
+        if (! (quantity == -1)){
             p.setQuantity(quantity);
         } 
-        if (! (price == -1.0)) { //CONDITIONAL ALLOWS PRICE TO BE NEGATIVE!!!
+        if (! (price == -1.0)) {
             p.setPrice(price);
         }
     }
     
+    /*
+     * Deletes a product in a store
+     */
     public void deleteProduct(Product p, String storeName) {
         for (Store s : stores) {
             if (storeName.equals(s.getStoreName())) {
@@ -89,6 +101,10 @@ public class Seller extends Person{
         }
     }
     
+    /*
+     * Returns an arraylist of prodcuts thata have been purcahsed
+     * in a store
+     */
     public static ArrayList<Product> listSales(ArrayList<Product> Store) {
         ArrayList<Product> sales = new ArrayList<Product>();
         for (Product p : Store) {

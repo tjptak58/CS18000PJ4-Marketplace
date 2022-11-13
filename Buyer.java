@@ -142,7 +142,9 @@ public class Buyer extends Person{
         }
     }
 
-    //CHANGED RETURN TYPE FROM VOID TO BOOLEAN 11/12/22 TO HANDLE OUT OF STOCK EDGE CASE
+    /*
+     * Adds a product to the shopping cart of a user
+     */
 
     public boolean addToCart(Product product) {
         if (product.getQuantity() > 0) {
@@ -168,6 +170,9 @@ public class Buyer extends Person{
 
     }
 
+    /*
+     * Removes a product from the shopping cart of the user
+     */
     public void removeFromCart(Product product) {
         product.setQuantity(product.getQuantity() + 1);
 
@@ -176,8 +181,6 @@ public class Buyer extends Person{
                 shoppingCart.remove(i);
             }
         }
-        //Made changes on 11/12/22
-        //Made function write new cart contents to file instead of appending product to be removed
         try {
             PrintWriter pw = new PrintWriter(new FileWriter(new File(cart) , false));
             for (int i = 0; i < shoppingCart.size(); i++) {
@@ -187,13 +190,6 @@ public class Buyer extends Person{
                 pw.print(shoppingCart.get(i).getQuantity() + ";");
                 pw.print(shoppingCart.get(i).getPrice() + "\n");
             }
-            /**
-            pw.print(product.getProductName() + ";");
-            pw.print(product.getStoreName() + ";");
-            pw.print(product.getDescription() + ";");
-            pw.print(Integer.toString(product.getQuantity()) + ",");
-            pw.print(Double.toString(product.getPrice()) + "\n");
-             **/
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -202,6 +198,10 @@ public class Buyer extends Person{
         }
     }
 
+    /*
+     * Writes the purchase history of a buyer to a file 
+     * Specified as a parameter
+     */
     public boolean exportHistory(String path) {
         try {
             BufferedReader buf = new BufferedReader(new FileReader(new File(history)));
@@ -226,6 +226,11 @@ public class Buyer extends Person{
         }
     }
 
+    /*
+     * Updates a user's purchase history when they purcahse an item
+     * Adds the product to ArrayList<Product> purchase and writes to the 
+     * history file.
+     */
     public void purchase(Product p) {
         p.setUnitsPurchased(p.getUnitsPurchased() + 1); //ADDED THIS LINE 11/12/22
         purchased.add(p);
