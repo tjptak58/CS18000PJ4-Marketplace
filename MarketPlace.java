@@ -124,7 +124,7 @@ public class MarketPlace {
                         System.out.println("Enter your new username");
                         usernameSeller = scanner.nextLine();
                         // if this is empty then there are no accounts put in yet
-                        if (!usernameAndPasswordSeller.isEmpty()) {
+                        if (!(usernameAndPasswordSeller.isEmpty())) {
                             // check if there is already a username that exists
                             for (int i = 0; i < usernameAndPasswordSeller.size(); i++) {
                                 if (usernameAndPasswordSeller.get(i).substring(0, usernameAndPasswordSeller.get(i).indexOf(";")).contains(usernameSeller)) {
@@ -168,6 +168,7 @@ public class MarketPlace {
                         usernameAlreadyExists = false;
                         System.out.println("Enter your new username");
                         usernameBuyer = scanner.nextLine();
+
                         for (int i = 0; i < usernameAndPasswordBuyer.size(); i++) {
                             if (usernameAndPasswordBuyer.get(i).substring(0, usernameAndPasswordSeller.get(i).indexOf(";")).contains(usernameBuyer)) {
                                 System.out.println("Error: Username already exists. Pick a new username");
@@ -450,12 +451,6 @@ public class MarketPlace {
         }
 
 
-
-
-
-
-
-
         if (loggedInAsBuyer) {
             /**for (int i = 0; i < buyerList.size(); i ++) {
                 if (buyerList.get(i).getUsername().equals(user)) {
@@ -491,7 +486,6 @@ public class MarketPlace {
                             System.out.println("Enter the product number :");
                             int productNumber = scanner.nextInt();
                             scanner.nextLine();
-                            //TODO: Check if product number is valid
                             if (productNumber > marketPlace.size()) {
                                 System.out.println("Invalid input!");
                             } else {
@@ -536,7 +530,6 @@ public class MarketPlace {
                             } else {
                                 for (int i = 0; i < matchArray.size(); i++) {
                                     System.out.println("----------------");
-                                    //Printout product number as well TODO
                                     System.out.println("Product Number " + (i + 1));
                                     System.out.println(matchArray.get(i).initialToString());
                                 }
@@ -550,28 +543,34 @@ public class MarketPlace {
                                         System.out.println("Enter the product number:");
                                         int productNum = scanner.nextInt();
                                         scanner.nextLine();
-                                        System.out.println(matchArray.get(productNum - 1).toString());
-                                        System.out.println("1. Add to cart");
-                                        System.out.println("2. Go back");
-                                        int specCartChoice = scanner.nextInt();
-                                        if (specCartChoice == 1) {
-                                            for (int i = 0; i < superListOfProducts.size(); i++) {
-                                                if (superListOfProducts.get(i).equals(matchArray.get(productNum - 1))) {
-                                                    for (int j = 0; j < buyerList.size(); j++) {
-                                                        if (buyerList.get(j).getUsername().equals(user)) {
-                                                            if (buyerList.get(j).addToCart(superListOfProducts.get(i))) {
-                                                                System.out.println("Added to cart!");
-                                                            } else {
-                                                                System.out.println("This item is out of stock!");
+                                        if (productNum > matchArray.size()) {
+                                            System.out.println("Invalid input");
+                                        } else {
+                                            System.out.println(matchArray.get(productNum - 1).toString());
+                                            System.out.println("1. Add to cart");
+                                            System.out.println("2. Go back");
+                                            int specCartChoice = scanner.nextInt();
+                                            if (specCartChoice == 1) {
+                                                for (int i = 0; i < superListOfProducts.size(); i++) {
+                                                    if (superListOfProducts.get(i).equals(matchArray.get(productNum - 1))) {
+                                                        for (int j = 0; j < buyerList.size(); j++) {
+                                                            if (buyerList.get(j).getUsername().equals(user)) {
+                                                                if (buyerList.get(j).addToCart(superListOfProducts.get(i))) {
+                                                                    System.out.println("Added to cart!");
+                                                                } else {
+                                                                    System.out.println("This item is out of stock!");
+                                                                }
+                                                                //superListOfProducts.get(i).setQuantity
+                                                                // (superListOfProducts.get(i).getQuantity() - 1);
                                                             }
-                                                            //superListOfProducts.get(i).setQuantity
-                                                            // (superListOfProducts.get(i).getQuantity() - 1);
                                                         }
                                                     }
                                                 }
+
                                             }
 
                                         }
+
 
 
 
@@ -637,8 +636,13 @@ public class MarketPlace {
                                             "remove from cart:");
                                     int rmvNum = scanner.nextInt();
                                     scanner.nextLine();
-                                    //Check for bounds TODO
-                                    buyerList.get(i).removeFromCart(buyerList.get(i).getShoppingCart().get(rmvNum - 1));
+                                    if (rmvNum > buyerList.get(i).getShoppingCart().size()) {
+                                        System.out.println("Invalid input!");
+                                    } else {
+                                        buyerList.get(i).removeFromCart(buyerList.get(i).getShoppingCart().get(rmvNum - 1));
+                                        System.out.println("Removed product from cart successfully!");
+                                    }
+
 
                                 }
 
@@ -799,9 +803,7 @@ public class MarketPlace {
                                                 double price = scanner.nextDouble();
                                                 scanner.nextLine();
                                                 sellerList.get(i).getStores().get(storeNum - 1).addProduct(new Product(newProdName, sellerList.get(i).getStores().get(storeNum - 1).getStoreName(), description, qty, price, 0, new ArrayList<String>()));
-                                                for (int j = 0; j < sellerList.get(i).getStores().size(); j++) {
-
-                                                }
+                                                System.out.println("Added product successfully!");
 
 
                                             } else if (modifyStoreChoice == 2) {
@@ -957,6 +959,7 @@ public class MarketPlace {
                     for (int h = 0; h < sellerList.size(); h++ ) {
                         if (sellerList.get(h).getUsername().equals(user)) {
                             for (int i = 0; i < sellerList.get(h).getStores().size(); i++) {
+                                //TODO IMPLEMENT SELLER DASHBOARD
                                 
 
                             }
