@@ -166,12 +166,15 @@ public class Buyer extends Person{
                 pw.print(product.getDescription() + ";");
                 pw.print(Integer.toString(product.getQuantity()) + ",");
                 pw.print(Double.toString(product.getPrice()) + "\n");
+                pw.flush();
+                pw.close();
 
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
             return true;
         } else {
             return false;
@@ -198,6 +201,8 @@ public class Buyer extends Person{
                 pw.print(shoppingCart.get(i).getDescription() + ";");
                 pw.print(shoppingCart.get(i).getQuantity() + ";");
                 pw.print(shoppingCart.get(i).getPrice() + "\n");
+                pw.flush();
+
             }
 
         } catch (FileNotFoundException e) {
@@ -249,8 +254,9 @@ public class Buyer extends Person{
                 pw.print(product.getProductName() + ";");
                 pw.print(product.getStoreName() + ";");
                 pw.print(product.getDescription() + ";");
-                pw.print(Integer.toString(product.getQuantity()) + ",");
+                pw.print(Integer.toString(product.getQuantity()) + ";");
                 pw.print(Double.toString(product.getPrice()) + "\n");
+                pw.flush();
 
             }
         } catch (FileNotFoundException e) {

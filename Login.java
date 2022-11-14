@@ -116,8 +116,8 @@ public class Login {
                         PrintWriter pw = new PrintWriter(fos);
                         //BufferedWriter bfw = new BufferedWriter
                         //        (new FileWriter("/Users/vijayvittal/IdeaProjects/Project/Project4/src/Seller.txt"));
-                        pw.write(usernameSeller + "; " + sellerPassword + "; " 
-                                + email + "; " + statisticsFilepath +
+                        pw.write(usernameSeller + ";" + sellerPassword + ";"
+                                + email + ";" + statisticsFilepath +
                                 "\n");
                         pw.close();
                     } catch (IOException e) {
@@ -168,8 +168,8 @@ public class Login {
                         FileOutputStream fos = new FileOutputStream("buyer.txt", true);
                         PrintWriter pw = new PrintWriter(fos);
 
-                        pw.write(usernameBuyer + "; " + buyerPassword + "; " +
-                                email + "; " + shoppingCartFilepath + "; " +
+                        pw.write(usernameBuyer + ";" + buyerPassword + ";" +
+                                email + ";" + shoppingCartFilepath + ";" +
                                 purchaseHistoryFilepath + "\n");
                         pw.close();
                     } catch (IOException e) {
