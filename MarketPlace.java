@@ -708,8 +708,6 @@ public class MarketPlace {
                                             } else {
                                                 System.out.println("This item is out of stock!");
                                             }
-                                            //superListOfProducts.get(productNumber - 1).setQuantity(superListOfProducts
-                                            // .get(productNumber - 1).getQuantity() - 1);
                                         }
                                     }
 
@@ -1278,7 +1276,6 @@ public class MarketPlace {
         }
 
 
-        // TODO NEED TO WRITE TO STATISTICS FILE FOR EACH STORE AT END OF PROGRAM !!!
 
     }
 }
