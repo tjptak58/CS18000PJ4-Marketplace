@@ -1,13 +1,26 @@
 import java.io.*;
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Scanner;
 
-public class MarketPlace {
+/**
+ * Main method for project that implements the marketplace
+ *
+ * @author
+ *
+ * @verion 11/14/22
+ */
 
+public class MarketPlace {
+    /**
+     *Static string that stores the username of the logged in buyer or seller
+     */
     static String user;
+
+    /**
+     * Static booleans to determine whether a buyer or seller has logged in
+     */
     static boolean loggedInAsBuyer;
     static boolean loggedInAsSeller;
 
@@ -23,27 +36,12 @@ public class MarketPlace {
         }
     }
 
-    public void deleteSeller(ArrayList<Seller> sellers, String usernameSeller, String sellerPassword, String filepath, String email) {
-        Seller seller = new Seller(usernameSeller, sellerPassword, filepath, email);
-        for (int i = 0; i < sellers.size(); i++) {
-            if (seller.getUsername().equals(usernameSeller)) {
-                sellers.remove(seller);
-            }
-        }
-    }
 
-    public void createSeller(ArrayList<Seller> sellers, String usernameSeller, String sellerPassword, String email, String filepath) {
-        Seller seller = new Seller(usernameSeller, sellerPassword, email, filepath);
-        sellers.add(seller);
-
-    }
-
-    public void createBuyer(ArrayList<Buyer> buyers, String usernameBuyer, String buyerPassword, String email,
-                            String cart, String history) {
-        Buyer buyer = new Buyer(usernameBuyer, buyerPassword, email, cart, history);
-        buyers.add(buyer);
-    }
-
+    /**
+     * Method to print out the contents of marketplace
+     * @author Rohan,
+     * @param superListOfProducts
+     */
     public  static void printMarketPlace (ArrayList<Product> superListOfProducts) {
         for (int i = 0; i <superListOfProducts.size(); i++) {
             System.out.println("--------------------");
@@ -55,17 +53,15 @@ public class MarketPlace {
 
     }
 
-    /** public ArrayList<Product> processStoreFile(String filePath) {
-
-    } **/
 
 
-    /*public Product processFileString(String fileLine) {
-        //Process fileLine to get a product object
-
-    }*/
+    /*
+     * Main method
+     */
 
     public static void main(String[] args) {
+
+
         Scanner scanner = new Scanner(System.in);
         ArrayList<String> sellerArrayList = new ArrayList<>();
         ArrayList<String> buyerArrayList = new ArrayList<>();
@@ -73,6 +69,10 @@ public class MarketPlace {
         HashMap<String, String> buyerLogin = new HashMap<String, String>();
         ArrayList<String> usernameAndPasswordSeller = new ArrayList<>();
         ArrayList<String> usernameAndPasswordBuyer = new ArrayList<>();
+        /**
+         * Login System
+         * @author
+         */
 
 
         System.out.println("Welcome");
@@ -489,11 +489,11 @@ public class MarketPlace {
 
 
         /**
-         * Login part of program must return a static string user
+         * Login part of program returns a static string user
          * which is username of buyer if logged in as buyer
-         * and is username of seller if logged in as seller
+         * or is username of seller if logged in as seller
          *
-         * Login part must also set loggedInAsBuyer or loggedInAsSeller to true
+         * Login part also sets loggedInAsBuyer or loggedInAsSeller to true accordingly
          *
          *
          *
@@ -506,7 +506,6 @@ public class MarketPlace {
         /**
          *Read from storeListFile in the beginning of the program to create
          * store objects and add them to marketPlace
-         *  ArrayList
          */
 
         String storeListFile = "storeListFile.txt";
@@ -590,7 +589,9 @@ public class MarketPlace {
         }
 
 
-        //Read from buyer.txt to create an array of buyer objects
+        /*
+         *Read from buyer.txt to create an array of buyer objects
+         */
         ArrayList<Buyer> buyerList = new ArrayList<>();
         try {
             File f = new File("buyer.txt");
@@ -604,10 +605,10 @@ public class MarketPlace {
                 String email = lineArray[2];
                 String filePathToShoppingCart = lineArray[3];
                 String filePathToPurchaseHistory = lineArray[4];
+                //Initialize new buyer object
                 Buyer buyer = new Buyer(username, password, email, filePathToShoppingCart, filePathToPurchaseHistory);
                 buyerList.add(buyer);
                 line = bfr.readLine();
-                //Initialize new buyer object
 
             }
 
@@ -659,7 +660,7 @@ public class MarketPlace {
                 if (buyerList.get(i).getUsername().equals(user)) {
                     buyerList.get(i).modify();
                 }
-            } //Processing buyer objects format **/
+            } //Processing buyer objects in place --  format **/
             System.out.println("Welcome to the marketplace!");
             while (loggedInAsBuyer) {
 
@@ -764,8 +765,7 @@ public class MarketPlace {
                                                                 } else {
                                                                     System.out.println("This item is out of stock!");
                                                                 }
-                                                                //superListOfProducts.get(i).setQuantity
-                                                                // (superListOfProducts.get(i).getQuantity() - 1);
+
                                                             }
                                                         }
                                                     }
@@ -774,10 +774,6 @@ public class MarketPlace {
                                             }
 
                                         }
-
-
-
-
                                     }
 
                                 }
@@ -808,8 +804,13 @@ public class MarketPlace {
                         if (checkoutChoice == 1) {
                             for (int i = 0; i < buyerList.size(); i++) {
                                 if (buyerList.get(i).getUsername().equals(user)) {
+                                    if (buyerList.get(i).getShoppingCart().size() == 0) {
+                                        System.out.println("Your shopping cart is empty!!");
+                                    }
                                     for (int j = 0; j < buyerList.get(i).getShoppingCart().size(); j++) {
                                         buyerList.get(i).purchase(buyerList.get(i).getShoppingCart().get(j));
+                                        System.out.println("Purchase successful!"); //Prints success message for each
+                                        // item
                                         for (int p = 0; p < marketPlace.size(); p++) {
                                             if (marketPlace.get(p).getStoreName().equals(buyerList.get(i).getShoppingCart().get(j).getStoreName())) {
                                                 //Add to stores revenue
@@ -820,7 +821,7 @@ public class MarketPlace {
                                     }
                                     //Empty shopping cart after purchase
                                     buyerList.get(i).setShoppingCart(new ArrayList<Product>());
-                                    System.out.println("Purchase successful!");
+
 
 
 
@@ -860,6 +861,7 @@ public class MarketPlace {
 
 
                 } else if (choice == 3) {
+                    System.out.println("----------------");
                     System.out.println("Enter file path to which you would like to export your purchase history");
                     String exportPath = scanner.nextLine();
                     for (int i = 0; i < buyerList.size(); i++) {
@@ -873,6 +875,7 @@ public class MarketPlace {
                     }
 
                 } else if (choice == 4) {
+                    System.out.println("----------------");
                     System.out.println("1. Edit info");
                     System.out.println("2. Delete account");
                     int choiceFour = scanner.nextInt();
@@ -906,6 +909,7 @@ public class MarketPlace {
                     }
 
                 } else if (choice == 5) {
+                    System.out.println("----------------");
                     System.out.println("Enter the name of the store whose seller you would like to contact");
                     String contactStore = scanner.nextLine();
                     boolean sellerFound = false;
@@ -940,7 +944,7 @@ public class MarketPlace {
              * All product details should be included, with one row per product.
              * Sellers can view a dashboard that lists statistics for each of their stores.
              * Data will include a list of customers with the number of items that they have purchased and a list of products with the number of sales.
-             * Sellers can choose to sort the dashboard. TODO
+             * Sellers can choose to sort the dashboard.
              * Sellers can view the number of products currently in customer shopping carts, along with the store and details associated with the products.
              */
             System.out.println("Welcome to the marketplace");
@@ -1174,25 +1178,11 @@ public class MarketPlace {
 
                         }
                     }
-                    /**
-                    for (int k = 0; k < sellerList.get(i).getStores().size(); k++) {
-                        System.out.println("Store Name : " + sellerList.get(i).getStores().get(k).getStoreName());
-                        System.out.println("Store Revenue: " + sellerList.get(i).getStores().get(k).getStoreRevenue());
-                        System.out.println("Product information for this store: ");
-                        for (int j = 0; j < sellerList.get(i).getStores().get(k).getProducts().size(); j++) {
-                            System.out.println("----------------");
-                            System.out.println("Product Number " + (k + 1));
-                            System.out.println(sellerList.get(i).getStores().get(k).getProducts().get(j).toString());
-                            System.out.println(sellerList.get(i).getStores().get(k).getProducts().get(j).getStatistics());
-
-                        }
-
-
-                    } **/
 
 
 
                 } else if (choice == 3 ) {
+                    System.out.println("----------------");
 
                     for (int p = 0; p < sellerList.size(); p++) {
                         if (sellerList.get(p).getUsername().equals(user)) {

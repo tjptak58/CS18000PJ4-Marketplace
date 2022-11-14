@@ -277,3 +277,44 @@
         }while (!loginSuccessful);
 
         System.out.println("finished login"); **/
+
+
+
+
+           public void deleteSeller(ArrayList<Seller> sellers, String usernameSeller, String sellerPassword, String filepath, String email) {
+                Seller seller = new Seller(usernameSeller, sellerPassword, filepath, email);
+                for (int i = 0; i < sellers.size(); i++) {
+                    if (seller.getUsername().equals(usernameSeller)) {
+                        sellers.remove(seller);
+                    }
+                }
+            }
+
+            public void createSeller(ArrayList<Seller> sellers, String usernameSeller, String sellerPassword, String email, String filepath) {
+                Seller seller = new Seller(usernameSeller, sellerPassword, email, filepath);
+                sellers.add(seller);
+
+            }
+
+            public void createBuyer(ArrayList<Buyer> buyers, String usernameBuyer, String buyerPassword, String email,
+                                    String cart, String history) {
+                Buyer buyer = new Buyer(usernameBuyer, buyerPassword, email, cart, history);
+                buyers.add(buyer);
+            }
+
+
+             /**
+                                for (int k = 0; k < sellerList.get(i).getStores().size(); k++) {
+                                    System.out.println("Store Name : " + sellerList.get(i).getStores().get(k).getStoreName());
+                                    System.out.println("Store Revenue: " + sellerList.get(i).getStores().get(k).getStoreRevenue());
+                                    System.out.println("Product information for this store: ");
+                                    for (int j = 0; j < sellerList.get(i).getStores().get(k).getProducts().size(); j++) {
+                                        System.out.println("----------------");
+                                        System.out.println("Product Number " + (k + 1));
+                                        System.out.println(sellerList.get(i).getStores().get(k).getProducts().get(j).toString());
+                                        System.out.println(sellerList.get(i).getStores().get(k).getProducts().get(j).getStatistics());
+
+                                    }
+
+
+                                } **/
