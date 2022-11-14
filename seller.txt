@@ -1,3 +1,1 @@
-walmart; 123; walmart@123.com; walmartStats.txt
-target;123;ys@ceo.com;target.txt
-mcdonalds;12;12;mcdonalds.txt
+Shop1;123;shop1email;shop1file

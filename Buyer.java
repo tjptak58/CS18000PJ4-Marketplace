@@ -164,7 +164,7 @@ public class Buyer extends Person{
                 pw.print(product.getProductName() + ";");
                 pw.print(product.getStoreName() + ";");
                 pw.print(product.getDescription() + ";");
-                pw.print(Integer.toString(product.getQuantity()) + ",");
+                pw.print(Integer.toString(product.getQuantity()) + ";");
                 pw.print(Double.toString(product.getPrice()) + "\n");
                 pw.flush();
                 pw.close();

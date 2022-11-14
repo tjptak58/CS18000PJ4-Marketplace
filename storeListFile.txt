@@ -1,1 +1,1 @@
-target;targetWL;0.0;targetWLSTORE.txt
+Shop1;First Shpo;0.0;firstshopfile.txt

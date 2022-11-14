@@ -523,6 +523,9 @@ public class MarketPlace {
                 line = line.substring(line.indexOf(';') + 1);
                 String storeFilePath = line;
                 File loopFile = new File(storeFilePath);
+                if (!loopFile.exists()) {
+                    loopFile.createNewFile();
+                }
                 FileReader loopfr = new FileReader(loopFile);
                 BufferedReader loopbfr = new BufferedReader(loopfr);
 
@@ -557,7 +560,7 @@ public class MarketPlace {
                     Product loopProduct = new Product(productName, storeNameOfProduct, description, qty, price, unitsPurchased
                             , customerArrayList);
                     productsInStore.add(loopProduct);
-                    innerLine = bfr.readLine();
+                    innerLine = loopbfr.readLine();
 
                 }
                 //End of storeFile
@@ -809,6 +812,8 @@ public class MarketPlace {
                                     }
                                     for (int j = 0; j < buyerList.get(i).getShoppingCart().size(); j++) {
                                         buyerList.get(i).purchase(buyerList.get(i).getShoppingCart().get(j));
+                                        buyerList.get(i).removeFromCart(buyerList.get(i).getShoppingCart().get(j));
+                                        buyerList.get(i).getShoppingCart().get(j).setQuantity(buyerList.get(i).getShoppingCart().get(j).getQuantity() - 1);
                                         System.out.println("Purchase successful!"); //Prints success message for each
                                         // item
                                         for (int p = 0; p < marketPlace.size(); p++) {
@@ -817,10 +822,12 @@ public class MarketPlace {
                                                 marketPlace.get(p).setStoreRevenue(marketPlace.get(p).getStoreRevenue() + buyerList.get(i).getShoppingCart().get(j).getPrice());
                                             }
                                         }
+                                        //For each item in shopping cart search marketplace for a store name that
+                                        // matches product store name and increase that stores revenue
+
 
                                     }
-                                    //Empty shopping cart after purchase
-                                    buyerList.get(i).setShoppingCart(new ArrayList<Product>());
+
 
 
 
@@ -1243,7 +1250,8 @@ public class MarketPlace {
             File f = new File("buyer.txt");
             PrintWriter pw = new PrintWriter(f);
             for (int i = 0; i < buyerList.size(); i++) {
-                pw.println(buyerList.get(i).getUsername() + ";" + buyerList.get(i).getPassword() + ";" + buyerList.get(i).getEmail() + ";" + buyerList.get(i).getCart() + ";" + buyerList.get(i).getHistory());
+                pw.println(buyerList.get(i).getUsername() + ";" + buyerList.get(i).getPassword() + ";" + buyerList.get(i).getEmail() + ";" + buyerList.get(i).getCart() + ";" + buyerList.get(i).getHistory() );
+
 
             }
             pw.flush();
