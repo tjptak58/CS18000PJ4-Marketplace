@@ -1,1 +1,1 @@
-Shop1;First Shpo;0.0;firstshopfile.txt
+123;newStore;2.0;newStore.txt

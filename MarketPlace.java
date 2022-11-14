@@ -659,6 +659,8 @@ public class MarketPlace {
 
 
         if (loggedInAsBuyer) {
+
+
             /**for (int i = 0; i < buyerList.size(); i ++) {
                 if (buyerList.get(i).getUsername().equals(user)) {
                     buyerList.get(i).modify();
@@ -818,8 +820,9 @@ public class MarketPlace {
                                             }
                                         }
                                         buyerList.get(i).purchase(buyerList.get(i).getShoppingCart().get(j));
-                                        buyerList.get(i).removeFromCart(buyerList.get(i).getShoppingCart().get(j));
                                         buyerList.get(i).getShoppingCart().get(j).setQuantity(buyerList.get(i).getShoppingCart().get(j).getQuantity() - 1);
+                                        buyerList.get(i).removeFromCart(buyerList.get(i).getShoppingCart().get(j));
+
                                         System.out.println("Purchase successful!"); //Prints success message for each
                                         //For each item in shopping cart search marketplace for a store name that
                                         // matches product store name and increase that stores revenue
@@ -915,15 +918,20 @@ public class MarketPlace {
                     }
 
                 } else if (choice == 5) {
+
                     System.out.println("----------------");
                     System.out.println("Enter the name of the store whose seller you would like to contact");
                     String contactStore = scanner.nextLine();
                     boolean sellerFound = false;
-                    for (int i = 0; i < sellerList.size(); i++) {
-                        for (int j = 0; j < sellerList.get(i).getStores().size(); j++) {
-                            if (sellerList.get(i).getStores().get(j).getStoreName().equals(contactStore)) {
-                                System.out.println("The seller of this store can be contacted at this email :" + sellerList.get(i).getEmail());
-                                sellerFound = true;
+                    for (int k = 0; k < marketPlace.size(); k++) {
+
+                        if (marketPlace.get(k).getStoreName().equals(contactStore)) {
+                            sellerFound = true;
+                            System.out.println("The sellers username is :" + marketPlace.get(k).getSellerName());
+                            for (int b = 0; b < sellerList.size(); b++) {
+                                if (sellerList.get(b).getUsername().equals(marketPlace.get(k).getSellerName())) {
+                                    System.out.println("The sellers email is :" + sellerList.get(b).getEmail());
+                                }
                             }
                         }
                     }
@@ -1213,6 +1221,7 @@ public class MarketPlace {
         }
         //Farewell message
         System.out.println("Goodbye! Thank you for using our marketplace");
+
 
         //Since all changes in menu interactions make changes to sellerList in place need to make changes reflect in
         // marketplace array list as well

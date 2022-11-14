@@ -1,1 +1,0 @@
-burger;burgershop;burger;19;2.0;1;

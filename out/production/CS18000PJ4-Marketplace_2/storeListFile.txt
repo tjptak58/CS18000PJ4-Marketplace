@@ -1,1 +1,1 @@
-walmartshop;WalmartWestLf;0.0;newWalmartStoreFILE.txt
+123;newStore;2.0;newStore.txt
