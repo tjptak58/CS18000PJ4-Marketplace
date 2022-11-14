@@ -23,17 +23,19 @@ import java.util.ArrayList;
 /*
  * Tests making a new Store
  */
-public class SellerTest {
+public class BuyerSellerTest {
 
     Store store;
     Seller seller;
     Product p;
+    Buyer buyer;
     @Before
     public void initialize() {
         store = new Store("tptak", "Cars", "cars.txt");
         seller = new Seller("tptak", "password", "tptak@gmail.com", "test.txt");
         Product p = new Product("Mazzerati", "Cars", "Drives Hella Fast", 
         20, 20000, 0, null);
+        buyer = new Buyer("jdilla", "beats", "jdilla@gmail.com", "cart.txt", "history.txt");  
 
     }
     
@@ -44,13 +46,18 @@ public class SellerTest {
         
     }
 
-    @Test
-    public void newProduct() {
+    @Test 
+    public void editProductTest() {
+        store.addProduct(p);
         seller.createStore(store);
-        seller.createProduct("Mazzerati", "tptak", "Cars", "test.txt", 
-        "Drives Hella Fast", 20, 20000, 0, null);
-        ArrayList<Product> products = seller.getStores().get(0).getProducts();
-        assertEquals(products.get(0), p);
-        
+        seller.editProduct(p, "Mazzerati", "Cars", "Drives Hella fast", 10, 20000);
+        Product changedp = new Product( "Mazzerati", "Cars", "Drives Hella fast", 10, 20000);
+        ArrayList<Store> stores = seller.getStores();
+        ArrayList<Product> products = stores.get(0).getProducts();
+        Product outputProduct = products.get(0);
+        assertEquals(changedp.equals(outputProduct),true);
     }
+
+
+    
 }
