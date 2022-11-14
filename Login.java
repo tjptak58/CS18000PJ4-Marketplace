@@ -25,44 +25,48 @@ public class Login {
         ArrayList<String> usernameAndPasswordBuyer = new ArrayList<>();
 
 
-        try {
-            BufferedReader bfr = new BufferedReader(new FileReader("/Users/vijayvittal/IdeaProjects/Project/Project4/src/Seller.txt"));
-            String line = "";
-            while ((line = bfr.readLine()) != null) {
-                usernameAndPasswordSeller.add(line);
-            }
-            bfr.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            BufferedReader bfr = new BufferedReader(new FileReader("/Users/vijayvittal/IdeaProjects/Project/Project4/src/Buyer.txt"));
-            String line = "";
-            while ((line = bfr.readLine()) != null) {
-                usernameAndPasswordBuyer.add(line);
-            }
-            bfr.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         System.out.println("Welcome");
         boolean flag;
         boolean loginFailed;
         boolean usernameAlreadyExists;
-        boolean loginSuccessful=false;
-        boolean usernameIsWrong=false;
-        boolean passwordIsWrong=false;
+        boolean loginSuccessful = false;
+        boolean usernameIsWrong = false;
+        boolean passwordIsWrong = false;
         // if you create an account then go back to beginning and ask if they want to create a new account or login with existing one
         do {
+
+            usernameAndPasswordSeller.clear();
+            usernameAndPasswordBuyer.clear();
+            try {
+                BufferedReader bfr = new BufferedReader(new FileReader("seller.txt"));
+                String line = "";
+                while ((line = bfr.readLine()) != null) {
+                    usernameAndPasswordSeller.add(line);
+                }
+                bfr.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                BufferedReader bfr = new BufferedReader(new FileReader("buyer.txt"));
+                String line = "";
+                while ((line = bfr.readLine()) != null) {
+                    usernameAndPasswordBuyer.add(line);
+                }
+                bfr.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             flag = false;
             loginFailed = false;
             usernameAlreadyExists = false;
-            loginSuccessful=false;
-            usernameIsWrong=false;
-            passwordIsWrong=false;
+            loginSuccessful = false;
+            usernameIsWrong = false;
+            passwordIsWrong = false;
 
 
             // ask if they have an exisiting or new account
+
             System.out.println("Would you like you login or create a new account?");
             System.out.println("1.Login\n2.Create new account");
             String newOrExisting = scanner.nextLine();
@@ -70,7 +74,8 @@ public class Login {
             if (newOrExisting.equals("2")) {
                 System.out.println("Are you a Seller or Buyer");
                 String sellOrBuy = scanner.nextLine();
-                // if they are sellerArrayList ask username password and what stores they would like to sell through
+                // if they are sellerArrayList ask username
+                // password and what stores they would like to sell through
                 if (sellOrBuy.equalsIgnoreCase("Seller")) {
                     String usernameSeller = "";
                     do {
@@ -81,7 +86,8 @@ public class Login {
                         if (!usernameAndPasswordSeller.isEmpty()) {
                             // check if there is already a username that exists
                             for (int i = 0; i < usernameAndPasswordSeller.size(); i++) {
-                                if (usernameAndPasswordSeller.get(i).substring(0, usernameAndPasswordSeller.get(i).indexOf(";")).contains(usernameSeller)) {
+                                if (usernameAndPasswordSeller.get(i).substring(0, 
+                                        usernameAndPasswordSeller.get(i).indexOf(";")).contains(usernameSeller)) {
                                     System.out.println("Error: Username already exists. Pick a new username");
                                     usernameAlreadyExists = true;
                                 }
@@ -95,20 +101,22 @@ public class Login {
                     System.out.println("Enter your e-mail");
                     String email = scanner.nextLine();
                     System.out.println("What is the filepath for the statistics of the seller");
-                    String statisticsFilepath=scanner.nextLine();
+                    String statisticsFilepath = scanner.nextLine();
 
-                    Collections.addAll(sellerArrayList, usernameSeller, sellerPassword, email,  statisticsFilepath);
+                    Collections.addAll(sellerArrayList, usernameSeller, 
+                            sellerPassword, email, statisticsFilepath);
                     // Seller seller = new Seller(usernameSeller, password);
 
 
                     System.out.println("Account made!");
 
                     try {
-                        FileOutputStream fos = new FileOutputStream("/Users/vijayvittal/IdeaProjects/Project/Project4/src/Seller.txt", true);
+                        FileOutputStream fos = new FileOutputStream("seller.txt", true);
                         PrintWriter pw = new PrintWriter(fos);
                         //BufferedWriter bfw = new BufferedWriter
                         //        (new FileWriter("/Users/vijayvittal/IdeaProjects/Project/Project4/src/Seller.txt"));
-                        pw.write(usernameSeller + "; " + sellerPassword + "\n");
+                        pw.write(usernameSeller + "; " + sellerPassword + "; " + email + "; " + statisticsFilepath +
+                                "\n");
                         pw.close();
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -122,7 +130,9 @@ public class Login {
                         System.out.println("Enter your new username");
                         usernameBuyer = scanner.nextLine();
                         // if this is empty then there are no accounts put in yet
-                        if (!usernameAndPasswordBuyer.isEmpty()) {
+                        if (!(usernameAndPasswordBuyer.size() == 0)) {
+
+
                             // check if there is already a username that exists
                             for (int i = 0; i < usernameAndPasswordBuyer.size(); i++) {
                                 if (usernameAndPasswordBuyer.get(i).substring(0, usernameAndPasswordBuyer.get(i).indexOf(";")).contains(usernameBuyer)) {
@@ -138,21 +148,28 @@ public class Login {
                     sellerLogin.put(usernameBuyer, buyerPassword);
                     System.out.println("Enter your e-mail");
                     String email = scanner.nextLine();
-                    System.out.println("What is the filepath for the statistics of the seller");
-                    String statisticsFilepath=scanner.nextLine();
+                    System.out.println("What is the filepath to the purchase history of this account?");
+                    String purchaseHistoryFilepath = scanner.nextLine();
+                    System.out.println("What is the filepath to the shopping cart for this account?");
+                    String shoppingCartFilepath = scanner.nextLine();
+                    System.out.println("Account made!");
 
-                    Collections.addAll(buyerArrayList, usernameBuyer, buyerPassword, email,  statisticsFilepath);
+                    Collections.addAll(buyerArrayList, usernameBuyer,
+                            buyerPassword, email,
+                            purchaseHistoryFilepath, shoppingCartFilepath);
                     // Seller seller = new Seller(usernameSeller, password);
 
 
                     System.out.println("Account made!");
 
                     try {
-                        FileOutputStream fos = new FileOutputStream("/Users/vijayvittal/IdeaProjects/Project/Project4/src/Buyer.txt", true);
+                        FileOutputStream fos = new FileOutputStream("buyer.txt", true);
                         PrintWriter pw = new PrintWriter(fos);
                         //BufferedWriter bfw = new BufferedWriter
                         //        (new FileWriter("/Users/vijayvittal/IdeaProjects/Project/Project4/src/Seller.txt"));
-                        pw.write(usernameBuyer + "; " + buyerPassword + "\n");
+                        pw.write(usernameBuyer + "; " + buyerPassword + "; " +
+                                email + "; " + shoppingCartFilepath + "; " +
+                                purchaseHistoryFilepath + "\n");
                         pw.close();
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -166,20 +183,22 @@ public class Login {
                 System.out.println("Do you want to login as a Seller or Buyer");
                 String sellerOrBuyer = scanner.nextLine();
                 if (sellerOrBuyer.equalsIgnoreCase("Seller")) {
+                    System.out.println("hi");
 
                     System.out.println("Enter your username");
                     String username = scanner.nextLine();
-                    user=username;
+                    user = username;
 //                    // of the array list username, password. If 0 index which is username contains username go to next step
                     for (int i = 0; i < usernameAndPasswordSeller.size(); i++) {
 
 
-
-                        if (usernameAndPasswordSeller.get(i).substring(0, usernameAndPasswordSeller.get(i).indexOf(";")).contains(username)) {
+                        if (usernameAndPasswordSeller.get(i).substring(0, 
+                                usernameAndPasswordSeller.get(i).indexOf(";")).contains(username)) {
 
                             System.out.println("Enter your password");
                             String password = scanner.nextLine();
                             for (int j = 1; j < usernameAndPasswordSeller.size(); j++) {
+
 
                                 String[] split = usernameAndPasswordSeller.get(i).split(";");
                                 String passwordTrim = split[1].trim();
@@ -189,16 +208,15 @@ public class Login {
                                     // System.out.println("Login successful!");
                                     loginFailed = false;
                                     flag = false;
-                                    loggedInAsSeller=true;
-                                    loginSuccessful=true;
-
+                                    loggedInAsSeller = true;
+                                    loginSuccessful = true;
 
 
                                     //boolean goIntoElse=false;
                                 } else {
                                     //   System.out.println("Error: Password is incorrect");
                                     loginFailed = true;
-                                    passwordIsWrong=true;
+                                    passwordIsWrong = true;
 
                                 }
                             }
@@ -211,9 +229,10 @@ public class Login {
                         }
 
                     }
+                    // System.out.println("hi");
                     if (loginSuccessful)
-                        usernameIsWrong=false;
-                    loginFailed=false;
+                        usernameIsWrong = false;
+                    loginFailed = false;
                     if (usernameIsWrong) {
                         System.out.println("Username not found");
                     }
@@ -233,8 +252,8 @@ public class Login {
                     for (int i = 0; i < usernameAndPasswordBuyer.size(); i++) {
 
 
-
-                        if (usernameAndPasswordBuyer.get(i).substring(0, usernameAndPasswordBuyer.get(i).indexOf(";")).contains(username)) {
+                        if (usernameAndPasswordBuyer.get(i).substring(0, 
+                                usernameAndPasswordBuyer.get(i).indexOf(";")).contains(username)) {
 
                             System.out.println("Enter your password");
                             String password = scanner.nextLine();
@@ -248,16 +267,15 @@ public class Login {
                                     // System.out.println("Login successful!");
                                     loginFailed = false;
                                     flag = false;
-                                    loggedInAsSeller=true;
-                                    loginSuccessful=true;
-
+                                    loggedInAsBuyer = true;
+                                    loginSuccessful = true;
 
 
                                     //boolean goIntoElse=false;
                                 } else {
                                     //   System.out.println("Error: Password is incorrect");
                                     loginFailed = true;
-                                    passwordIsWrong=true;
+                                    passwordIsWrong = true;
 
                                 }
                             }
@@ -271,8 +289,8 @@ public class Login {
 
                     }
                     if (loginSuccessful)
-                        usernameIsWrong=false;
-                    loginFailed=false;
+                        usernameIsWrong = false;
+                    loginFailed = false;
                     if (usernameIsWrong) {
                         System.out.println("Username not found");
                     }
@@ -290,7 +308,8 @@ public class Login {
 
     }
 
-    public void deleteBuyer(ArrayList<Buyer> buyers, String usernameBuyer, String buyerPassowrd, String filepath, String email) {
+    public void deleteBuyer(ArrayList<Buyer> buyers, String usernameBuyer, String buyerPassowrd,
+                            String filepath, String email) {
         Buyer buyer = new Buyer(usernameBuyer, buyerPassowrd, filepath, email);
         for (int i = 0; i < buyers.size(); i++) {
             if (buyer.getUsername().equals(usernameBuyer)) {
@@ -299,7 +318,8 @@ public class Login {
         }
     }
 
-    public void deleteSeller(ArrayList<Seller> sellers, String usernameSeller, String sellerPassword, String filepath, String email) {
+    public void deleteSeller(ArrayList<Seller> sellers, String usernameSeller,
+                             String sellerPassword, String filepath, String email) {
         Seller seller = new Seller(usernameSeller, sellerPassword, filepath, email);
         for (int i = 0; i < sellers.size(); i++) {
             if (seller.getUsername().equals(usernameSeller)) {
@@ -308,13 +328,15 @@ public class Login {
         }
     }
 
-    public void createSeller(ArrayList<Seller> sellers, String usernameSeller, String sellerPassword, String email, String filepath) {
+    public void createSeller(ArrayList<Seller> sellers, String usernameSeller, 
+                             String sellerPassword, String email, String filepath) {
         Seller seller = new Seller(usernameSeller, sellerPassword, email, filepath);
         sellers.add(seller);
 
     }
 
-    public void createBuyer(ArrayList<Buyer> buyers, String usernameBuyer, String buyerPassword, String email, String filepath) {
+    public void createBuyer(ArrayList<Buyer> buyers, String usernameBuyer, 
+                            String buyerPassword, String email, String filepath) {
         Buyer buyer = new Buyer(usernameBuyer, buyerPassword, email, filepath);
         buyers.add(buyer);
     }
