@@ -66,9 +66,6 @@ public class MarketPlace {
     }*/
 
     public static void main(String[] args) {
-        /**
-         * Loging part
-         */
         Scanner scanner = new Scanner(System.in);
         ArrayList<String> sellerArrayList = new ArrayList<>();
         ArrayList<String> buyerArrayList = new ArrayList<>();
@@ -78,37 +75,52 @@ public class MarketPlace {
         ArrayList<String> usernameAndPasswordBuyer = new ArrayList<>();
 
 
-        try {
-            BufferedReader bfr = new BufferedReader(new FileReader("seller.txt"));
-            String line = "";
-            while ((line = bfr.readLine()) != null) {
-                usernameAndPasswordSeller.add(line);
-            }
-            bfr.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            BufferedReader bfr = new BufferedReader(new FileReader("buyer.txt"));
-            String line = "";
-            while ((line = bfr.readLine()) != null) {
-                usernameAndPasswordBuyer.add(line);
-            }
-            bfr.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         System.out.println("Welcome");
-        boolean flag;
-        boolean loginFailed;
-        boolean usernameAlreadyExists;
+        /** boolean flag;
 
+        boolean usernameAlreadyExists;
+        boolean loginSuccessful = false;
+        boolean usernameIsWrong = false;
+        boolean passwordIsWrong = false; **/
+        boolean loginSuccessful = false;
         // if you create an account then go back to beginning and ask if they want to create a new account or login with existing one
         do {
-            flag = false;
-            loginFailed = false;
-            usernameAlreadyExists = false;
+            /** //boolean loginFailed = true;
+             //flag =  false;
+             //boolean loginFailed = true;
+             usernameAlreadyExists = false;
+             loginSuccessful = false;
+             usernameIsWrong = true;
+             passwordIsWrong = true; **/
+
+            boolean usernameAlreadyExists = false;
+
+            usernameAndPasswordSeller.clear();
+            usernameAndPasswordBuyer.clear();
+            try {
+                BufferedReader bfr = new BufferedReader(new FileReader("seller.txt"));
+                String line = "";
+                while ((line = bfr.readLine()) != null) {
+                    usernameAndPasswordSeller.add(line);
+                }
+                bfr.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                BufferedReader bfr = new BufferedReader(new FileReader("buyer.txt"));
+                String line = "";
+                while ((line = bfr.readLine()) != null) {
+                    usernameAndPasswordBuyer.add(line);
+                }
+                bfr.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
             // ask if they have an exisiting or new account
+
             System.out.println("Would you like you login or create a new account?");
             System.out.println("1.Login\n2.Create new account");
             String newOrExisting = scanner.nextLine();
@@ -116,7 +128,8 @@ public class MarketPlace {
             if (newOrExisting.equals("2")) {
                 System.out.println("Are you a Seller or Buyer");
                 String sellOrBuy = scanner.nextLine();
-                // if they are sellerArrayList ask username password and what stores they would like to sell through
+                // if they are sellerArrayList ask username
+                // password and what stores they would like to sell through
                 if (sellOrBuy.equalsIgnoreCase("Seller")) {
                     String usernameSeller = "";
                     do {
@@ -124,10 +137,11 @@ public class MarketPlace {
                         System.out.println("Enter your new username");
                         usernameSeller = scanner.nextLine();
                         // if this is empty then there are no accounts put in yet
-                        if (!(usernameAndPasswordSeller.isEmpty())) {
+                        if (!usernameAndPasswordSeller.isEmpty()) {
                             // check if there is already a username that exists
                             for (int i = 0; i < usernameAndPasswordSeller.size(); i++) {
-                                if (usernameAndPasswordSeller.get(i).substring(0, usernameAndPasswordSeller.get(i).indexOf(";")).contains(usernameSeller)) {
+                                if (usernameAndPasswordSeller.get(i).substring(0,
+                                        usernameAndPasswordSeller.get(i).indexOf(";")).equals(usernameSeller)) {
                                     System.out.println("Error: Username already exists. Pick a new username");
                                     usernameAlreadyExists = true;
                                 }
@@ -141,9 +155,10 @@ public class MarketPlace {
                     System.out.println("Enter your e-mail");
                     String email = scanner.nextLine();
                     System.out.println("What is the filepath for the statistics of the seller");
-                    String statisticsFilepath=scanner.nextLine();
+                    String statisticsFilepath = scanner.nextLine();
 
-                    Collections.addAll(sellerArrayList, usernameSeller, sellerPassword, email,  statisticsFilepath);
+                    Collections.addAll(sellerArrayList, usernameSeller,
+                            sellerPassword, email, statisticsFilepath);
                     // Seller seller = new Seller(usernameSeller, password);
 
 
@@ -154,7 +169,7 @@ public class MarketPlace {
                         PrintWriter pw = new PrintWriter(fos);
                         //BufferedWriter bfw = new BufferedWriter
                         //        (new FileWriter("/Users/vijayvittal/IdeaProjects/Project/Project4/src/Seller.txt"));
-                        pw.write(usernameSeller + "; " + sellerPassword + ";" + email + ";" + statisticsFilepath +
+                        pw.write(usernameSeller + ";" + sellerPassword + ";" + email + ";" + statisticsFilepath +
                                 "\n");
                         pw.close();
                     } catch (IOException e) {
@@ -168,130 +183,168 @@ public class MarketPlace {
                         usernameAlreadyExists = false;
                         System.out.println("Enter your new username");
                         usernameBuyer = scanner.nextLine();
+                        // if this is empty then there are no accounts put in yet
+                        if (!(usernameAndPasswordBuyer.size() == 0)) {
 
-                        for (int i = 0; i < usernameAndPasswordBuyer.size(); i++) {
-                            if (usernameAndPasswordBuyer.get(i).substring(0, usernameAndPasswordSeller.get(i).indexOf(";")).contains(usernameBuyer)) {
-                                System.out.println("Error: Username already exists. Pick a new username");
-                                usernameAlreadyExists = true;
+
+                            // check if there is already a username that exists
+                            for (int i = 0; i < usernameAndPasswordBuyer.size(); i++) {
+                                if (usernameAndPasswordBuyer.get(i).substring(0,
+                                        usernameAndPasswordBuyer.get(i).indexOf(";")).equals(usernameBuyer)) {
+                                    System.out.println("Error: Username already exists. Pick a new username");
+                                    usernameAlreadyExists = true;
+                                }
                             }
                         }
 
                     } while (usernameAlreadyExists);
-
                     System.out.println("Enter your new password");
                     String buyerPassword = scanner.nextLine();
+                    sellerLogin.put(usernameBuyer, buyerPassword);
                     System.out.println("Enter your e-mail");
                     String email = scanner.nextLine();
-                    buyerLogin.put(usernameBuyer, buyerPassword);
                     System.out.println("What is the filepath to the purchase history of this account?");
-                    String purchaseHistoryFilepath=scanner.nextLine();
+                    String purchaseHistoryFilepath = scanner.nextLine();
                     System.out.println("What is the filepath to the shopping cart for this account?");
-                    String shoppingCartFilepath=scanner.nextLine();
+                    String shoppingCartFilepath = scanner.nextLine();
                     System.out.println("Account made!");
-                    Collections.addAll(buyerArrayList, usernameBuyer, buyerPassword, email, purchaseHistoryFilepath, shoppingCartFilepath);
 
+                    Collections.addAll(buyerArrayList, usernameBuyer,
+                            buyerPassword, email,
+                            purchaseHistoryFilepath, shoppingCartFilepath);
+                    // Seller seller = new Seller(usernameSeller, password);
+
+
+                    System.out.println("Account made!");
 
                     try {
                         FileOutputStream fos = new FileOutputStream("buyer.txt", true);
                         PrintWriter pw = new PrintWriter(fos);
-                        //  BufferedWriter bfw = new BufferedWriter
-                        //          (new FileWriter("/Users/vijayvittal/IdeaProjects/Project/Project4/src/Buyer.txt"));
-                        pw.write(usernameBuyer + "; " + buyerPassword + ";" + email + ";" + shoppingCartFilepath + ";" +
+                        //BufferedWriter bfw = new BufferedWriter
+                        //        (new FileWriter("/Users/vijayvittal/IdeaProjects/Project/Project4/src/Seller.txt"));
+                        pw.write(usernameBuyer + ";" + buyerPassword + ";" +
+                                email + ";" + shoppingCartFilepath + ";" +
                                 purchaseHistoryFilepath + "\n");
                         pw.close();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+                } else {
+                    System.out.println("Invalid input");
                 }
-                flag = true;
+                //flag = true;
                 // if 1 is input then you try to login
 
             } else if (newOrExisting.equals("1")) {
+                boolean userFound = false;
 
                 System.out.println("Do you want to login as a Seller or Buyer");
                 String sellerOrBuyer = scanner.nextLine();
                 if (sellerOrBuyer.equalsIgnoreCase("Seller")) {
+                    //System.out.println("hi");
 
                     System.out.println("Enter your username");
                     String username = scanner.nextLine();
-                    user = username; //ADDED LINE 12/11/22 ***
+                    user = username;
 //                    // of the array list username, password. If 0 index which is username contains username go to next step
                     for (int i = 0; i < usernameAndPasswordSeller.size(); i++) {
-                        boolean repeat = true;
-                        while (repeat){
 
 
-                            if (usernameAndPasswordSeller.get(i).substring(0, usernameAndPasswordSeller.get(i).indexOf(";")).contains(username)) {
-                                repeat=false;
-                                System.out.println("Enter your password");
-                                String password = scanner.nextLine();
-                                for (int j = 1; j < usernameAndPasswordSeller.size(); j++) {
-
-                                    String[] split = usernameAndPasswordSeller.get(i).split(";");
-                                    String passwordTrim = split[1].trim();
+                        if (usernameAndPasswordSeller.get(i).substring(0,
+                                usernameAndPasswordSeller.get(i).indexOf(";")).equals(username)) {
+                            userFound = true;
 
 
-                                    if (passwordTrim.contains(password)) {
-                                        System.out.println("Login successful!");
-                                        loggedInAsSeller = true; //ADDED THIS LINE
-                                        loginFailed = false;
-                                        flag = false;
+                            System.out.println("Enter your password");
+                            String password = scanner.nextLine();
+                            //boolean passMatched = false;
+                            String[] split = usernameAndPasswordSeller.get(i).split(";");
+                            String passwordTrim = split[1].trim();
+                            if (passwordTrim.equals(password)) {
+                                // System.out.println("Login successful!");
+                                //loginFailed = false;
+                                //flag = false;
+                                loggedInAsSeller = true;
+                                loginSuccessful = true;
+                                //passMatched = true;
 
 
-
-                                        //boolean goIntoElse=false;
-                                    } else {
-                                        System.out.println("Error: Password is incorrect");
-                                        loginFailed = true;
-
-                                    }
-                                }
-                            } else {
-                                System.out.println("Username not found");
-                                loginFailed = true;
-
+                                //boolean goIntoElse=false;
                             }
-                        }
+                        } /**else {
+                         // System.out.println("Username not found");
+                         loginFailed = true;
+                         usernameIsWrong = true;
 
 
+                         } **/
+
+                    }
+                    // System.out.println("hi");
+                    //if (loginSuccessful)
+                    //    usernameIsWrong = false;
+                    //loginFailed = false;
+                    if (!userFound) {
+                        System.out.println("Username not found");
+                    }
+                    if (userFound && !loginSuccessful) {
+                        System.out.println("Incorrect password!");
+                    }
+
+                    if (loginSuccessful) {
+                        System.out.println("Login successful!");
                     }
 
                 } else if (sellerOrBuyer.equalsIgnoreCase("Buyer")) {
+
                     System.out.println("Enter your username");
                     String username = scanner.nextLine();
-                    user = username; //ADDED LINE 11/12/22 ***
-//                    // of the array list username, password. If 0 index which is username contains username go to next step
 
+//                    // of the array list username, password. If 0 index which is username contains username go to next step
                     for (int i = 0; i < usernameAndPasswordBuyer.size(); i++) {
-                        if (usernameAndPasswordBuyer.get(i).substring(0, usernameAndPasswordSeller.get(i).indexOf(";")).contains(username)) {
+
+
+                        if (usernameAndPasswordBuyer.get(i).substring(0,
+                                usernameAndPasswordBuyer.get(i).indexOf(";")).equals(username)) {
+                            userFound = true;
+
                             System.out.println("Enter your password");
                             String password = scanner.nextLine();
-                            for (int j = 1; j < usernameAndPasswordBuyer.size(); j++) {
-                                String[] split = usernameAndPasswordSeller.get(i).split(";");
-                                String passwordTrim = split[1].trim();
-                                if (passwordTrim.contains(password)) {
-                                    System.out.println("Login successful!");
-                                    loginFailed = false;
-                                    flag = false;
-                                    loggedInAsBuyer = true; //ADDED THIS LINE
-                                    break;
 
-                                } else {
-                                    System.out.println("Error: Password is incorrect");
-                                    loginFailed = true;
-                                }
+                            String[] split = usernameAndPasswordBuyer.get(i).split(";");
+                            String pass = split[1];
+                            if (password.equals(pass)) {
+                                // System.out.println("Login successful!");
+                                //loginFailed = false;
+                                //flag = false;
+                                loggedInAsBuyer = true;
+                                loginSuccessful = true;
+
+
+                                //boolean goIntoElse=false;
                             }
-                        } else {
-                            System.out.println("Username not found");
-                            loginFailed = true;
+
+
                         }
+
+                        if (!userFound) {
+                            System.out.println("Username not found");
+                        }
+                        if (userFound && !loginSuccessful) {
+                            System.out.println("Error: Password is incorrect");
+                        }
+                        if (loginSuccessful) {
+                            System.out.println("Login successful!");
+                        }
+
                     }
-
-
                 }
+                // for when account is created so user can go back to beginning
             }
-            // for when account is created so user can go back to beginning
-        } while (flag || loginFailed);
+        }while (!loginSuccessful);
+
+        System.out.println("finished login");
+
 
         /**
          * Login part of program must return a static string user
@@ -333,6 +386,7 @@ public class MarketPlace {
                 BufferedReader loopbfr = new BufferedReader(loopfr);
 
                 String innerLine = loopbfr.readLine();
+                System.out.println(innerLine.substring(0, innerLine.indexOf(';')));
                 ArrayList<Product> productsInStore = new ArrayList<>();
 
 
@@ -359,14 +413,17 @@ public class MarketPlace {
                     for (int i = 0; i < customerList.length; i++) {
                         customerArrayList.add(customerList[i]);
                     }
+
                     Product loopProduct = new Product(productName, storeNameOfProduct, description, qty, price, unitsPurchased
                             , customerArrayList);
                     productsInStore.add(loopProduct);
+                    innerLine = bfr.readLine();
 
                 }
                 //End of storeFile
                 Store loopStore = new Store(sellerName, storeName, storeFilePath, productsInStore, storeRevenue );
                 marketPlace.add(loopStore);
+                line = bfr.readLine();
 
 
 
@@ -391,6 +448,7 @@ public class MarketPlace {
             }
         }
 
+
         //Read from buyer.txt to create an array of buyer objects
         ArrayList<Buyer> buyerList = new ArrayList<>();
         try {
@@ -407,6 +465,7 @@ public class MarketPlace {
                 String filePathToPurchaseHistory = lineArray[4];
                 Buyer buyer = new Buyer(username, password, email, filePathToShoppingCart, filePathToPurchaseHistory);
                 buyerList.add(buyer);
+                line = bfr.readLine();
                 //Initialize new buyer object
 
             }
@@ -776,7 +835,7 @@ public class MarketPlace {
                                         System.out.println("Invalid input!");
                                     } else {
                                         int modifyStoreChoice = -1;
-                                        while (modifyStoreChoice != 4) {
+                                        while (modifyStoreChoice != 6) {
                                             for (int k = 0; k < sellerList.get(i).getStores().get(storeNum - 1).getProducts().size(); k++) {
                                                 System.out.println("----------------");
                                                 System.out.println("Product Number " + (k + 1));
@@ -879,7 +938,7 @@ public class MarketPlace {
                                                     System.out.println("Choose the modify product information option " +
                                                             "on the menu to change product info");
                                                 }
-                                                
+
                                             } else if (modifyStoreChoice == 5) {
                                                 System.out.println("Enter the file path to which you would like to " +
                                                         "export the products of this store");
@@ -890,7 +949,7 @@ public class MarketPlace {
                                                 } else {
                                                     System.out.println("There was an error writing to the file!");
                                                 }
-                                                
+
                                             }
                                         }
                                     }
@@ -912,12 +971,8 @@ public class MarketPlace {
                                         int currentRevenue = scanner.nextInt();
                                         scanner.nextLine(); **/
                                         marketPlace.add(new Store(user, newStoreName, filePathToStore));
-                                        for (int p = 0; p < sellerList.size(); p++) {
-                                            if (sellerList.get(p).getUsername().equals(user)) {
-                                                sellerList.get(p).addStore(new Store(user, newStoreName, filePathToStore));
-                                            }
+                                        sellerList.get(i).addStore(new Store(user, newStoreName, filePathToStore));
 
-                                        }
                                         System.out.println("Added store successfully!");
                                     }
 
@@ -956,7 +1011,6 @@ public class MarketPlace {
                     for (int h = 0; h < sellerList.size(); h++ ) {
                         if (sellerList.get(h).getUsername().equals(user)) {
                             for (int i = 0; i < sellerList.get(h).getStores().size(); i++) {
-                                //TODO IMPLEMENT sorting of SELLER DASHBOARD
                                 if (sellerList.get(h).getStores().get(i).getStoreName().equals(dashboardStore)) {
                                     storeFound = true;
                                     System.out.println("Store name: " + dashboardStore);
@@ -971,7 +1025,7 @@ public class MarketPlace {
 
                                 }
 
-                                
+
 
                             }
 
@@ -1056,9 +1110,11 @@ public class MarketPlace {
             File f = new File("buyer.txt");
             PrintWriter pw = new PrintWriter(f);
             for (int i = 0; i < buyerList.size(); i++) {
-                System.out.println(buyerList.get(i).getUsername() + ";" + buyerList.get(i).getPassword() + ";" + buyerList.get(i).getEmail() + ";" + buyerList.get(i).getCart() + ";" + buyerList.get(i).getHistory());
+                pw.println(buyerList.get(i).getUsername() + ";" + buyerList.get(i).getPassword() + ";" + buyerList.get(i).getEmail() + ";" + buyerList.get(i).getCart() + ";" + buyerList.get(i).getHistory());
 
             }
+            pw.flush();
+            pw.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -1068,12 +1124,21 @@ public class MarketPlace {
             File f = new File("storeListFile.txt");
             PrintWriter pw = new PrintWriter(f);
             for (int i = 0 ; i < marketPlace.size(); i++) {
-                System.out.println(marketPlace.get(i).getSellerName() + ";" + marketPlace.get(i).getStoreName() + ";" + marketPlace.get(i).getStoreRevenue() + ";" + marketPlace.get(i).getFilePath());
+                pw.println(marketPlace.get(i).getSellerName() + ";" + marketPlace.get(i).getStoreName() + ";" + marketPlace.get(i).getStoreRevenue() + ";" + marketPlace.get(i).getFilePath());
+                pw.flush();
                 File loopf = new File(marketPlace.get(i).getFilePath());
+                if (!loopf.exists()) {
+                    loopf.createNewFile();
+
+                }
                 PrintWriter loopPw = new PrintWriter(loopf);
                 for (int j = 0; j < marketPlace.get(i).getProducts().size(); j++) {
                     loopPw.println(marketPlace.get(i).getProducts().get(j).fileString());
+                    loopPw.flush();
                 }
+                pw.close();
+                loopPw.close();
+
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -1081,5 +1146,6 @@ public class MarketPlace {
 
 
         // TODO NEED TO WRITE TO STATISTICS FILE FOR EACH STORE AT END OF PROGRAM !!!
+
     }
 }

@@ -25,7 +25,11 @@ public class Buyer extends Person{
         this.purchased = new ArrayList<Product>();
 
         try {
-            BufferedReader buf = new BufferedReader(new FileReader(new File(cart)));
+            File f = new File (cart); //ADDED THIS 11/13/22
+            if (!f.exists()) {
+                f.createNewFile();
+            }
+            BufferedReader buf = new BufferedReader(new FileReader(f));
             String s = buf.readLine();
             while (true) {
                 if (s == null) {
@@ -38,7 +42,12 @@ public class Buyer extends Person{
             }
             buf.close();
 
-            BufferedReader buftwo = new BufferedReader(new FileReader(new File(history)));
+            File fh = new File(history);
+            if (!fh.exists()) {
+                fh.createNewFile();
+            }
+
+            BufferedReader buftwo = new BufferedReader(new FileReader(fh));
             s = buftwo.readLine();
             while (true) {
                 if (s == null) {

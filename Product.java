@@ -210,6 +210,12 @@ public class Product {
         for (int i = 0; i < this.customerList.size(); i++) {
             s += this.customerList.get(i) + ",";
         }
-        return s.substring(0, s.length() - 1);
+        if (customerList.size() > 0) {
+            return s.substring(0, s.length() - 1);
+
+        } else {
+            return s;
+        }
+
     }
 }
