@@ -4,7 +4,7 @@ Open up the terminal and enter two commands
 javac Marketplace.java 
 java Marketplace.java 
 
-Student 1 - Submitted Report on Brightspace. 
+Shreya Kamath - Submitted Review and Planning Report on Brightspace. 
 Student 2 - Submitted Vocareum workspace.
 
 Marketplace Class: 
