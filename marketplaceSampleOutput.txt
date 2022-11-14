@@ -47,6 +47,43 @@ Enter your username
 [jake]
 Enter your password
 [green]
+Login Successful!
+"Welcome to the marketplace!"
+1. View product listings
+2. View shopping cart
+3. View previously purchased items
+4. Edit your account info
+5. Contact a seller");
+6. Logout
+[1]
+Enter the product number
+1. Add to cart
+2. Go back
+[1]
+Added to cart!
+1. View product listings
+2. View shopping cart
+3. View previously purchased items
+4. Edit your account info
+5. Contact a seller");
+6. Logout
+[2]
+1. Purchase all items in shopping cart
+2. Remove an item from shopping cart
+3. Go back
+[1]
+Purchase successful!
+1. View product listings
+2. View shopping cart
+3. View previously purchased items
+4. Edit your account info
+5. Contact a seller");
+6. Logout
+[6]
+
+
+
+
 
 SampleOutput 2
 
@@ -76,7 +113,23 @@ Enter your username
 [sean]
 Enter your password
 [yellow]
-
+Login Successful!
+1. View your stores
+2. View your dashboard
+3. View products from your store customers have in their carts
+4. Logout
+[1]
+----------------
+1. Select a store to view more information
+2. Add a store
+3. Delete a store
+4. Go back
+[4]
+1. View your stores
+2. View your dashboard
+3. View products from your store customers have in their carts
+4. Logout
+[4]
 
 
 
