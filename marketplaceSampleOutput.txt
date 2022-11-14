@@ -1,0 +1,114 @@
+Sample Output 1
+
+Welcome
+Would you like you login or create a new account?
+1.Login
+2.Create new account
+[2]
+Are you a Seller or Buyer?
+[buyer]
+Enter your new username
+[will]
+Enter your new password
+[blue]
+Enter your e-mail
+[will@gmail.com]
+What is the filepath to the purchase history of this account?
+[purchaseHistory.txt]
+What is the filepath to the shopping Cart of this account?
+[shoppingCart.txt]
+Account made!
+Would you like you login or create a new account?
+1.Login
+2.Create new account
+[2]
+Are you a Seller or Buyer?
+[buyer]
+Enter your new username
+[will]
+Error: Username already exists. Pick a new username
+[jake]
+Enter your new password
+[green]
+Enter your e-mail
+[jake@gmail.com]
+What is the filepath to the purchase history of this account?
+[purchaseHistory1.txt]
+What is the filepath to the shopping Cart of this account?
+[shoppingCart1.txt]
+Account made!
+Would you like you login or create a new account?
+1.Login
+2.Create new account
+[1]
+Do you want to login as a Seller or Buyer
+[buyer]
+Enter your username
+[jake]
+Enter your password
+[green]
+
+SampleOutput 2
+
+Welcome
+Would you like you login or create a new account?
+1.Login
+2.Create new account
+[1]
+Are you a Seller or Buyer?
+[seller]
+Enter your new username
+[sean]
+Enter your new password
+[yellow]
+Enter your e-mail
+[sean@gmail.com]
+What is the filepath for the statistics of the seller
+[statistics.txt]
+Account made!
+Would you like you login or create a new account?
+1.Login
+2.Create new account
+[1]
+Do you want to login as a seller or buyer?
+[seller]
+Enter your username
+[sean]
+Enter your password
+[yellow]
+
+SampleOutput 2
+
+Welcome
+Would you like you login or create a new account?
+1.Login
+2.Create new account
+[1]
+Are you a Seller or Buyer?
+[seller]
+Enter your new username
+[sean]
+Enter your new password
+[yellow]
+Enter your e-mail
+[sean@gmail.com]
+What is the filepath for the statistics of the seller
+[statistics.txt]
+Account made!
+Would you like you login or create a new account?
+1.Login
+2.Create new account
+[1]
+Do you want to login as a seller or buyer?
+[seller]
+Enter your username
+[sean]
+Enter your password
+[yellow]
+
+
+
+
+
+
+
