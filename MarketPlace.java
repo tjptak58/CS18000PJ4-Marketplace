@@ -809,10 +809,7 @@ public class MarketPlace {
                                         System.out.println("Your shopping cart is empty!!");
                                     }
                                     for (int j = 0; j < buyerList.get(i).getShoppingCart().size(); j++) {
-                                        buyerList.get(i).purchase(buyerList.get(i).getShoppingCart().get(j));
-                                        buyerList.get(i).removeFromCart(buyerList.get(i).getShoppingCart().get(j));
-                                        buyerList.get(i).getShoppingCart().get(j).setQuantity(buyerList.get(i).getShoppingCart().get(j).getQuantity() - 1);
-                                        System.out.println("Purchase successful!"); //Prints success message for each
+
                                         // item
                                         for (int p = 0; p < marketPlace.size(); p++) {
                                             if (marketPlace.get(p).getStoreName().equals(buyerList.get(i).getShoppingCart().get(j).getStoreName())) {
@@ -820,6 +817,10 @@ public class MarketPlace {
                                                 marketPlace.get(p).setStoreRevenue(marketPlace.get(p).getStoreRevenue() + buyerList.get(i).getShoppingCart().get(j).getPrice());
                                             }
                                         }
+                                        buyerList.get(i).purchase(buyerList.get(i).getShoppingCart().get(j));
+                                        buyerList.get(i).removeFromCart(buyerList.get(i).getShoppingCart().get(j));
+                                        buyerList.get(i).getShoppingCart().get(j).setQuantity(buyerList.get(i).getShoppingCart().get(j).getQuantity() - 1);
+                                        System.out.println("Purchase successful!"); //Prints success message for each
                                         //For each item in shopping cart search marketplace for a store name that
                                         // matches product store name and increase that stores revenue
 
