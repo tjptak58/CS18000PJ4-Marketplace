@@ -16,6 +16,13 @@ The attributes of the account are written to a file (seller.txt and buyer.txt). 
 t handles certain errors like if the username already exists in another account. 
 When logging in, if the username does not exist or the password is incorrect, 
 the program goes back to the beginning asking if they would like to create an account or login.
+After login the main method uses a menu to interact with the buyer or seller
+A seller can view their current stores, add or delete a store and can add, delete or modify products
+for an existing store
+A seller can also view a statistics dashboard for a particular store
+A  buyer can view all the products currently listed on the marketplace, add a product to their cart,
+remove a product from their cart.
+A buyer can contact the seller of a particular store and can checkout all the products in their cart at once
 
 Person Class:
 The Person class holds the generic information for a user. This info
