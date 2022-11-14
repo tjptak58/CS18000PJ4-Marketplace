@@ -1,0 +1,5 @@
+Product Name: burger, 
+Store Name: burgershop, 
+Description: burger, 
+Quantity: 19, 
+Price: 2.0, 
