@@ -77,43 +77,6 @@ Enter your username
 Enter your password
 [yellow]
 
-SampleOutput 2
-
-Welcome
-Would you like you login or create a new account?
-1.Login
-2.Create new account
-[1]
-Are you a Seller or Buyer?
-[seller]
-Enter your new username
-[sean]
-Enter your new password
-[yellow]
-Enter your e-mail
-[sean@gmail.com]
-What is the filepath for the statistics of the seller
-[statistics.txt]
-Account made!
-Would you like you login or create a new account?
-1.Login
-2.Create new account
-[1]
-Do you want to login as a seller or buyer?
-[seller]
-Enter your username
-[jacob]
-Username not found
-Would you like you login or create a new account?
-1.Login
-2.Create new account
-[1]
-Are you a Seller or Buyer?
-[Seller]
-Enter your usenrame
-[sean]
-Enter your password
-[yellow]
 
 
 
