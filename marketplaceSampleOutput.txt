@@ -102,6 +102,15 @@ Would you like you login or create a new account?
 Do you want to login as a seller or buyer?
 [seller]
 Enter your username
+[jacob]
+Username not found
+Would you like you login or create a new account?
+1.Login
+2.Create new account
+[1]
+Are you a Seller or Buyer?
+[Seller]
+Enter your usenrame
 [sean]
 Enter your password
 [yellow]
