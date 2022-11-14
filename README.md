@@ -8,7 +8,13 @@ Student 1 - Submitted Report on Brightspace.
 Student 2 - Submitted Vocareum workspace.
 
 Marketplace Class: 
-The main method....
+The main method, which starts with the login. The user has. the option to create an account or log in with an existing account. 
+They are asked to log in or create an account as a seller or buyer. 
+When creating an account there are specific attributes for both the seller and buyer.
+The attributes of the account are written to a file (seller.txt and buyer.txt). I
+t handles certain errors like if the username already exists in another account. 
+When logging in, if the username does not exist or the password is incorrect, 
+the program goes back to the beginning asking if they would like to create an account or login.
 
 Person Class:
 The Person class holds the generic information for a user. This info
