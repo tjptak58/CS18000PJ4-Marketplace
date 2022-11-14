@@ -20,13 +20,37 @@ import java.util.UUID;
 import static org.junit.Assert.*;
 import java.util.ArrayList;
 
+/*
+ * Tests making a new Store
+ */
 public class SellerTest {
+
+    Store store;
+    Seller seller;
+    Product p;
+    @Before
+    public void initialize() {
+        store = new Store("tptak", "Cars", "cars.txt");
+        seller = new Seller("tptak", "password", "tptak@gmail.com", "test.txt");
+        Product p = new Product("Mazzerati", "Cars", "Drives Hella Fast", 
+        20, 20000, 0, null);
+
+    }
+    
     @Test
     public void newStore() {
-        Store expectedStore = new Store("tptak", "Cars", "cars.txt");
-        Seller seller = new Seller("tptak", "password", "tptak@gmail.com", "test.txt");
         seller.createStore("tptak", "Cars", "cars.txt");
-        assertEquals(expectedStore.equals(seller.getStores().get(0)), true);
+        assertEquals(store.equals(seller.getStores().get(0)), true);
+        
+    }
+
+    @Test
+    public void newProduct() {
+        seller.createStore(store);
+        seller.createProduct("Mazzerati", "tptak", "Cars", "test.txt", 
+        "Drives Hella Fast", 20, 20000, 0, null);
+        ArrayList<Product> products = seller.getStores().get(0).getProducts();
+        assertEquals(products.get(0), p);
         
     }
 }

@@ -46,27 +46,8 @@ public class Seller extends Person{
         stores.add(store);
     }
 
-    /*
-     * Creates a product and adds that product to the appropriate store
-     */
-    public void createProduct(String productName , String sellerName, String storeName , String filePath,
-    String description, int quantity , double price, int unitsPurchased, ArrayList<String> customerList) {
-        if (stores.size() == 0) {
-            createStore(sellerName , storeName , filePath);
-            Store s = stores.get(0);
-            Product p = new Product(productName, storeName, description, quantity, price , unitsPurchased , customerList);
-            s.addProduct(p);
-        } else {
-            int count = 0; 
-            for (Store s : stores) {
-                if (storeName.equals(s.getStoreName())) {
-                    break;
-                }
-                count++;
-            }
-            Product p = new Product(productName, storeName, description, quantity, price , unitsPurchased , customerList);
-            stores.get(count).addProduct(p);
-        }
+    public void createStore(Store s) {
+        stores.add(s);
     }
 
     /*
