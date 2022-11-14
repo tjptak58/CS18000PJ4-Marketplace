@@ -109,6 +109,24 @@ public class Store {
     }
 
     //Create a getNumberOfSales method that sums up number of units sold for each product in that store
-
-
+    public boolean equals(Store s) {
+        boolean flag = true;
+        if (s.storeName.equals(this.storeName)) {
+            if (s.sellerName.equals(this.sellerName)) {
+                if (s.filePath.equals(this.filePath)) {
+                    if (s.storeName.equals(this.storeName)) {
+                        for (int i = 0 ; i < products.size() ; i++) {
+                            if (! (s.getProducts().get(i).equals(this.getProducts().get(i)))) {
+                                flag = false;
+                            }
+                        }
+                        if (flag) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
 }
