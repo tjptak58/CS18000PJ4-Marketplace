@@ -1,0 +1,2 @@
+apple;WalmartWestLf;apple;20;2.0;0;
+bannana;WalmartWestLf;banananana;20;2.0;0;
