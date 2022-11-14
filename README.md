@@ -6,7 +6,7 @@ java Marketplace.java
 
 Shreya Kamath - Submitted Review and Planning Report on Brightspace. 
 
-Student 2 - Submitted Vocareum workspace.
+Tyler Ptak - Submitted Vocareum workspace.
 
 Marketplace Class: 
 The main method, which starts with the login. The user has. the option to create an account or log in with an existing account. 
