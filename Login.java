@@ -162,7 +162,7 @@ public class Login {
                     // Seller seller = new Seller(usernameSeller, password);
 
 
-                    System.out.println("Account made!");
+                   
 
                     try {
                         FileOutputStream fos = new FileOutputStream("buyer.txt", true);
