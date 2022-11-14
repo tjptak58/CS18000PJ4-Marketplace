@@ -1,1 +1,2 @@
 Shop1;123;shop1email;shop1file
+tptak;kangaroo;kangaroo@gmail.com;stats.txtt

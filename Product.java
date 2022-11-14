@@ -127,27 +127,27 @@ public class Product {
 
     public String toString() {
         String s = "";
-        s = s + String.format("Product Name: %s, \n", productName);
-        s = s + String.format("Store Name: %s, \n" , storeName);
-        s = s + String.format("Description: %s, \n" , description);
-        s = s + String.format("Quantity: %s, \n" , Integer.toString(quantity));
-        s = s + String.format("Price: %s, " , Double.toString(price));
+        s = s + String.format("Product Name: %s \n", productName);
+        s = s + String.format("Store Name: %s \n" , storeName);
+        s = s + String.format("Description: %s \n" , description);
+        s = s + String.format("Quantity: %s \n" , Integer.toString(quantity));
+        s = s + String.format("Price: %s " , Double.toString(price));
         return s;
 
     }
 
     public String initialToString() {
         String s = "";
-        s += String.format("Product Name: %s, \n", productName);
-        s += String.format("Store Name: %s, \n" , storeName);
-        s += String.format("Price: %s, " , Double.toString(price));
+        s += String.format("Product Name: %s \n", productName);
+        s += String.format("Store Name: %s \n" , storeName);
+        s += String.format("Price: %s " , Double.toString(price));
         return s;
 
     }
 
     public String getStatistics() {
         String s = "";
-        s = s + String.format("Units Purchased: %s, \n" , Integer.toString(unitsPurchased));
+        s = s + String.format("Units Purchased: %s \n" , Integer.toString(unitsPurchased));
         s = s + "Customer List: ";
         ArrayList<String> masterList = new ArrayList<>();
         //Edited method so that customer list prints out a list of customers who have purchased it along with the
