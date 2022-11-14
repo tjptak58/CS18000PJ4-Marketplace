@@ -248,6 +248,9 @@ public class Buyer extends Person{
     public void purchase(Product p) {
         p.setUnitsPurchased(p.getUnitsPurchased() + 1); //ADDED THIS LINE 11/12/22
         purchased.add(p);
+        ArrayList<String> curList = p.getCustomerList();
+        curList.add(this.getUsername());
+        p.setCustomerList(curList);
         try {
             PrintWriter pw = new PrintWriter(new FileWriter(new File(history) , false));
             for (Product product : purchased) {

@@ -1,1 +1,1 @@
-123;newStore;2.0;newStore.txt
+123;newStore;6.0;newStore.txt
