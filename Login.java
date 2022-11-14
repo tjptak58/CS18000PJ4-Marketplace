@@ -32,7 +32,8 @@ public class Login {
         boolean loginSuccessful = false;
         boolean usernameIsWrong = false;
         boolean passwordIsWrong = false;
-        // if you create an account then go back to beginning and ask if they want to create a new account or login with existing one
+        // if you create an account then go back to beginning and 
+        // ask if they want to create a new account or login with existing one
         do {
 
             usernameAndPasswordSeller.clear();
@@ -86,7 +87,7 @@ public class Login {
                         if (!usernameAndPasswordSeller.isEmpty()) {
                             // check if there is already a username that exists
                             for (int i = 0; i < usernameAndPasswordSeller.size(); i++) {
-                                if (usernameAndPasswordSeller.get(i).substring(0, 
+                                if (usernameAndPasswordSeller.get(i).substring(0,
                                         usernameAndPasswordSeller.get(i).indexOf(";")).contains(usernameSeller)) {
                                     System.out.println("Error: Username already exists. Pick a new username");
                                     usernameAlreadyExists = true;
@@ -103,7 +104,7 @@ public class Login {
                     System.out.println("What is the filepath for the statistics of the seller");
                     String statisticsFilepath = scanner.nextLine();
 
-                    Collections.addAll(sellerArrayList, usernameSeller, 
+                    Collections.addAll(sellerArrayList, usernameSeller,
                             sellerPassword, email, statisticsFilepath);
                     // Seller seller = new Seller(usernameSeller, password);
 
@@ -115,7 +116,8 @@ public class Login {
                         PrintWriter pw = new PrintWriter(fos);
                         //BufferedWriter bfw = new BufferedWriter
                         //        (new FileWriter("/Users/vijayvittal/IdeaProjects/Project/Project4/src/Seller.txt"));
-                        pw.write(usernameSeller + "; " + sellerPassword + "; " + email + "; " + statisticsFilepath +
+                        pw.write(usernameSeller + "; " + sellerPassword + "; " 
+                                + email + "; " + statisticsFilepath +
                                 "\n");
                         pw.close();
                     } catch (IOException e) {
@@ -165,8 +167,7 @@ public class Login {
                     try {
                         FileOutputStream fos = new FileOutputStream("buyer.txt", true);
                         PrintWriter pw = new PrintWriter(fos);
-                        //BufferedWriter bfw = new BufferedWriter
-                        //        (new FileWriter("/Users/vijayvittal/IdeaProjects/Project/Project4/src/Seller.txt"));
+
                         pw.write(usernameBuyer + "; " + buyerPassword + "; " +
                                 email + "; " + shoppingCartFilepath + "; " +
                                 purchaseHistoryFilepath + "\n");
@@ -183,76 +184,199 @@ public class Login {
                 System.out.println("Do you want to login as a Seller or Buyer");
                 String sellerOrBuyer = scanner.nextLine();
                 if (sellerOrBuyer.equalsIgnoreCase("Seller")) {
-                    System.out.println("hi");
-
-                    System.out.println("Enter your username");
-                    String username = scanner.nextLine();
-                    user = username;
-//                    // of the array list username, password. If 0 index which is username contains username go to next step
-                    for (int i = 0; i < usernameAndPasswordSeller.size(); i++) {
-
-
-                        if (usernameAndPasswordSeller.get(i).substring(0, 
-                                usernameAndPasswordSeller.get(i).indexOf(";")).contains(username)) {
-
-                            System.out.println("Enter your password");
-                            String password = scanner.nextLine();
-                            for (int j = 1; j < usernameAndPasswordSeller.size(); j++) {
+                    if (usernameAndPasswordSeller.size() == 1) {
+                        System.out.println("Enter your username");
+                        String username = scanner.nextLine();
+                        user = username;
+//                    // of the array list username, password. If 0 index which is username
+//                   contains username go to next step
 
 
-                                String[] split = usernameAndPasswordSeller.get(i).split(";");
-                                String passwordTrim = split[1].trim();
+
+                            if (usernameAndPasswordSeller.get(0).substring(0,
+                                    usernameAndPasswordSeller.get(0).indexOf(";")).contains(username)) {
+
+                                System.out.println("Enter your password");
+                                String password = scanner.nextLine();
 
 
-                                if (passwordTrim.contains(password)) {
-                                    // System.out.println("Login successful!");
-                                    loginFailed = false;
-                                    flag = false;
-                                    loggedInAsSeller = true;
-                                    loginSuccessful = true;
+
+                                    String[] split = usernameAndPasswordSeller.get(0).split(";");
+                                    String passwordTrim = split[1].trim();
 
 
-                                    //boolean goIntoElse=false;
-                                } else {
-                                    //   System.out.println("Error: Password is incorrect");
-                                    loginFailed = true;
-                                    passwordIsWrong = true;
+                                    if (passwordTrim.contains(password)) {
+                                        // System.out.println("Login successful!");
+                                        loginFailed = false;
+                                        flag = false;
+                                        loggedInAsSeller = true;
+                                        loginSuccessful = true;
 
-                                }
+
+                                        //boolean goIntoElse=false;
+                                    } else {
+                                        //   System.out.println("Error: Password is incorrect");
+                                        loginFailed = true;
+                                        passwordIsWrong = true;
+
+                                    }
+
+                            } else {
+                                // System.out.println("Username not found");
+                                loginFailed = true;
+                                usernameIsWrong = true;
+
+
                             }
-                        } else {
-                            // System.out.println("Username not found");
-                            loginFailed = true;
-                            usernameIsWrong = true;
 
 
+                        // System.out.println("hi");
+                        if (loginSuccessful)
+                            usernameIsWrong = false;
+                        loginFailed = false;
+                        if (passwordIsWrong) {
+                            System.out.println("Error: Password is incorrect");
+                            usernameIsWrong=false;
+                        }
+                        if (usernameIsWrong) {
+                            System.out.println("Username not found");
                         }
 
-                    }
-                    // System.out.println("hi");
-                    if (loginSuccessful)
-                        usernameIsWrong = false;
-                    loginFailed = false;
-                    if (usernameIsWrong) {
-                        System.out.println("Username not found");
-                    }
-                    if (passwordIsWrong) {
-                        System.out.println("Error: Password is incorrect");
-                    }
-                    if (loginSuccessful) {
-                        System.out.println("Login successful!");
+                        if (loginSuccessful) {
+                            System.out.println("Login successful!");
+                        }
+                    } else if (usernameAndPasswordSeller.size() > 1) {
+                        System.out.println("Enter your username");
+                        String username = scanner.nextLine();
+                        user = username;
+//                    // of the array list username, password. If 0 i
+//                    ndex which is username contains username go to next step
+                        for (int i = 0; i < usernameAndPasswordSeller.size(); i++) {
+
+
+                            if (usernameAndPasswordSeller.get(i).substring(0,
+                                    usernameAndPasswordSeller.get(i).indexOf(";")).contains(username)) {
+
+                                System.out.println("Enter your password");
+                                String password = scanner.nextLine();
+                                for (int j = 1; j < usernameAndPasswordSeller.size(); j++) {
+
+
+                                    String[] split = usernameAndPasswordSeller.get(i).split(";");
+                                    String passwordTrim = split[1].trim();
+
+
+                                    if (passwordTrim.contains(password)) {
+                                        // System.out.println("Login successful!");
+                                        loginFailed = false;
+                                        flag = false;
+                                        loggedInAsSeller = true;
+                                        loginSuccessful = true;
+
+
+                                        //boolean goIntoElse=false;
+                                    } else {
+                                        //   System.out.println("Error: Password is incorrect");
+                                        loginFailed = true;
+                                        passwordIsWrong = true;
+
+                                    }
+                                }
+                            } else {
+                                // System.out.println("Username not found");
+                                loginFailed = true;
+                                usernameIsWrong = true;
+
+
+                            }
+
+                        }
+                        // System.out.println("hi");
+                        if (loginSuccessful)
+                            usernameIsWrong = false;
+                        loginFailed = false;
+                        if (passwordIsWrong) {
+                            System.out.println("Error: Password is incorrect");
+                            usernameIsWrong=false;
+                        }
+                        if (usernameIsWrong) {
+                            System.out.println("Username not found");
+                        }
+
+                        if (loginSuccessful) {
+                            System.out.println("Login successful!");
+                        }
                     }
 
                 } else if (sellerOrBuyer.equalsIgnoreCase("Buyer")) {
+                    if (usernameAndPasswordBuyer.size() == 1) {
+                        System.out.println("Enter your username");
+                        String username = scanner.nextLine();
 
-                    System.out.println("Enter your username");
+//                    // of the array list username,
+//                    password. If 0 index which is username
+//                    contains username go to next step
+
+
+
+                            if (usernameAndPasswordBuyer.get(0).substring(0,
+                                    usernameAndPasswordBuyer.get(0).indexOf(";")).contains(username)) {
+
+                                System.out.println("Enter your password");
+                                String password = scanner.nextLine();
+
+
+                                    String[] split = usernameAndPasswordBuyer.get(0).split(";");
+                                    String passwordTrim = split[1].trim();
+
+
+                                    if (passwordTrim.contains(password)) {
+                                        // System.out.println("Login successful!");
+                                       loginFailed = false;
+                                        flag = false;
+                                        loggedInAsBuyer = true;
+                                        loginSuccessful = true;
+
+
+                                        //boolean goIntoElse=false;
+                                    } else {
+                                        //   System.out.println("Error: Password is incorrect");
+                                        loginFailed = true;
+                                        passwordIsWrong = true;
+
+                                    }
+
+                            } else {
+                                // System.out.println("Username not found");
+                                loginFailed = true;
+                                usernameIsWrong = true;
+
+
+                            }
+
+
+                        if (loginSuccessful)
+                            usernameIsWrong = false;
+                        loginFailed = false;
+                        if (usernameIsWrong) {
+                            System.out.println("Username not found");
+                        }
+                        if (passwordIsWrong) {
+                            System.out.println("Error: Password is incorrect");
+                        }
+                        if (loginSuccessful) {
+                            System.out.println("Login successful!");
+                        }
+                    } else if (usernameAndPasswordBuyer.size() > 1) {
+
+                        System.out.println("Enter your username");
                     String username = scanner.nextLine();
 
 //                    // of the array list username, password. If 0 index which is username contains username go to next step
                     for (int i = 0; i < usernameAndPasswordBuyer.size(); i++) {
 
 
-                        if (usernameAndPasswordBuyer.get(i).substring(0, 
+                        if (usernameAndPasswordBuyer.get(i).substring(0,
                                 usernameAndPasswordBuyer.get(i).indexOf(";")).contains(username)) {
 
                             System.out.println("Enter your password");
@@ -300,6 +424,7 @@ public class Login {
                     if (loginSuccessful) {
                         System.out.println("Login successful!");
                     }
+                }
 
                 }
             }
@@ -328,14 +453,14 @@ public class Login {
         }
     }
 
-    public void createSeller(ArrayList<Seller> sellers, String usernameSeller, 
+    public void createSeller(ArrayList<Seller> sellers, String usernameSeller,
                              String sellerPassword, String email, String filepath) {
         Seller seller = new Seller(usernameSeller, sellerPassword, email, filepath);
         sellers.add(seller);
 
     }
 
-    public void createBuyer(ArrayList<Buyer> buyers, String usernameBuyer, 
+    public void createBuyer(ArrayList<Buyer> buyers, String usernameBuyer,
                             String buyerPassword, String email, String filepath) {
         Buyer buyer = new Buyer(usernameBuyer, buyerPassword, email, filepath);
         buyers.add(buyer);
