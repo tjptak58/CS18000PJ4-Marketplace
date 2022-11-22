@@ -68,7 +68,9 @@ public class Buyer extends Person{
         
     }
 
-    
+    public ArrayList<Product> getPurchased() {
+        return purchased;
+    }
 
     /*
      * Gets all product in users.txt that have a name, description, or store that matches the search parameter
@@ -155,10 +157,9 @@ public class Buyer extends Person{
      * Adds a product to the shopping cart of a user
      */
 
-    public boolean addToCart(Product product) {
-        if (product.getQuantity() > 0) {
+    public boolean addToCart(Product product , int available) {
+        if (available - product.getQuantity() >= 0) {
             shoppingCart.add(product);
-            product.setQuantity(product.getQuantity() - 1);
             try {
                 PrintWriter pw = new PrintWriter(new FileWriter(new File(cart) , true));
                 pw.print(product.getProductName() + ";");
@@ -179,7 +180,6 @@ public class Buyer extends Person{
         } else {
             return false;
         }
-
     }
 
     /*
@@ -246,11 +246,12 @@ public class Buyer extends Person{
      * history file.
      */
     public void purchase(Product p) {
-        p.setUnitsPurchased(p.getUnitsPurchased() + 1); //ADDED THIS LINE 11/12/22
+        p.setUnitsPurchased(p.getUnitsPurchased() + p.getQuantity()); //ADDED THIS LINE 11/12/22
         purchased.add(p);
         ArrayList<String> curList = p.getCustomerList();
         curList.add(this.getUsername());
         p.setCustomerList(curList);
+        shoppingCart.clear();
         try {
             PrintWriter pw = new PrintWriter(new FileWriter(new File(history) , false));
             for (Product product : purchased) {

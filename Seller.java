@@ -82,6 +82,17 @@ public class Seller extends Person{
             }
         }
     }
+
+    /*
+     * Deletes a store in stores
+     */
+    public void deleteStore(Store st) {
+        for (Store s : stores) {
+            if (st.getStoreName().equals(s.getStoreName())) {
+                stores.remove(s);
+            }
+        }
+    }
     
     /*
      * Returns an arraylist of prodcuts thata have been purcahsed
@@ -105,7 +116,7 @@ public class Seller extends Person{
     ,quantity,price
      * 
      */
-    public static ArrayList<Product> importProducts(String path) {
+    public ArrayList<Product> importProducts(String path) {
         try {
             var output = new ArrayList<Product>();
             BufferedReader buf = new BufferedReader(new FileReader(new File(path)));
@@ -131,7 +142,7 @@ public class Seller extends Person{
     }
 
     //Changed return type from void to boolean 11/13/22
-    public static boolean exportProducts(String path , ArrayList<Product> products) {
+    public boolean exportProducts(String path , ArrayList<Product> products) {
         try {
             var output = new ArrayList<Product>();
             PrintWriter pw = new PrintWriter(new FileWriter(new File(path)));
