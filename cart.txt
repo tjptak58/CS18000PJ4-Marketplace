@@ -1,2 +1,0 @@
-Honda;tptak;Good Car;9;100.0
-Bugati;tptak;Crazy Car;9;10000.0

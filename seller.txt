@@ -1,5 +1,0 @@
-Shop1;123;shop1email;shop1file
-tptak;kangaroo;kangaroo@gmail.com;stats.txtt
-target;123;targetemail;targetstats
-123;123;123;123
-tjptak;cat;tylerptak@gmail.com;cat.txt

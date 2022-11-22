@@ -1,3 +1,0 @@
-firstbuyer;123;firstbuyeremail;buyercart.txt;buyerpath.txt
-rohan;123;rohanemail;FINALCART.txt;FinalHistory.txt
-tim;timmy;tim;tim.txt;tim.xt
