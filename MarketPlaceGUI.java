@@ -24,14 +24,6 @@ public class MarketPlaceGUI extends JComponent implements Runnable{
      */
     static boolean loggedInAsBuyer;
     static boolean loggedInAsSeller;
-    Person user;
-    ArrayList<Store> marketPlace = new ArrayList<Store>();
-    ArrayList<Product> superListOfProducts = new ArrayList<Product>();
-    ArrayList<Buyer> buyers = new ArrayList<Buyer>();
-    ArrayList<Seller> sellers = new ArrayList<Seller>();
-        
-
-    
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new MarketPlaceGUI());
     }
@@ -41,52 +33,19 @@ public class MarketPlaceGUI extends JComponent implements Runnable{
     }
 
     public void run() {
-        Product honda = new Product("Honda", "tptak", "Good Car", 10, 100.0);
-        Product ford = new Product("Ford", "tptak", "Great Car", 20, 1000.0);
-        Product bugati = new Product("Bugati", "tptak", "Crazy Car", 30, 10000.0);
-        Store tptak = new Store("TJ", "tptak", "Car.txt");
-        Product lamborgini = new Product("Lamborgini", "tptak2", "Good Car", 10, 100.0);   //TEST ITEMS
-        Product tesla = new Product("Tesla", "tptak2", "Elon musk's baby", 20, 1000.0);
-        Product ferrari = new Product("Ferrari", "tptak2", "Crazy Car", 30, 10000.0);
-        Store tptak2 = new Store("TJ", "tptak", "Car.txt");
-        Seller tj = new Seller("TJ", "Ptak", username, "tj.txt");
-        Buyer user1 = new Buyer("james123", "12435" , "james@gmail.com" , "cart.txt" , "hist.txt");
-        Seller user2 = new Seller("james123", "12435" , "james@gmail.com", "file.txt");
-
-        tptak.addProduct(honda);
-        tptak.addProduct(ford);
-        tptak.addProduct(bugati);
-        marketPlace.add(tptak);
-        tptak2.addProduct(lamborgini);
-        tptak2.addProduct(tesla);
-        tptak2.addProduct(ferrari);
-        marketPlace.add(tptak2);
-        sellers.add(tj);
-
-        loggedInAsSeller = true;
-       
+        loggedInAsBuyer = true;
+        ArrayList<String> superNames = new ArrayList<String>(); //SERVERREQUEST GETSUPERNAMES
         if (loggedInAsBuyer) {
-            for (int i = 0; i < marketPlace.size(); i++ ) {
-                for (int j = 0; j < marketPlace.get(i).getProducts().size(); j++) {
-                    superListOfProducts.add(marketPlace.get(i).getProducts().get(j));
-                }
-            }
-            buyerMain(user1);
-        } else if (loggedInAsSeller) {
-            for (int i = 0; i < marketPlace.size(); i++ ) {
-                for (int j = 0; j < marketPlace.get(i).getProducts().size(); j++) {
-                    superListOfProducts.add(marketPlace.get(i).getProducts().get(j));
-                }
-            }
-            sellerMain(user2);
-            
+            buyerMain(superNames);
+        } else if (loggedInAsSeller) {     
+            sellerMain(superNames);           
         }
     }
 
     /*
      * Creates the Home Page for Buyer
      */
-    public void buyerMain(Buyer user) {
+    public void buyerMain(ArrayList<String> superNames) {
         JFrame buyerMain = new JFrame("THE MARKETPLACE");
         Container buyerMainPanel = buyerMain.getContentPane();
         buyerMainPanel.setLayout(new BorderLayout());
@@ -96,7 +55,8 @@ public class MarketPlaceGUI extends JComponent implements Runnable{
         refresh.addActionListener(new ActionListener() {      
             public void actionPerformed(ActionEvent e) {           //ACTION LISTENER - Refreshes the Home Page
                 buyerMain.dispose();
-                buyerMain(user);
+                superNames = new ArrayList<String>(); //SERVERREQUEST GETSUPERNAMES
+                buyerMain(superNames);  
             }
         
         }); 
@@ -150,11 +110,32 @@ public class MarketPlaceGUI extends JComponent implements Runnable{
         JButton searchButton = new JButton("Search");
         String[] s = {"Sort the menu","Sort by price High to Low","Sort by price Low to High","Sort by quantity High to Low","Sort by quantity Low to Hight"};
         JComboBox sortBox = new JComboBox(s);
-        JButton sortButton = new JButton("Sort");
+        sortBox.addItemListener(listener -> {
+            String choice;
+            JComboBox getSelection = (JComboBox) listener.getSource();
+            choice = (String) getSelection.getSelectedItem();
+            if (choice == s[1]) {
+                superListOfProducts = Buyer.sortPrice(superListOfProducts, true);
+                buyerMain.dispose();
+                buyerMain(user);
+            } else if (choice == s[2]) {
+                superListOfProducts = Buyer.sortPrice(superListOfProducts, false);
+                buyerMain.dispose();
+                buyerMain(user);
+            } else if (choice == s[3]) {
+                superListOfProducts = Buyer.sortQuantity(superListOfProducts, true);
+                buyerMain.dispose();
+                buyerMain(user);
+            } else if (choice == s[4]) {
+                superListOfProducts = Buyer.sortQuantity(superListOfProducts, false);
+                buyerMain.dispose();
+                buyerMain(user);
+            }
+        
+        });
         searchAndSort.add(searchText);                    //Creates search and sort bars
         searchAndSort.add(searchButton);
         searchAndSort.add(sortBox);
-        searchAndSort.add(sortButton);
         buyerMainCentral.add(searchAndSort , BorderLayout.NORTH);
 
         JPanel productsPanel = new JPanel();
@@ -172,7 +153,11 @@ public class MarketPlaceGUI extends JComponent implements Runnable{
                     int available = p.getQuantity();
                     Product chosen = p;
                     chosen.setQuantity(Integer.parseInt(s));
-                    user.addToCart(chosen , available);
+                    boolean flag = user.addToCart(chosen , available);
+                    if (!flag) {
+                        JOptionPane.showMessageDialog(null, "This item is out of stock for your purchase amount", 
+                        "ERROR", JOptionPane.ERROR_MESSAGE);
+                    }
                 }
             
             });
@@ -324,7 +309,7 @@ public class MarketPlaceGUI extends JComponent implements Runnable{
         cartPanel.setLayout(new BorderLayout());
 
         JPanel cartNorth = new JPanel(new FlowLayout());
-        JLabel title = new JLabel("<html><h1>SHOPPING CART</h1></html>");     //Createds title
+        JLabel title = new JLabel("<html><h1> CART</h1></html>");     //Createds title
         cartNorth.add(title);
         cart.add(cartNorth, BorderLayout.NORTH);
 
@@ -550,7 +535,7 @@ public class MarketPlaceGUI extends JComponent implements Runnable{
     /*
      * Opens the home page for a seller
      */
-    public void sellerMain(Seller user) {
+    public void sellerMain(ArrayList<String> superNames) {
         JFrame sellerMain = new JFrame("THE MARKETPLACE");
         Container sellerMainPanel = sellerMain.getContentPane();
         sellerMainPanel.setLayout(new BorderLayout());
@@ -782,7 +767,7 @@ public class MarketPlaceGUI extends JComponent implements Runnable{
     /*
      * Opens a page for a seller to edit
      */
-    public void displayEditProduct(Seller user ,Store s,  Product p) {
+    public void displayEditProduct(Seller user , Store s,  Product p) {
         JFrame editProduct = new JFrame("THE MARKETPLACE");
         Container editProductPanel = editProduct.getContentPane();
         editProductPanel.setLayout(new BorderLayout());

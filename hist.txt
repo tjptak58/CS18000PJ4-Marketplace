@@ -1,3 +1,0 @@
-Lamborgini;tptak2;Good Car;9;100.0
-Tesla;tptak2;Elon musk's baby;8;1000.0
-Honda;tptak;Good Car;9;100.0
