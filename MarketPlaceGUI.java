@@ -1,6 +1,7 @@
 
 import java.util.ArrayList;
 import javax.swing.*;
+import java.io.*;
 
 import java.awt.*; 
 import java.awt.event.*;
@@ -55,7 +56,7 @@ public class MarketPlaceGUI extends JComponent implements Runnable{
         refresh.addActionListener(new ActionListener() {      
             public void actionPerformed(ActionEvent e) {           //ACTION LISTENER - Refreshes the Home Page
                 buyerMain.dispose();
-                superNames = new ArrayList<String>(); //SERVERREQUEST GETSUPERNAMES
+                var superNames = new ArrayList<String>(); //SERVERREQUEST GETSUPERNAMES
                 buyerMain(superNames);  
             }
         
@@ -69,7 +70,8 @@ public class MarketPlaceGUI extends JComponent implements Runnable{
         JButton purchaseHistory = new JButton("Purchase History");
         purchaseHistory.addActionListener(new ActionListener() {      
             public void actionPerformed(ActionEvent e) {           //ACTION LISTENER - Link to the purchase history of the user
-                displayPurchaseHistory(user);
+                var history = new ArrayList<String>(); //SERVERREQUEST GETPURCHASEHISTORY
+                displayPurchaseHistory(history);   
                 buyerMain.dispose();
             }
         
@@ -77,7 +79,8 @@ public class MarketPlaceGUI extends JComponent implements Runnable{
         JButton viewCart = new JButton("View Cart");                
         viewCart.addActionListener(new ActionListener() {      
             public void actionPerformed(ActionEvent e) {           //ACTION LISTENER - Link to the shopping cart of a user
-                displayCart(user);
+                var cart = new ArrayList<String>(); //SERVERREQUEST VIEWCART
+                displayCart(cart);
                 buyerMain.dispose();
             }
         
@@ -85,7 +88,8 @@ public class MarketPlaceGUI extends JComponent implements Runnable{
         JButton editAccount = new JButton("Edit Account");
         editAccount.addActionListener(new ActionListener() {      
             public void actionPerformed(ActionEvent e) {           //ACTION LISTENER - Link to the page to edit a buyer account
-                editAccount(user);
+                var info = new ArrayList<String>(); //SERVERREQUEST GETACCOUNTINFO
+                editAccount(info);
                 buyerMain.dispose();
             }
         
@@ -93,8 +97,9 @@ public class MarketPlaceGUI extends JComponent implements Runnable{
         JButton logout = new JButton("Logout");
         logout.addActionListener(new ActionListener() {      
             public void actionPerformed(ActionEvent e) {           //ACTION LISTENER - Link to the page to goodbye page
-                goodbye();
                 buyerMain.dispose();
+                goodbye();
+                
             }
         
         });
@@ -108,28 +113,38 @@ public class MarketPlaceGUI extends JComponent implements Runnable{
         JPanel searchAndSort = new JPanel(new FlowLayout());
         JTextField searchText = new JTextField(10);
         JButton searchButton = new JButton("Search");
+        searchButton.addActionListener(new ActionListener() {      
+            public void actionPerformed(ActionEvent e) {   //ACTION LISTENER - Searches for a product
+                ArrayList<String> searched = searchProducts(searchText.getText());      
+                buyerMain.dispose();
+                buyerMain(searched);
+                
+            }
+        
+        });
         String[] s = {"Sort the menu","Sort by price High to Low","Sort by price Low to High","Sort by quantity High to Low","Sort by quantity Low to Hight"};
         JComboBox sortBox = new JComboBox(s);
+        var superName = new ArrayList<String>(); //SERVERREQUEST GETSUPERNAMES
         sortBox.addItemListener(listener -> {
             String choice;
             JComboBox getSelection = (JComboBox) listener.getSource();
             choice = (String) getSelection.getSelectedItem();
-            if (choice == s[1]) {
-                superListOfProducts = Buyer.sortPrice(superListOfProducts, true);
+            if (choice == s[1]) { 
+                sortPrice(superName , true);
                 buyerMain.dispose();
-                buyerMain(user);
+                buyerMain(superName);
             } else if (choice == s[2]) {
-                superListOfProducts = Buyer.sortPrice(superListOfProducts, false);
+                sortPrice(superName, false);
                 buyerMain.dispose();
-                buyerMain(user);
+                buyerMain(superName);
             } else if (choice == s[3]) {
-                superListOfProducts = Buyer.sortQuantity(superListOfProducts, true);
+                sortQuantity(superName, true);
                 buyerMain.dispose();
-                buyerMain(user);
+                buyerMain(superName);
             } else if (choice == s[4]) {
-                superListOfProducts = Buyer.sortQuantity(superListOfProducts, false);
+                sortQuantity(superName, false);
                 buyerMain.dispose();
-                buyerMain(user);
+                buyerMain(superName);
             }
         
         });
@@ -142,18 +157,17 @@ public class MarketPlaceGUI extends JComponent implements Runnable{
         BoxLayout boxlayout = new BoxLayout(productsPanel, BoxLayout.Y_AXIS); //Variable number of products from product list
         productsPanel.setLayout(boxlayout);
         ArrayList<JPanel> panels = new ArrayList<JPanel>();
-        for (Product p : superListOfProducts) {
+        superNames = new ArrayList<String>(); //SERVERREQUEST GETSUPERNAMES
+        for (String line : superNames) {
             JPanel product1 = new JPanel(new FlowLayout());
-            JLabel product1Text = new JLabel(p.getProductName());
+            JLabel product1Text = new JLabel(line);
             product1.add(product1Text);
             JButton product1Add = new JButton("Add To Cart");
             product1Add.addActionListener(new ActionListener() {      
                 public void actionPerformed(ActionEvent e) {           //ACTION LISTENER - Add to cart Ask the user how many they want to buy
                     String s = JOptionPane.showInputDialog("How many items do you want to buy?");
-                    int available = p.getQuantity();
-                    Product chosen = p;
-                    chosen.setQuantity(Integer.parseInt(s));
-                    boolean flag = user.addToCart(chosen , available);
+                    int requested = Integer.parseInt(s);
+                    boolean flag = true; //SERVERREQUEST ADDTOCART
                     if (!flag) {
                         JOptionPane.showMessageDialog(null, "This item is out of stock for your purchase amount", 
                         "ERROR", JOptionPane.ERROR_MESSAGE);
@@ -165,7 +179,7 @@ public class MarketPlaceGUI extends JComponent implements Runnable{
             JButton product1Info = new JButton("Info");
             product1Info.addActionListener(new ActionListener() {      
                 public void actionPerformed(ActionEvent e) {   
-                    displayProductInfo(user , p);      //ACTION LISTENER - Sends the user to the Product info page for the specific product
+                    displayProductInfo(line);      //ACTION LISTENER - Sends the user to the Product info page for the specific product
                     buyerMain.dispose();
                     
                 }
@@ -192,7 +206,7 @@ public class MarketPlaceGUI extends JComponent implements Runnable{
     /*
     * Creates the info page for unique products
     */
-    public void displayProductInfo(Buyer user, Product p) {
+    public void displayProductInfo(String line) {
         JFrame productInfo = new JFrame("THE MARKETPLACE");
         Container productInfoPanel = productInfo.getContentPane();
         productInfoPanel.setLayout(new BorderLayout());
@@ -205,11 +219,13 @@ public class MarketPlaceGUI extends JComponent implements Runnable{
         JPanel productInfoCentral = new JPanel();
         BoxLayout boxlayout = new BoxLayout(productInfoCentral, BoxLayout.Y_AXIS); //Add Product info
         productInfoCentral.setLayout(boxlayout);
-        JLabel productNameLabel = new JLabel(String.format("Product Name: %s" , p.getProductName()));
-        JLabel storeNameLabel = new JLabel(String.format("Store Name: %s" , p.getStoreName()));
-        JLabel descriptionLabel = new JLabel(String.format("Description: %s" , p.getDescription()));
-        JLabel quantityLabel = new JLabel(String.format("Quantity: %d" , p.getQuantity()));
-        JLabel priceLabel = new JLabel(String.format("Price: %.2f" , p.getPrice()));
+        String info = ""; //SERVERREQUEST PRODUCTINFO
+        String[] infoSplit = info.split(";");
+        JLabel productNameLabel = new JLabel(String.format("Product Name: %s" , infoSplit[0]));
+        JLabel storeNameLabel = new JLabel(String.format("Store Name: %s" , infoSplit[1]));
+        JLabel descriptionLabel = new JLabel(String.format("Description: %s" , infoSplit[2]));
+        JLabel quantityLabel = new JLabel(String.format("Quantity: %d" , infoSplit[3]));
+        JLabel priceLabel = new JLabel(String.format("Price: %.2f" , infoSplit[4]));
         productInfoCentral.add(productNameLabel);
         productInfoCentral.add(storeNameLabel);
         productInfoCentral.add(descriptionLabel);
@@ -222,7 +238,12 @@ public class MarketPlaceGUI extends JComponent implements Runnable{
         addToCart.addActionListener(new ActionListener() {      
             public void actionPerformed(ActionEvent e) {           //ACTION LISTENER - Link to add a product to the cart
                 String s = JOptionPane.showInputDialog("How many items do you want to buy?");
-                user.addToCart(p , Integer.parseInt(s));
+                int requested = Integer.parseInt(s);
+                boolean flag = true; //SERVERREQUEST ADDTOCART
+                if (!flag) {
+                    JOptionPane.showMessageDialog(null, "This item is out of stock for your purchase amount", 
+                    "ERROR", JOptionPane.ERROR_MESSAGE);
+                }
             }
         
         });
@@ -230,7 +251,8 @@ public class MarketPlaceGUI extends JComponent implements Runnable{
         JButton back = new JButton("Back");
         back.addActionListener(new ActionListener() {      
             public void actionPerformed(ActionEvent e) {           //Send the user back to the buyer home
-                buyerMain(user);
+                var superNames = new ArrayList<String>(); //SERVERREQUEST GETSUPERNAMES
+                buyerMain(superNames);
                 productInfo.dispose();
             }
         
@@ -250,7 +272,7 @@ public class MarketPlaceGUI extends JComponent implements Runnable{
     /*
      * Creates the page for user to see their purchase history
      */
-    public void displayPurchaseHistory(Buyer user) {
+    public void displayPurchaseHistory(ArrayList<String> history) {
         JFrame purchaseHistory = new JFrame("THE MARKETPLACE");
         Container purchaseHistoryPanel = purchaseHistory.getContentPane();
         purchaseHistoryPanel.setLayout(new BorderLayout());
@@ -263,9 +285,8 @@ public class MarketPlaceGUI extends JComponent implements Runnable{
         JPanel purchaseHistoryCentral = new JPanel();
         BoxLayout boxlayout = new BoxLayout(purchaseHistoryCentral, BoxLayout.Y_AXIS); //Add Product info
         purchaseHistoryCentral.setLayout(boxlayout);
-        ArrayList<Product> phistory = user.getPurchased();
-        for (Product p : phistory) {
-            purchaseHistoryCentral.add(new JLabel(p.toString()));  //Gets the user purchase history and displays it : how does marketplace do this?
+        for (String line : history) {
+            purchaseHistoryCentral.add(new JLabel(line));  //Gets the user purchase history and displays it : how does marketplace do this?
         }
         JScrollPane scrollPane = new JScrollPane(purchaseHistoryCentral); 
         purchaseHistory.add(scrollPane , BorderLayout.CENTER);
@@ -275,14 +296,14 @@ public class MarketPlaceGUI extends JComponent implements Runnable{
         JButton exportProduct = new JButton("Export to File"); //Adds bottom buttons
         exportProduct.addActionListener(new ActionListener() {      
             public void actionPerformed(ActionEvent e) {           //Exports the purchase history to a file
-                user.exportHistory(exportText.getText());
+                exportHistory(exportText.getText());
             }
-        
         });
         JButton back = new JButton("Back");
         back.addActionListener(new ActionListener() {      
             public void actionPerformed(ActionEvent e) {           //Send the user back to the buyer home
-                buyerMain(user);
+                var superNames = new ArrayList<String>(); //SERVERREQUEST GETSUPERNAMES
+                buyerMain(superNames);
                 purchaseHistory.dispose();
             }
         
@@ -303,7 +324,7 @@ public class MarketPlaceGUI extends JComponent implements Runnable{
     /*
      * Allows the user to see and edit their cart or checkout.
      */
-    public void displayCart(Buyer user) {
+    public void displayCart(ArrayList<String> viewCart) {
         JFrame cart = new JFrame("THE MARKETPLACE");
         Container cartPanel = cart.getContentPane();
         cartPanel.setLayout(new BorderLayout());
@@ -318,7 +339,8 @@ public class MarketPlaceGUI extends JComponent implements Runnable{
         continueShopping.addActionListener(new ActionListener() {      
             public void actionPerformed(ActionEvent e) {   
                 cart.dispose();      //ACTION LISTENER - Sends the user back to the main page
-                buyerMain(user);
+                var superNames = new ArrayList<String>(); //SERVERREQUEST GETSUPERNAMES
+                buyerMain(superNames);
             }
         
         });
@@ -327,11 +349,10 @@ public class MarketPlaceGUI extends JComponent implements Runnable{
             public void actionPerformed(ActionEvent e) {   
                 int choice = JOptionPane.showConfirmDialog(null, "Are you sure?");      //ACTION LISTENER - Sends the user back to the main page
                 if (choice == JOptionPane.YES_OPTION) {
-                    for (Product p : user.getShoppingCart()) {
-                        user.purchase(p);
-                    }
+                    String checkout = ""; //SERVERREQUEST PURCHASE
                     cart.dispose();
-                    displayCart(user);
+                    var viewCart = new ArrayList<String>();  //SERVERREQUEST VIEWCART
+                    displayCart(viewCart);
                     JOptionPane.showMessageDialog(null, "Purchase Confirmed", "THE MARKETPLACE", JOptionPane.PLAIN_MESSAGE);
                 }
                 
@@ -348,18 +369,17 @@ public class MarketPlaceGUI extends JComponent implements Runnable{
         BoxLayout boxlayout = new BoxLayout(productsPanel, BoxLayout.Y_AXIS); //Variable number of products from product list
         productsPanel.setLayout(boxlayout);
         ArrayList<JPanel> panels = new ArrayList<JPanel>();
-        ArrayList<Product> c = user.getShoppingCart();
-        for (Product p : c) {    
+        for (String line : viewCart) {    
             JPanel product1 = new JPanel(new FlowLayout());
-            JLabel product1Text = new JLabel(String.format("Name: %s, Store: %s, Quantity: %d, Price %.2f" //Populates shopping cart on screen
-            , p.getProductName() , p.getStoreName(), p.getQuantity(), p.getPrice()));
+            JLabel product1Text = new JLabel(line); //Populates shopping cart on screen
             product1.add(product1Text);
             JButton delete = new JButton("Delete");
             delete.addActionListener(new ActionListener() {      
-                public void actionPerformed(ActionEvent e) {   
-                    user.removeFromCart(p);      //ACTION LISTENER - removes an item from the cart and updates the page
+                public void actionPerformed(ActionEvent e) {   //ACTION LISTENER - removes an item from the cart and updates the page
+                    //SERVERREQUEST DELETEPRODUCTCART      
                     cart.dispose();
-                    displayCart(user);
+                    var view = new ArrayList<String>(); //SERVERREQUEST VIEWCART
+                    displayCart(view);
                     
                 }
             
@@ -386,7 +406,7 @@ public class MarketPlaceGUI extends JComponent implements Runnable{
     /*
      * Opens a page for a user to edit their account
      */
-    public void editAccount(Buyer user) {
+    public void editAccount(ArrayList<String> edit) {
         JFrame account = new JFrame("THE MARKETPLACE");
         Container accountPanel = account.getContentPane();
         accountPanel.setLayout(new BorderLayout());
@@ -403,11 +423,6 @@ public class MarketPlaceGUI extends JComponent implements Runnable{
         BoxLayout boxlayout = new BoxLayout(accountFields, BoxLayout.Y_AXIS); //Variable number of products from product list
         accountFields.setLayout(boxlayout);
         
-        JPanel username = new JPanel(new FlowLayout());
-        JLabel usernameText = new JLabel("Username: ");
-        JTextField usernameField = new JTextField("username"); //prepopulated with username
-        username.add(usernameText);
-        username.add(usernameField);
         JPanel password = new JPanel(new FlowLayout());
         JLabel passwordText = new JLabel("Password: ");
         JTextField passwordField = new JTextField("password"); //prepopulated with username
@@ -424,10 +439,11 @@ public class MarketPlaceGUI extends JComponent implements Runnable{
         update.addActionListener(new ActionListener() {      
             public void actionPerformed(ActionEvent e) {   
                 account.dispose();      //ACTION LISTENER - Sends the user back to the main page
-                user.setUsername(usernameText.getText());
-                user.setPassword(passwordText.getText());
-                user.setEmail(emailText.getText());
-                buyerMain(user);
+                String p = passwordText.getText();
+                String em = emailText.getText();
+                //SERVERREQUEST UPDATEACCOUNTINFO
+                var superNames = new ArrayList<String>(); //SERVERREQUEST GETSUPERNAMES
+                buyerMain(superNames);
                 
             }
         
@@ -437,7 +453,8 @@ public class MarketPlaceGUI extends JComponent implements Runnable{
         back.addActionListener(new ActionListener() {      
             public void actionPerformed(ActionEvent e) {   
                 account.dispose();      //ACTION LISTENER - Sends the user back to the main page
-                buyerMain(user);
+                var superNames = new ArrayList<String>(); //SERVERREQUEST GETSUPERNAMES
+                buyerMain(superNames);
                 
             }
         
@@ -446,7 +463,6 @@ public class MarketPlaceGUI extends JComponent implements Runnable{
         accountSouth.add(back);
         account.add(accountSouth, BorderLayout.SOUTH);
 
-        accountFields.add(username);
         accountFields.add(password);
         accountFields.add(email);
         JScrollPane scrollPane = new JScrollPane(accountFields); 
@@ -1016,6 +1032,118 @@ public class MarketPlaceGUI extends JComponent implements Runnable{
         goodbye.setVisible(true);
         goodbye.requestFocus();
         
+    }
+
+    public boolean exportHistory(String path) {
+        try {
+            BufferedReader buf = new BufferedReader(new FileReader(new File(path)));
+            PrintWriter pw = new PrintWriter(new FileWriter(new File(path) , true));           
+            String s = buf.readLine();
+            while (true) {
+                if (s == null) {
+                    break;
+                } else {
+                    String[] split = s.split(";");
+                    Product p = new Product(split[0], split[1], split[2], Integer.parseInt(split[3]), Double.parseDouble(split[4]));
+                    pw.println(p.toString());
+                    s = buf.readLine();
+                }  
+            }
+            buf.close();
+            pw.close();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /*
+     * Sorts an Arraylist of products based on price
+     * Sorts highest price to lowest if highToLow = true    NOT SURE IF I EVEN NEED THIS
+     * if it's false, sorts lowest to highest
+     */
+    public static ArrayList<String> sortPrice(ArrayList<String> products , boolean highToLow) {
+        ArrayList<String> output = new ArrayList<String>();
+        ArrayList<String> p = products;
+        while (p.size() > 0) {
+            double max = 0;
+            int index = 0;
+            for (int i = 0 ; i < p.size() ; i++) {
+                String productInfo = ""; //SERVERREQUEST PRODUCTINFO
+                String[] productSplit = productInfo.split(";");
+                Double price = Double.parseDouble(productSplit[4]);
+                if (price >= max) {
+                    max = price;
+                    index = i;
+                }
+            }
+            output.add(p.get(index));
+            p.remove(index);
+        }
+        if (highToLow) {
+            return output;
+        } else {
+            ArrayList<String> reversed = new ArrayList<String>();
+            for (int i = output.size() - 1 ; i >= 0 ; i--) {
+                reversed.add(output.get(i));
+            }
+            return reversed;
+        }
+    }
+
+    /*
+     * Sorts an Arraylist of products based on quantity
+     * Sorts highest price to lowest if highToLow = true
+     * if it's false, sorts lowest to highest
+     */
+    public static ArrayList<String> sortQuantity(ArrayList<String> products , boolean highToLow) {
+        ArrayList<String> output = new ArrayList<String>();
+        ArrayList<String> p = products;
+        while (p.size() > 0) {
+            int max = 0;
+            int index = 0;
+            for (int i = 0 ; i < p.size() ; i++) {
+                String productInfo = ""; //SERVERREQUEST PRODUCTINFO
+                String[] productSplit = productInfo.split(";");
+                Integer quantity = Integer.parseInt(productSplit[3]);
+                if (quantity >= max) {
+                    max = quantity;
+                    index = i;
+                }
+            }
+            output.add(p.get(index));
+            p.remove(index);
+        }
+        if (highToLow) {
+            return output;
+        } else {
+            ArrayList<String> reversed = new ArrayList<String>();
+            for (int i = output.size() - 1 ; i >= 0 ; i--) {
+                reversed.add(output.get(i));
+            }
+            return reversed;
+        }
+    }
+
+    /*
+     * Gets all product in users.txt that have a name, description, or store that matches the search parameter
+     */
+    public static ArrayList<String> searchProducts(String searchParameter) {
+        ArrayList<String> output = new ArrayList<String>();
+        ArrayList<String> superNames = new ArrayList<String>(); //SERVERREQUEST GETSUPERNAMES
+        for (String line : superNames) {
+            String productInfo = ""; //SERVERREQUEST PRODUCTINFO
+            String[] productSplit = productInfo.split(";");
+            if (productSplit[0].contains(searchParameter)) {
+                output.add(line);
+            } else if (productSplit[1].contains(searchParameter)) {
+                output.add(line);
+            } else if (productSplit[2].contains(searchParameter)) {
+                output.add(line);
+            } 
+        }
+        return output;
     }
 
 }
