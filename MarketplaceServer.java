@@ -18,7 +18,7 @@ import java.util.Scanner;
  *
  *
  * KEYWORDS
- *
+ * asdasd
  *
  */
 
@@ -27,6 +27,7 @@ public class MarketplaceServer implements Runnable {
     static ArrayList<Buyer> buyerArrayList = new ArrayList<>();
     static ArrayList<Seller> sellerArrayList = new ArrayList<>();
     static ArrayList<Store> marketPlace = new ArrayList<>();
+    static ArrayList<Product> superListOfProducts = new ArrayList<>();
     //Creating a gatekeeper object
     Object object = new Object();
 
@@ -68,25 +69,53 @@ public class MarketplaceServer implements Runnable {
         BufferedReader blfr = new BufferedReader(lfr);
         String storeLine = blfr.readLine();
         while (storeLine != null) {
+            //storeLine has format
+            //sellerName;storeName;storeRevenue;filePathToStore
             String[] storeArray = storeLine.split(";");
             String storeFile = storeArray[3];
             File loopFile = new File(storeFile);
             FileReader loopfr = new FileReader(loopFile);
             BufferedReader bloopfr = new BufferedReader(loopfr);
             String productLine = bloopfr.readLine();
+            //ArrayList of products for this store
+            ArrayList<Product> storeProducts = new ArrayList<>();
             while (productLine != null) {
+                
                 /*
                  * ProductLine has format
                  * ProductName;StoreName;description;quantity;price;unitsPurchased;customerList
                  */
                 String[] productArray = productLine.split(";");
                 ArrayList<String> customerList = new ArrayList<>();
+                //If a customer has bought the same product multiple times then their name appears multiple times in the ArrayList
+                if (productArray[6].indexOf(",") == -1) {
+                    if (productArray[6] != null) {
+                        //If here then only one customer has purchased the product
+                        customerList.add(productArray[6]);
+
+                    }
+                } else {
+                    //More than one customer has purchased the product
+                    String[] customerL = productArray[6].split(",");
+                    for (int i = 0; i < customerL.length; i++) {
+                        customerList.add(customerL[i]);
+                    }
+
+                }
+                storeProducts.add(new Product(productArray[0], productArray[1], productArray[2], Integer.parseInt(productArray[3]), Double.parseDouble(productArray[4]), Integer.parseInt(productArray[5]), customerList ));
+                
+                productLine = bloopfr.readLine();
+
+
 
 
 
             }
-            //
+            //Adding store to marketplace
+            marketPlace.add( new Store (storeArray[0], storeArray[1], storeFile, storeProducts, Double.parseDouble(storeArray[2])));
+            storeLine = blfr.readLine();
         }
+        //When main main method runs for the first time all static variables are initialized before entering infinite while loop
 
         ServerSocket serverSocket = new ServerSocket(4242);
         while (true) {
@@ -117,7 +146,11 @@ public class MarketplaceServer implements Runnable {
 
             } else if (keyWord.equals("PRODUCTINFO") ) {
 
-            } else if (keyWord.equals("GETPURCHASE"))
+            } else if (keyWord.equals("GETPURCHASE")) {
+
+            } else if (keyWord.equals("")) {
+
+            }
 
 
 
