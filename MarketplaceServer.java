@@ -137,20 +137,58 @@ public class MarketplaceServer implements Runnable {
             Scanner in = new Scanner(socket.getInputStream());
             ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
 
-            //Listening for KEYWORDS and sending information back
-            String keyWord = in.nextLine();
-            if (keyWord.equals("GETSUPERNAMES")) {
-                //Send ArrayList of Strings containing all product names in marketplace
+            while (true) {
+                //Loop until client closes application or logs out
+                //Listening for KEYWORDS and sending information back
+                //LISTEN FOR WHEN APPLICATION IS CLOSED AND FOR REFRESH!
+                String keyWord = in.nextLine();
+                if (keyWord.equals("GETSUPERNAMES")) {
+                    //Send ArrayList of Strings containing all product names in marketplace
+                    ArrayList<String> arrayListToSend = new ArrayList<>();
+                    for (int j = 0; j < marketPlace.size(); j++) {
+                        for (int k = 0; k < marketPlace.get(j).getProducts().size(); k++) {
+                            arrayListToSend.add(marketPlace.get(j).getProducts().get(k).getProductName());
 
-            } else if (keyWord.equals("ADDTOCART")) {
+                        }
+                    }
+                    //Send ArrayList back to client
+                    oos.writeObject(arrayListToSend);
+                    oos.flush(); //FLUSHING!!!
 
-            } else if (keyWord.equals("PRODUCTINFO") ) {
+                } else if (keyWord.equals("ADDTOCART")) {
+                     //Listen for productname
+                     //Listen for username
+                     //Listen for quantity
+                     //LISTEN FOR STORE??????
+                     String productName = in.nextLine(); //STRING!!
+                     String userName = in.nextLine(); //STRING!!
+                     int quantity = in.nextInt(); //INT!!
+                     in.nextLine();
+                     for (int i = 0; i < buyerArrayList.size(); i++) {
+                        //Search for matching username in the arraylist and update cart where username is a match
+                        if (buyerArrayList.get(i).getUsername().equals(userName)) {
 
-            } else if (keyWord.equals("GETPURCHASE")) {
+                        }
+                     }
 
-            } else if (keyWord.equals("")) {
 
+ 
+
+                } else if (keyWord.equals("PRODUCTINFO") ) {
+                    //Listen for product name
+
+                } else if (keyWord.equals("GETPURCHASE")) {
+
+                } else if (keyWord.equals("")) {
+
+                }
+                
             }
+
+            //If reached here then client has logged out or closed the application
+            //Call writeToFiles method here
+
+            
 
 
 
@@ -162,5 +200,10 @@ public class MarketplaceServer implements Runnable {
 
 
     };
+
+    public synchronized void writeToFiles(ArrayList<Buyer> buyerArrayList, ArrayList<Seller> sellerArrayList, ArrayList<Store> storeArrayList) {
+
+
+    }
 
 }
