@@ -1,6 +1,7 @@
 
 import java.util.ArrayList;
 import javax.swing.*;
+
 import java.io.*;
 
 import java.awt.*; 
@@ -14,7 +15,7 @@ import java.awt.event.*;
  * @verion 11/14/22
  */
 
-public class MarketPlaceGUI extends JComponent implements Runnable{
+public class MarketPlaceClient extends JComponent implements Runnable{
     /**
      *Static string that stores the username of the logged in buyer or seller
      */
@@ -26,15 +27,16 @@ public class MarketPlaceGUI extends JComponent implements Runnable{
     static boolean loggedInAsBuyer;
     static boolean loggedInAsSeller;
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(new MarketPlaceGUI());
+        SwingUtilities.invokeLater(new MarketPlaceClient());
     }
 
-    public MarketPlaceGUI() {
+    public MarketPlaceClient() {
         
     }
 
     public void run() {
-        loggedInAsBuyer = true;
+        loggedInAsBuyer = false;
+        loggedInAsSeller = true;
         ArrayList<String> superNames = new ArrayList<String>(); //SERVERREQUEST GETSUPERNAMES
         if (loggedInAsBuyer) {
             buyerMain(superNames);
@@ -416,21 +418,21 @@ public class MarketPlaceGUI extends JComponent implements Runnable{
         accountNorth.add(title);
         account.add(accountNorth, BorderLayout.NORTH);
 
-       
+        ArrayList<String> returned = new ArrayList<String>(); //SERVERREQUEST - GETACCOUNTINFO
 
         JPanel accountCentral = new JPanel(new BorderLayout());
         JPanel accountFields = new JPanel();
-        BoxLayout boxlayout = new BoxLayout(accountFields, BoxLayout.Y_AXIS); //Variable number of products from product list
+        BoxLayout boxlayout = new BoxLayout(accountFields, BoxLayout.Y_AXIS);
         accountFields.setLayout(boxlayout);
         
         JPanel password = new JPanel(new FlowLayout());
         JLabel passwordText = new JLabel("Password: ");
-        JTextField passwordField = new JTextField("password"); //prepopulated with username
+        JTextField passwordField = new JTextField(returned.get(0)); //prepopulated with password
         password.add(passwordText);
         password.add(passwordField);
         JPanel email = new JPanel(new FlowLayout());
         JLabel emailText = new JLabel("Email: ");
-        JTextField emailField = new JTextField("email"); //prepopulated with username
+        JTextField emailField = new JTextField(returned.get(1)); //prepopulated with email
         email.add(emailText);
         email.add(emailField);
 
@@ -443,7 +445,11 @@ public class MarketPlaceGUI extends JComponent implements Runnable{
                 String em = emailText.getText();
                 //SERVERREQUEST UPDATEACCOUNTINFO
                 var superNames = new ArrayList<String>(); //SERVERREQUEST GETSUPERNAMES
-                buyerMain(superNames);
+                if (loggedInAsBuyer) {
+                    buyerMain(superNames);
+                } else if (loggedInAsSeller) {
+                    sellerMain(superNames);
+                }
                 
             }
         
@@ -454,7 +460,11 @@ public class MarketPlaceGUI extends JComponent implements Runnable{
             public void actionPerformed(ActionEvent e) {   
                 account.dispose();      //ACTION LISTENER - Sends the user back to the main page
                 var superNames = new ArrayList<String>(); //SERVERREQUEST GETSUPERNAMES
-                buyerMain(superNames);
+                if (loggedInAsBuyer) {
+                    buyerMain(superNames);
+                } else if (loggedInAsSeller) {
+                    sellerMain(superNames);
+                }
                 
             }
         
@@ -463,78 +473,6 @@ public class MarketPlaceGUI extends JComponent implements Runnable{
         accountSouth.add(back);
         account.add(accountSouth, BorderLayout.SOUTH);
 
-        accountFields.add(password);
-        accountFields.add(email);
-        JScrollPane scrollPane = new JScrollPane(accountFields); 
-        accountCentral.add(scrollPane , BorderLayout.CENTER);
-        account.add(accountCentral, BorderLayout.CENTER);
-        account.pack();
-        account.setSize(600, 400);
-        account.setLocationRelativeTo(null);
-        account.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        account.setVisible(true);
-        account.requestFocus();
-    }
-
-    public void editAccount(Seller user) {
-        JFrame account = new JFrame("THE MARKETPLACE");
-        Container accountPanel = account.getContentPane();
-        accountPanel.setLayout(new BorderLayout());
-
-        JPanel accountNorth = new JPanel(new FlowLayout());
-        JLabel title = new JLabel("<html><h1>EDIT ACCOUNT</h1></html>");     //Createds title
-        accountNorth.add(title);
-        account.add(accountNorth, BorderLayout.NORTH);
-
-        JPanel accountCentral = new JPanel(new BorderLayout());
-        JPanel accountFields = new JPanel();
-        BoxLayout boxlayout = new BoxLayout(accountFields, BoxLayout.Y_AXIS); //Variable number of products from product list
-        accountFields.setLayout(boxlayout);
-        
-        JPanel username = new JPanel(new FlowLayout());
-        JLabel usernameText = new JLabel("Username: ");
-        JTextField usernameField = new JTextField("username"); //prepopulated with username
-        username.add(usernameText);
-        username.add(usernameField);
-        JPanel password = new JPanel(new FlowLayout());
-        JLabel passwordText = new JLabel("Password: ");
-        JTextField passwordField = new JTextField("password"); //prepopulated with username
-        password.add(passwordText);
-        password.add(passwordField);
-        JPanel email = new JPanel(new FlowLayout());
-        JLabel emailText = new JLabel("Email: ");
-        JTextField emailField = new JTextField("email"); //prepopulated with username
-        email.add(emailText);
-        email.add(emailField);
-
-        JPanel accountSouth = new JPanel(new FlowLayout());
-        JButton update = new JButton("Update");
-        update.addActionListener(new ActionListener() {      
-            public void actionPerformed(ActionEvent e) {   
-                account.dispose();      //ACTION LISTENER - Sends the user back to the main page
-                user.setUsername(usernameText.getText());
-                user.setPassword(passwordText.getText());
-                user.setEmail(emailText.getText());
-                sellerMain(user);
-                
-            }
-        
-        });
-        JButton back = new JButton("Back");                 //Displays Bottom Buttons
-        back.addActionListener(new ActionListener() {      
-            public void actionPerformed(ActionEvent e) {   
-                account.dispose();      //ACTION LISTENER - Sends the user back to the main page
-                sellerMain(user);
-                
-                
-            }
-        
-        });
-        accountSouth.add(update);
-        accountSouth.add(back);
-        account.add(accountSouth, BorderLayout.SOUTH);
-
-        accountFields.add(username);
         accountFields.add(password);
         accountFields.add(email);
         JScrollPane scrollPane = new JScrollPane(accountFields); 
@@ -563,9 +501,8 @@ public class MarketPlaceGUI extends JComponent implements Runnable{
         addStore.addActionListener(new ActionListener() {      
             public void actionPerformed(ActionEvent e) {   
                 String s = JOptionPane.showInputDialog(null, "Enter Store Name:");     //ACTION LISTENER - adds a store
-                user.createStore(user.getUsername(), s, "file.txt"); //Temporary File Name
-                sellerMain.dispose();
-                sellerMain(user);
+                ArrayList<String> superNames = new ArrayList<String>(); //SERVERREQUEST - ADDSTORE
+                sellerMain(superNames);
                 
             }
         
@@ -578,19 +515,18 @@ public class MarketPlaceGUI extends JComponent implements Runnable{
         sellerMainCentral.add(yourStores, BorderLayout.NORTH);
 
         JPanel storesPanel = new JPanel();
-        BoxLayout boxlayout = new BoxLayout(storesPanel, BoxLayout.Y_AXIS); //Variable number of products from product list
+        BoxLayout boxlayout = new BoxLayout(storesPanel, BoxLayout.Y_AXIS); //Variable number of stores from store list
         storesPanel.setLayout(boxlayout);
         ArrayList<JPanel> panels = new ArrayList<JPanel>();
-        for (Store s : user.getStores()) {
+        for (String line : superNames) {
             JPanel store1 = new JPanel(new FlowLayout());
-            JLabel store1Text = new JLabel(s.getStoreName());
+            JLabel store1Text = new JLabel(line);
             store1.add(store1Text);
             JButton store1Edit = new JButton("Edit");  
             store1Edit.addActionListener(new ActionListener() {      
                 public void actionPerformed(ActionEvent e) {           //ACTION LISTENER links to edit page
-                    displayEditStore(user, s);
+                    displayEditStore(line);
                     sellerMain.dispose();
-                    
                 }
             
             });
@@ -598,9 +534,9 @@ public class MarketPlaceGUI extends JComponent implements Runnable{
             JButton store1Delete = new JButton("Delete");
             store1Delete.addActionListener(new ActionListener() {      
                 public void actionPerformed(ActionEvent e) {  
-                    user.deleteStore(s);
+                    ArrayList<String> returned = new ArrayList<String>(); //SERVERREQUEST - DELETESTORE
                     sellerMain.dispose();                          //ACTION LISTENER Deletes store
-                    sellerMain(user);
+                    sellerMain(returned);
                     
                 }
             
@@ -616,18 +552,11 @@ public class MarketPlaceGUI extends JComponent implements Runnable{
         sellerMain.add(sellerMainCentral, BorderLayout.CENTER);
 
         JPanel sellerMainSouth = new JPanel(new FlowLayout());
-        JButton stats = new JButton("Statistics");
-        stats.addActionListener(new ActionListener() {      
-            public void actionPerformed(ActionEvent e) {  
-                displayStatistics(user);          //Links to stats page
-                sellerMain.dispose();
-            }
-        
-        });
         JButton editAccount = new JButton("Edit Account");
         editAccount.addActionListener(new ActionListener() {      
             public void actionPerformed(ActionEvent e) {  
-                editAccount(user);          //Links to edit account page
+                var info = new ArrayList<String>(); //SERVERREQUEST GETACCOUNTINFO
+                editAccount(info);
                 sellerMain.dispose();
             }
         
@@ -640,7 +569,6 @@ public class MarketPlaceGUI extends JComponent implements Runnable{
             }
         
         });
-        sellerMainSouth.add(stats);
         sellerMainSouth.add(editAccount);
         sellerMainSouth.add(logout);
         sellerMain.add(sellerMainSouth , BorderLayout.SOUTH);
@@ -657,18 +585,18 @@ public class MarketPlaceGUI extends JComponent implements Runnable{
     /*
      * Opens a menu to edit a chosen store
      */
-    public void displayEditStore(Seller user , Store store) {
+    public void displayEditStore(String line) {
         JFrame editStore = new JFrame("THE MARKETPLACE");
         Container editStorePanel = editStore.getContentPane();
         editStorePanel.setLayout(new BorderLayout());
 
         JPanel editStoreNorth = new JPanel(new FlowLayout());
-        JLabel title = new JLabel("<html><h1>" + store.getStoreName() + "</h1></html>");     //Creates title
+        JLabel title = new JLabel("<html><h1>" + line + "</h1></html>");     //Creates title
         editStoreNorth.add(title);
         JButton addProduct = new JButton("Add Product");
         addProduct.addActionListener(new ActionListener() {      
             public void actionPerformed(ActionEvent e) {  
-                displayAddProduct(user , store);
+                displayAddProduct(line);
                 editStore.dispose();
             }
         
@@ -679,13 +607,20 @@ public class MarketPlaceGUI extends JComponent implements Runnable{
         JPanel editStoreCentral = new JPanel(new BorderLayout());
         JPanel yourStoresWindow = new JPanel(new FlowLayout());
         JLabel yourStores = new JLabel("<html>Products in:</html>"); 
-        JTextField storeTitle = new JTextField(store.getStoreName());
+        JTextField storeTitle = new JTextField(line);
         JButton storeTitleUpdate = new JButton("Update Store Title");
         storeTitleUpdate.addActionListener(new ActionListener() {      
             public void actionPerformed(ActionEvent e) {  
-                store.setStoreName(storeTitle.getText());
+                String updatedName = storeTitle.getText();
+                String confirmed = ""; //SERVERREQUEST - UPDATESTORENAME
                 editStore.dispose();
-                displayEditStore(user, store);                 //ACTION Listener changes store name
+                if (confirmed.equals("ERROR")) {
+                    JOptionPane.showMessageDialog(null, "Store with this name already exists", "ERROR", JOptionPane.ERROR_MESSAGE);
+                    displayEditStore(line);
+                } else {
+                    displayEditStore(updatedName);
+                }
+                                 //ACTION Listener changes store name
             }
         
         });
@@ -699,15 +634,16 @@ public class MarketPlaceGUI extends JComponent implements Runnable{
         BoxLayout boxlayout = new BoxLayout(productsPanel, BoxLayout.Y_AXIS); //Variable number of products from product list
         productsPanel.setLayout(boxlayout);
         ArrayList<JPanel> panels = new ArrayList<JPanel>();
-        for (Product p : store.getProducts()) {
+        ArrayList<String> products = new ArrayList<String>(); //SERVERREQUEST - VIEWPRODUCTS
+        for (String p : products) {
             JPanel product1 = new JPanel(new FlowLayout());
-            JLabel product1Text = new JLabel(p.getProductName());
+            JLabel product1Text = new JLabel(p);
             product1.add(product1Text);
             JButton product1Edit = new JButton("Edit");  
             product1Edit.addActionListener(new ActionListener() {      
                 public void actionPerformed(ActionEvent e) {  
                     editStore.dispose();          //Links to stats page
-                    displayEditProduct(user,store, p);
+                    displayEditProduct(p , line);
                     
                 }
             
@@ -716,10 +652,9 @@ public class MarketPlaceGUI extends JComponent implements Runnable{
             JButton product1Delete = new JButton("Delete");
             product1Delete.addActionListener(new ActionListener() {      
                 public void actionPerformed(ActionEvent e) {  
-                    store.removeProduct(p);        //Links to stats page
+                    //SERVERREQUEST - DELETEPRODUCT
                     editStore.dispose();
-                    displayEditStore(user, store);
-
+                    displayEditStore(line);
                 }
             
             });
@@ -737,13 +672,11 @@ public class MarketPlaceGUI extends JComponent implements Runnable{
         JTextField importText = new JTextField(10);  //FilePath
         JButton importProduct = new JButton("Import");
         importProduct.addActionListener(new ActionListener() {      
-            public void actionPerformed(ActionEvent e) {  
-                ArrayList<Product> imported = user.importProducts(importText.getText());
-                for (Product p : imported) {        //ACTIONLISTENER Import PRODUCATS
-                    store.addProduct(p);
-                }
+            public void actionPerformed(ActionEvent e) {  //ACTIONLISTENER Import PRODUCATS
+                ArrayList<String> imported = importProducts(importText.getText());
+                String confirmed = ""; //SERVERREQUEST - ADDPRODCUTS
                 editStore.dispose();
-                displayEditStore(user, store);
+                displayEditStore(line);
 
 
             }
@@ -753,18 +686,28 @@ public class MarketPlaceGUI extends JComponent implements Runnable{
         JButton exportProduct = new JButton("Export"); //Adds bottom buttons
         exportProduct.addActionListener(new ActionListener() {      
             public void actionPerformed(ActionEvent e) {  
-                user.exportProducts(exportText.getText(), store.getProducts());  //ACTIONLISTENER EXPORT PRODUCATS
+                exportProducts(exportText.getText(), line);  //ACTIONLISTENER EXPORT PRODUCATS
             }
         
         });
         JButton back = new JButton("Back");
         back.addActionListener(new ActionListener() {      
             public void actionPerformed(ActionEvent e) {  
-                sellerMain(user);
+                ArrayList<String> superNames = new ArrayList<String>(); //SERVERREQUEST GETSUPERNAMES
+                sellerMain(superNames);
                 editStore.dispose();
             }
         
         });
+        JButton stats = new JButton("Statistics");
+        stats.addActionListener(new ActionListener() {      
+            public void actionPerformed(ActionEvent e) {  
+                displayStatistics(line);          //Links to stats page
+                editStore.dispose();
+            }
+        
+        });
+        editStoreSouth.add(stats);
         editStoreSouth.add(importText);
         editStoreSouth.add(importProduct);
         editStoreSouth.add(exportText);
@@ -783,7 +726,9 @@ public class MarketPlaceGUI extends JComponent implements Runnable{
     /*
      * Opens a page for a seller to edit
      */
-    public void displayEditProduct(Seller user , Store s,  Product p) {
+    public void displayEditProduct(String line , String storeString) {
+        String info = ""; //SERVERREQUEST - PRODUCTINFO
+        String[] infoSplit = info.split(";");
         JFrame editProduct = new JFrame("THE MARKETPLACE");
         Container editProductPanel = editProduct.getContentPane();
         editProductPanel.setLayout(new BorderLayout());
@@ -801,31 +746,31 @@ public class MarketPlaceGUI extends JComponent implements Runnable{
         
         JPanel productName = new JPanel(new FlowLayout());
         JLabel productNameText = new JLabel("Product Name: ");
-        JTextField productNameField = new JTextField(p.getProductName()); //prepopulated with product name
+        JTextField productNameField = new JTextField(infoSplit[0]); //prepopulated with product name
         productName.add(productNameText);
         productName.add(productNameField);
 
         JPanel storeName = new JPanel(new FlowLayout());
         JLabel storeNameText = new JLabel("Store Name: ");
-        JTextField storeNameField = new JTextField(p.getStoreName()); //prepopulated with store name
+        JTextField storeNameField = new JTextField(infoSplit[1]); //prepopulated with store name
         storeName.add(storeNameText);
         storeName.add(storeNameField);
 
         JPanel description = new JPanel(new FlowLayout());
         JLabel descriptionText = new JLabel("Description: ");
-        JTextField descriptionField = new JTextField(p.getDescription()); //prepopulated with descirption
+        JTextField descriptionField = new JTextField(infoSplit[2]); //prepopulated with descirption
         description.add(descriptionText);
         description.add(descriptionField);
 
         JPanel quantity = new JPanel(new FlowLayout());
         JLabel quantityText = new JLabel("Quantity: ");
-        JTextField quantityField = new JTextField(Integer.toString(p.getQuantity())); //prepopulated with descirption
+        JTextField quantityField = new JTextField(infoSplit[3]); //prepopulated with descirption
         quantity.add(quantityText);
         quantity.add(quantityField);
 
         JPanel price = new JPanel(new FlowLayout());
         JLabel priceText = new JLabel("Price: ");
-        JTextField priceField = new JTextField(Double.toString(p.getPrice())); //prepopulated with descirption
+        JTextField priceField = new JTextField(infoSplit[4]); //prepopulated with descirption
         price.add(priceText);
         price.add(priceField);
 
@@ -840,16 +785,21 @@ public class MarketPlaceGUI extends JComponent implements Runnable{
         JButton update = new JButton("Update");
         update.addActionListener(new ActionListener() {   
             public void actionPerformed(ActionEvent e) {      
-                for (Product prod : s.getProducts()) {
-                    if (p.getProductName().equals(prod.getProductName())) {
-                        prod.setProductName(productNameText.getText()); 
-                        prod.setStoreName(storeNameText.getText());  
-                        prod.setDescription(descriptionText.getText());
-                        prod.setQuantity(Integer.parseInt(quantityText.getText()));
-                        prod.setPrice(Double.parseDouble(priceText.getText()));
-                    }
+                String pInfo = "";
+                ArrayList<String> output = new ArrayList<String>();
+                pInfo += productNameText.getText() + ";";
+                pInfo += storeName + ";";
+                pInfo += descriptionText.getText() + ";";
+                pInfo += quantityText.getText() + ";";
+                pInfo += priceText.getText();
+                output.add(pInfo);
+                String confirmed = ""; //SERVERREQUEST - EDITPRODUCT
+                if (confirmed.equals("ERROR")) {
+                    JOptionPane.showMessageDialog(null, "There is already a product with that name in your store",
+                     "ERROR", JOptionPane.ERROR_MESSAGE);
                 }
-                displayEditStore(user, s);
+
+                displayEditStore(storeString);
                 editProduct.dispose();
             }
         
@@ -858,7 +808,7 @@ public class MarketPlaceGUI extends JComponent implements Runnable{
         JButton back = new JButton("Back");                 //Displays Bottom Buttons
         back.addActionListener(new ActionListener() {      
             public void actionPerformed(ActionEvent e) {  
-                displayEditStore(user, s);
+                displayEditStore(storeString);
                 editProduct.dispose();
             }
         
@@ -881,22 +831,22 @@ public class MarketPlaceGUI extends JComponent implements Runnable{
     /*
      * Opens a page for a seller to add a product
      */
-    public void displayAddProduct(Seller user , Store s) {                               //UPDATE TO ADD EVERYTHING
-        JFrame editProduct = new JFrame("THE MARKETPLACE");
-        Container editProductPanel = editProduct.getContentPane();
-        editProductPanel.setLayout(new BorderLayout());
+    public void displayAddProduct(String storeName) {                               //UPDATE TO ADD EVERYTHING
+        JFrame addProduct = new JFrame("THE MARKETPLACE");
+        Container addProductPanel = addProduct.getContentPane();
+        addProductPanel.setLayout(new BorderLayout());
 
-        JPanel editProductNorth = new JPanel(new FlowLayout());
+        JPanel addProductNorth = new JPanel(new FlowLayout());
         JLabel title = new JLabel("<html><h1>ADD PRODUCT</h1></html>");     //Createds title
-        editProductNorth.add(title);
-        editProduct.add(editProductNorth, BorderLayout.NORTH);
+        addProductNorth.add(title);
+        addProduct.add(addProductNorth, BorderLayout.NORTH);
 
         
 
-        JPanel editProductCentral = new JPanel(new BorderLayout());
-        JPanel editProductFields = new JPanel();
-        BoxLayout boxlayout = new BoxLayout(editProductFields, BoxLayout.Y_AXIS); //Variable number of products from product list
-        editProductFields.setLayout(boxlayout);
+        JPanel addProductCentral = new JPanel(new BorderLayout());
+        JPanel addProductFields = new JPanel();
+        BoxLayout boxlayout = new BoxLayout(addProductFields, BoxLayout.Y_AXIS); //Variable number of products from product list
+        addProductFields.setLayout(boxlayout);
         
         JPanel productName = new JPanel(new FlowLayout());
         JLabel productNameText = new JLabel("Product Name: ");
@@ -922,15 +872,25 @@ public class MarketPlaceGUI extends JComponent implements Runnable{
         price.add(priceText);
         price.add(priceField);
 
-        JPanel editProductSouth = new JPanel(new FlowLayout());
+        JPanel addProductSouth = new JPanel(new FlowLayout());
         JButton create = new JButton("Create");
         create.addActionListener(new ActionListener() {   
             public void actionPerformed(ActionEvent e) {
-                Product p = new Product(productNameText.getText(), s.getStoreName(), descriptionText.getText(), 
-                Integer.parseInt(quantityText.getText()), Double.parseDouble(priceText.getText()));      
-                s.addProduct(p);
-                editProduct.dispose();
-                displayEditStore(user, s);
+                String pInfo = "";
+                ArrayList<String> output = new ArrayList<String>();
+                pInfo += productNameText.getText() + ";";
+                pInfo += storeName + ";";
+                pInfo += descriptionText.getText() + ";";
+                pInfo += quantityText.getText() + ";";
+                pInfo += priceText.getText();
+                output.add(pInfo);
+                String confirmed = ""; //SERVERREQUEST - ADDPRODUCTS
+                if (confirmed.equals("ERROR")) {
+                    JOptionPane.showMessageDialog(null, "There is already a product with that name in your store",
+                     "ERROR", JOptionPane.ERROR_MESSAGE);
+                }
+                addProduct.dispose();
+                displayEditStore(storeName);
                 
             }
         
@@ -938,32 +898,32 @@ public class MarketPlaceGUI extends JComponent implements Runnable{
         JButton back = new JButton("Back");                 //Displays Bottom Buttons
         back.addActionListener(new ActionListener() {      
             public void actionPerformed(ActionEvent e) {  
-                displayEditStore(user, s);
-                editProduct.dispose();
+                displayEditStore(storeName);
+                addProduct.dispose();
             }
         
         });
-        editProductSouth.add(create);
-        editProductSouth.add(back);
-        editProduct.add(editProductSouth, BorderLayout.SOUTH);
+        addProductSouth.add(create);
+        addProductSouth.add(back);
+        addProduct.add(addProductSouth, BorderLayout.SOUTH);
 
-        editProductFields.add(productName);
-        editProductFields.add(description);
-        editProductFields.add(quantity);
-        editProductFields.add(price);
+        addProductFields.add(productName);
+        addProductFields.add(description);
+        addProductFields.add(quantity);
+        addProductFields.add(price);
 
-        JScrollPane scrollPane = new JScrollPane(editProductFields); 
-        editProductCentral.add(scrollPane , BorderLayout.CENTER);
-        editProduct.add(editProductCentral, BorderLayout.CENTER);
-        editProduct.pack();
-        editProduct.setSize(600, 400);
-        editProduct.setLocationRelativeTo(null);
-        editProduct.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        editProduct.setVisible(true);
-        editProduct.requestFocus();
+        JScrollPane scrollPane = new JScrollPane(addProductFields); 
+        addProductCentral.add(scrollPane , BorderLayout.CENTER);
+        addProduct.add(addProductCentral, BorderLayout.CENTER);
+        addProduct.pack();
+        addProduct.setSize(600, 400);
+        addProduct.setLocationRelativeTo(null);
+        addProduct.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        addProduct.setVisible(true);
+        addProduct.requestFocus();
     }
 
-    public void displayStatistics(Seller user) {
+    public void displayStatistics(String storeName) {
         JFrame stats = new JFrame("THE MARKETPLACE");
         Container statsPanel = stats.getContentPane();
         statsPanel.setLayout(new BorderLayout());
@@ -975,28 +935,39 @@ public class MarketPlaceGUI extends JComponent implements Runnable{
         
         JPanel statsCentral = new JPanel(new BorderLayout());
         JPanel sort = new JPanel(new FlowLayout());
-        String[] s = {"Sort the menu","Sort by price High to Low","Sort by price Low to High","Sort by quantity High to Low","Sort by quantity Low to Hight"};
+        String[] s = {"Sort the menu","Most Sales","Least Sales"};
         JComboBox sortBox = new JComboBox(s);
-        JButton sortButton = new JButton("Sort");
+        
         sort.add(sortBox);
-        sort.add(sortButton);
         statsCentral.add(sort , BorderLayout.NORTH);
         JPanel statsItems = new JPanel();
         BoxLayout boxlayout = new BoxLayout(statsItems, BoxLayout.Y_AXIS); //Add Product info
         statsItems.setLayout(boxlayout);
-        ArrayList<String> customers = new ArrayList<String>();
-        customers.add("CAT");
-        customers.add("CAT");
-        customers.add("CAT");  //Dummy purchases
-        customers.add("CAT");
-        customers.add("CAT");
-        customers.add("CAT");
-        for (String c : customers) {
-            statsItems.add(new JLabel(c));
+        ArrayList<String> returned = new ArrayList<String>(); //SERVERREQUEST - VIEWDASHBOARD
+        String c = "";
+        for (String line : returned) {
+            c += line + "\n";
         }
+        statsItems.add(new JLabel(c));
         JScrollPane scrollPane = new JScrollPane(statsItems); 
         statsCentral.add(scrollPane , BorderLayout.CENTER);
         stats.add(statsCentral,  BorderLayout.CENTER);
+
+        sortBox.addItemListener(listener -> {
+            String choice;
+            JComboBox getSelection = (JComboBox) listener.getSource();
+            choice = (String) getSelection.getSelectedItem();
+            if (choice == s[1]) { 
+                ArrayList<String> sorted = sortSales(returned , true);
+                stats.dispose();
+                sellerMain(sorted);
+            } else if (choice == s[2]) {
+                ArrayList<String> sorted = sortSales(returned , true);
+                stats.dispose();
+                sellerMain(sorted);
+            }
+        
+        });
 
         JPanel statsSouth = new JPanel(new FlowLayout());
         JTextField exportText = new JTextField("statistics.txt");  //FilePath
@@ -1063,7 +1034,7 @@ public class MarketPlaceGUI extends JComponent implements Runnable{
      * Sorts highest price to lowest if highToLow = true    NOT SURE IF I EVEN NEED THIS
      * if it's false, sorts lowest to highest
      */
-    public static ArrayList<String> sortPrice(ArrayList<String> products , boolean highToLow) {
+    public ArrayList<String> sortPrice(ArrayList<String> products , boolean highToLow) {
         ArrayList<String> output = new ArrayList<String>();
         ArrayList<String> p = products;
         while (p.size() > 0) {
@@ -1097,7 +1068,7 @@ public class MarketPlaceGUI extends JComponent implements Runnable{
      * Sorts highest price to lowest if highToLow = true
      * if it's false, sorts lowest to highest
      */
-    public static ArrayList<String> sortQuantity(ArrayList<String> products , boolean highToLow) {
+    public ArrayList<String> sortQuantity(ArrayList<String> products , boolean highToLow) {
         ArrayList<String> output = new ArrayList<String>();
         ArrayList<String> p = products;
         while (p.size() > 0) {
@@ -1129,7 +1100,7 @@ public class MarketPlaceGUI extends JComponent implements Runnable{
     /*
      * Gets all product in users.txt that have a name, description, or store that matches the search parameter
      */
-    public static ArrayList<String> searchProducts(String searchParameter) {
+    public ArrayList<String> searchProducts(String searchParameter) {
         ArrayList<String> output = new ArrayList<String>();
         ArrayList<String> superNames = new ArrayList<String>(); //SERVERREQUEST GETSUPERNAMES
         for (String line : superNames) {
@@ -1146,4 +1117,54 @@ public class MarketPlaceGUI extends JComponent implements Runnable{
         return output;
     }
 
+    public ArrayList<String> importProducts(String path) {
+        try {
+            var output = new ArrayList<String>();
+            BufferedReader buf = new BufferedReader(new FileReader(new File(path)));
+            String s = buf.readLine();
+            while (true) {
+                if (s == null) {
+                    break;
+                } else {
+                    output.add(s);
+                    s = buf.readLine();
+                }  
+            }
+            return output;
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+
+    }
+
+    //Changed return type from void to boolean 11/13/22
+    public boolean exportProducts(String path , String storeName) {
+        try {
+            ArrayList<String> products = new ArrayList<String>(); //SERVERREQUEST - VIEWPRODUCTS
+            PrintWriter pw = new PrintWriter(new FileWriter(new File(path)));
+            for (String line : products) {
+                pw.print(line + "\n");
+
+            }
+            pw.flush();
+            pw.close();
+            return true;
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return false;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public ArrayList<String> sortSales(ArrayList<String> sales , boolean b) {
+        ArrayList<String> s = new ArrayList<String>();
+        return s;
+    }
 }
