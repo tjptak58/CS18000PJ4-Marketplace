@@ -9,6 +9,8 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import javax.swing.plaf.basic.BasicSplitPaneUI.KeyboardUpLeftHandler;
+
 
 /**
  * Information on files is shared between server threads so filereading and filewriting methods
@@ -163,6 +165,7 @@ public class MarketplaceServer implements Runnable {
                      String productName = in.nextLine(); //STRING!!
                      String userName = in.nextLine(); //STRING!!
                      int quantity = in.nextInt(); //INT!!
+
                      in.nextLine();
                      for (int i = 0; i < buyerArrayList.size(); i++) {
                         //Search for matching username in the arraylist and update cart where username is a match
@@ -176,8 +179,18 @@ public class MarketplaceServer implements Runnable {
 
                 } else if (keyWord.equals("PRODUCTINFO") ) {
                     //Listen for product name
+                    String productName = in.nextLine();
 
-                } else if (keyWord.equals("GETPURCHASE")) {
+
+                } else if (keyWord.equals("GETPURCHASEHISTORY")) {
+                    //Listen for username
+                    //Return purchase history of that username as ArrayList<String>
+
+
+                } else if (keyWord.equals("VIEWCART")) {
+                    //Listen for username
+                    //Return shopping cary for that username as ArrayList<String>
+                    
 
                 } else if (keyWord.equals("")) {
 
