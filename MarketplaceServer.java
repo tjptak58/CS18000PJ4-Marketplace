@@ -2,11 +2,14 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Scanner;
 
 import javax.swing.plaf.basic.BasicSplitPaneUI.KeyboardUpLeftHandler;
@@ -31,7 +34,7 @@ public class MarketplaceServer implements Runnable {
     static ArrayList<Store> marketPlace = new ArrayList<>();
     static ArrayList<Product> superListOfProducts = new ArrayList<>();
     //Creating a gatekeeper object
-    Object object = new Object();
+    Object objectForBuyerListModification = new Object();
 
     //Constructor for this class
     public MarketplaceServer(Socket socket) {
@@ -138,6 +141,7 @@ public class MarketplaceServer implements Runnable {
             PrintWriter pw = new PrintWriter(socket.getOutputStream());
             Scanner in = new Scanner(socket.getInputStream());
             ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
+            ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
 
             while (true) {
                 //Loop until client closes application or logs out
@@ -159,9 +163,9 @@ public class MarketplaceServer implements Runnable {
 
                 } else if (keyWord.equals("ADDTOCART")) {
                      //Listen for productname
-                     //Listen for username
+                     //Listen for storename
                      //Listen for quantity
-                     //LISTEN FOR STORE??????
+                     //LISTEN FOR username
                      String productName = in.nextLine(); //STRING!!
                      String userName = in.nextLine(); //STRING!!
                      int quantity = in.nextInt(); //INT!!
@@ -179,21 +183,162 @@ public class MarketplaceServer implements Runnable {
 
                 } else if (keyWord.equals("PRODUCTINFO") ) {
                     //Listen for product name
+                    //Listen for store name
+                    //Write back ArrayList of info
                     String productName = in.nextLine();
+                    String storeName = in.nextLine();
+                    for (int i = 0; i < marketPlace.size(); i++) {
+                        if (marketPlace.get(i).getStoreName().equals(storeName)) {
+                            for (int j = 0; j < marketPlace.get(i).getProducts().size(); j++) {
+                                if (marketPlace.get(i).getProducts().get(j).getProductName().equals(productName)) {
+                                    ArrayList<String> writeInfo = new ArrayList<>();
+                                    writeInfo.add(marketPlace.get(i).getProducts().get(j).getStoreName());
+                                    writeInfo.add(marketPlace.get(i).getProducts().get(j).getDescription());
+                                    String quantString = String.format("%d", marketPlace.get(i).getProducts().get(j).getQuantity());
+                                    writeInfo.add(quantString);
+                                    String priceString = String.format("%d", marketPlace.get(i).getProducts().get(j).getPrice());
+                                    writeInfo.add(priceString);
+                                    try {
+                                        oos.writeObject(writeInfo);
+                                        oos.flush();
+
+                                    } catch (IOException e) {
+                                        //WHAT TO DO HERE?
+
+                                    }
+                                    
+
+                                }
+                            }
+                        }
+                    }
+                    //Use ObjectOutputStream to send ArrayList back to client
+
 
 
                 } else if (keyWord.equals("GETPURCHASEHISTORY")) {
                     //Listen for username
                     //Return purchase history of that username as ArrayList<String>
+                    String userNameHist = in.nextLine();
+                    for (int i = 0; i < buyerArrayList.size(); i++) {
+                        if (buyerArrayList.get(i).getUsername().equals(userNameHist)) {
+                            ArrayList<String> sendHistoryList = new ArrayList<>();
+                            //Add product names to array list
+                            for (int j = 0; j < buyerArrayList.get(i).getPurchased().size(); j++) {
+                                sendHistoryList.add(buyerArrayList.get(i).getPurchased().get(j).getProductName());
+                            }
+                            oos.writeObject(sendHistoryList);
+                            oos.flush(); //FLUSHING!!!
+                            //NO TRY CATCH HERE
+
+                        }
+                    }
+
+
 
 
                 } else if (keyWord.equals("VIEWCART")) {
                     //Listen for username
-                    //Return shopping cary for that username as ArrayList<String>
+                    //Return shopping cart for that username as ArrayList<String>
+                    String userNameViewCart = in.nextLine();
+                    
+                    //Scroll down to see method viewCart
+                    ArrayList<String> viewCartList = viewCart(userNameViewCart);
+                    //ArrayList of strings "ProductName;QuantityOfThatProductInCart"
+                    oos.writeObject(viewCartList);
+                    oos.flush(); //FLUSHING!!!
+
+
                     
 
-                } else if (keyWord.equals("")) {
+                } else if (keyWord.equals("DELETEPRODUCTCART")) {
+                    //Listen for productname
+                    //Listen for storename
+                    //Listen for username
+                    //Does not not write back anything
+                    String delProductName = in.nextLine();
+                    String delStoreName = in.nextLine();
+                    String delUserName = in.nextLine();
+                    for (int i = 0; i < buyerArrayList.size(); i++) {
+                        if (buyerArrayList.get(i).getUsername().equals(delUserName)) {
+                            for (int j = 0; j < buyerArrayList.get(i).getShoppingCart().size(); j++) {
+                                if (buyerArrayList.get(i).getShoppingCart().get(j).getProductName().equals(delProductName) && buyerArrayList.get(i).getShoppingCart().get(j).getStoreName().equals(delStoreName)) {
+                                    synchronized (objectForBuyerListModification) { //SYNCHRONIZED
+                                        buyerArrayList.get(i).removeFromCart(buyerArrayList.get(i).getShoppingCart().get(j));
+                                         //Removes from shopping cart array list and writes to files
 
+                                    }
+                                    
+
+                                }
+
+                            }
+                        }
+                    }
+                    oos.writeObject(viewCart(delUserName)); //Sends new shopping cart
+                    oos.flush(); //FLUSHING!!!
+
+
+
+
+
+                } else if (keyWord.equals("PURCHASE")) {
+                    //Listen for username
+                    //Modify information in server
+                    String purchUserName = in.nextLine();
+                    for (int i = 0; i < buyerArrayList.size(); i++) {
+                        if (buyerArrayList.get(i).getUsername().equals(purchUserName)) {
+                            //Purchase each item in shopping cart
+                            for (int j = 0; j < buyerArrayList.get(i).getShoppingCart().size(); j++) {
+                                synchronized (objectForBuyerListModification) { //SYNCHRONIZED!!!
+                                    buyerArrayList.get(i).purchase(buyerArrayList.get(i).getShoppingCart().get(j));
+                                }
+                            }
+
+                        }
+                    }
+
+
+                } else if (keyWord.equals("GETACCOUNTINFO")) {
+                    //Listen for username
+                    //Returns ArrayList<String>
+                    String viewAccUserName = in.nextLine();
+                    ArrayList<String> sendInfoList = new ArrayList<>();
+                    for (int i = 0; i < buyerArrayList.size(); i++) {
+                        if (buyerArrayList.get(i).getUsername().equals(viewAccUserName)) {
+                            sendInfoList.add(buyerArrayList.get(i).getEmail());
+                            sendInfoList.add(buyerArrayList.get(i).getPassword());
+                        }
+                    }
+                    oos.writeObject(sendInfoList);
+                    oos.flush(); //FLUSHING!!!
+
+                } else if (keyWord.equals("UPDATEACCOUNTINFO")) {
+                    //Listen for username
+                    //Listen for ArrayList<String>
+                    String updateUserName = in.nextLine();
+                    ArrayList<String> newInfo = null; //ASSUMING FIRST STRING IS NEW EMAIL AND SECOND STRING IS NEW PASSWORD TODO !!!
+                    try {
+                        newInfo = (ArrayList<String>) ois.readObject();
+
+                    } catch (Exception e) {
+                        System.out.println("Class Not Found!"); //Will never reach here since class will always be defined
+                    }
+                    //Updating info
+                    for (int i = 0; i < buyerArrayList.size(); i++) {
+                        if (buyerArrayList.get(i).getUsername().equals(updateUserName)) {
+                            synchronized (objectForBuyerListModification) {
+                                buyerArrayList.get(i).setEmail(newInfo.get(0));
+                                buyerArrayList.get(i).setPassword(newInfo.get(2));
+                            }
+                        }
+                    }
+                    
+
+
+
+                } else if (keyWord.equals("")) {
+                    
                 }
                 
             }
@@ -216,6 +361,32 @@ public class MarketplaceServer implements Runnable {
 
     public synchronized void writeToFiles(ArrayList<Buyer> buyerArrayList, ArrayList<Seller> sellerArrayList, ArrayList<Store> storeArrayList) {
 
+
+    }
+
+    public ArrayList<String> viewCart(String userNameViewCart) {
+        ArrayList<String> cartListDuplicate = new ArrayList<>();
+        for (int i = 0; i < buyerArrayList.size(); i++) {
+            if (buyerArrayList.get(i).getUsername().equals(userNameViewCart)) {
+                for (int j = 0; j < buyerArrayList.get(i).getShoppingCart().size(); j++) {
+                    cartListDuplicate.add(buyerArrayList.get(i).getShoppingCart().get(j).getProductName());
+                }
+
+            }
+        }
+        ArrayList<String> cartListUnique = new ArrayList<>();
+        for (String s: cartListDuplicate) {
+            if (cartListUnique.indexOf(s) == -1) {
+                cartListUnique.add(s);
+            }
+        }
+        //cartListUnique is a arrayList of unique items in the cart
+        ArrayList<String> viewCartList  = new ArrayList<>();
+        for (String uniqueS: cartListUnique) {
+            viewCartList.add(String.format(uniqueS + ";%d", Collections.frequency(cartListDuplicate, uniqueS)));
+        }
+
+        return viewCartList;
 
     }
 
