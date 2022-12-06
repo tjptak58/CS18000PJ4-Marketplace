@@ -167,13 +167,34 @@ public class MarketplaceServer implements Runnable {
                      //Listen for quantity
                      //LISTEN FOR username
                      String productName = in.nextLine(); //STRING!!
-                     String userName = in.nextLine(); //STRING!!
+                     String storeName = in.nextLine(); //STRING!!
                      int quantity = in.nextInt(); //INT!!
-
-                     in.nextLine();
+                     in.nextLine(); //Consuming newline char
+                     String userName = in.nextLine(); //STRING!!
+                     
+                     
                      for (int i = 0; i < buyerArrayList.size(); i++) {
                         //Search for matching username in the arraylist and update cart where username is a match
                         if (buyerArrayList.get(i).getUsername().equals(userName)) {
+                            for (int j = 0; j < marketPlace.size(); j++) {
+                                if (marketPlace.get(j).getStoreName().equals(storeName)) {
+                                    for (int k = 0; k < marketPlace.get(j).getProducts().size(); k++) {
+                                        if (marketPlace.get(j).getProducts().get(k).getProductName().equals(userName)) {
+                                            //Add to cart kth product
+                                            //Check for available quantity
+                                            if (marketPlace.get(j).getProducts().get(k).getQuantity() < quantity) {
+                                                //Send error message to client
+                                                pw.println("ERROR");
+                                                pw.flush(); //FLUSHING!!!
+                                            } else {
+                                                //Add product to cart 'quantity' times TODO
+
+
+                                            }
+                                        }
+                                    }
+                                }
+                            }
 
                         }
                      }
@@ -200,7 +221,7 @@ public class MarketplaceServer implements Runnable {
                                     writeInfo.add(priceString);
                                     try {
                                         oos.writeObject(writeInfo);
-                                        oos.flush();
+                                        oos.flush(); //FLUSHING!!!
 
                                     } catch (IOException e) {
                                         //WHAT TO DO HERE?
@@ -338,7 +359,7 @@ public class MarketplaceServer implements Runnable {
 
 
                 } else if (keyWord.equals("")) {
-                    
+
                 }
                 
             }
