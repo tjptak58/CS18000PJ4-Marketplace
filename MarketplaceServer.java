@@ -20,11 +20,10 @@ import javax.swing.plaf.basic.BasicSplitPaneUI.KeyboardUpLeftHandler;
  * must be synchronized
  * Information from files stored on server in static variables is also shared and modification must be done
  * using a gatekeeper object
- *
- *
+ * <p>
+ * <p>
  * KEYWORDS
  * asdasd
- *
  */
 
 public class MarketplaceServer implements Runnable {
@@ -47,7 +46,7 @@ public class MarketplaceServer implements Runnable {
         FileReader bfr = new FileReader(bf);
         BufferedReader bbfr = new BufferedReader(bfr);
         String buyerLine = bbfr.readLine();
-        while(buyerLine != null) {
+        while (buyerLine != null) {
             String[] buyerArray = buyerLine.split(";");
             //Add to buyerArrayList
             buyerArrayList.add(new Buyer(buyerArray[0], buyerArray[1], buyerArray[2], buyerArray[3], buyerArray[4]));
@@ -85,7 +84,7 @@ public class MarketplaceServer implements Runnable {
             //ArrayList of products for this store
             ArrayList<Product> storeProducts = new ArrayList<>();
             while (productLine != null) {
-                
+
                 /*
                  * ProductLine has format
                  * ProductName;StoreName;description;quantity;price;unitsPurchased;customerList
@@ -94,10 +93,9 @@ public class MarketplaceServer implements Runnable {
                 ArrayList<String> customerList = new ArrayList<>();
                 //If a customer has bought the same product multiple times then their name appears multiple times in the ArrayList
                 if (!productArray[6].contains(",")) {
-                        //If here then only one customer has purchased the product
-                        customerList.add(productArray[6]);
+                    //If here then only one customer has purchased the product
+                    customerList.add(productArray[6]);
 
-                    }
                 } else {
                     //More than one customer has purchased the product
                     String[] customerL = productArray[6].split(",");
@@ -106,17 +104,14 @@ public class MarketplaceServer implements Runnable {
                     }
 
                 }
-                storeProducts.add(new Product(productArray[0], productArray[1], productArray[2], Integer.parseInt(productArray[3]), Double.parseDouble(productArray[4]), Integer.parseInt(productArray[5]), customerList ));
-                
+                storeProducts.add(new Product(productArray[0], productArray[1], productArray[2], Integer.parseInt(productArray[3]), Double.parseDouble(productArray[4]), Integer.parseInt(productArray[5]), customerList));
+
                 productLine = bloopfr.readLine();
-
-
-
 
 
             }
             //Adding store to marketplace
-            marketPlace.add( new Store (storeArray[0], storeArray[1], storeFile, storeProducts, Double.parseDouble(storeArray[2])));
+            marketPlace.add(new Store(storeArray[0], storeArray[1], storeFile, storeProducts, Double.parseDouble(storeArray[2])));
             storeLine = blfr.readLine();
         }
         //When main main method runs for the first time all static variables are initialized before entering infinite while loop
@@ -124,16 +119,13 @@ public class MarketplaceServer implements Runnable {
         ServerSocket serverSocket = new ServerSocket(4242);
         while (true) {
             Socket socket = serverSocket.accept();
-            MarketplaceServer server  = new MarketplaceServer(socket);
+            MarketplaceServer server = new MarketplaceServer(socket);
             new Thread(server).start();
         }
 
 
-
-
-
-
     }
+
     public void run() {
         try {
             //Creating Scanner object for this socket
@@ -161,18 +153,18 @@ public class MarketplaceServer implements Runnable {
                     oos.flush(); //FLUSHING!!!
 
                 } else if (keyWord.equals("ADDTOCART")) {
-                     //Listen for productname
-                     //Listen for storename
-                     //Listen for quantity
-                     //LISTEN FOR username
-                     String productName = in.nextLine(); //STRING!!
-                     String storeName = in.nextLine(); //STRING!!
-                     int quantity = in.nextInt(); //INT!!
-                     in.nextLine(); //Consuming newline char
-                     String userName = in.nextLine(); //STRING!!
-                     
-                     
-                     for (int i = 0; i < buyerArrayList.size(); i++) {
+                    //Listen for productname
+                    //Listen for storename
+                    //Listen for quantity
+                    //LISTEN FOR username
+                    String productName = in.nextLine(); //STRING!!
+                    String storeName = in.nextLine(); //STRING!!
+                    int quantity = in.nextInt(); //INT!!
+                    in.nextLine(); //Consuming newline char
+                    String userName = in.nextLine(); //STRING!!
+
+
+                    for (int i = 0; i < buyerArrayList.size(); i++) {
                         //Search for matching username in the arraylist and update cart where username is a match
                         if (buyerArrayList.get(i).getUsername().equals(userName)) {
                             for (int j = 0; j < marketPlace.size(); j++) {
@@ -196,12 +188,10 @@ public class MarketplaceServer implements Runnable {
                             }
 
                         }
-                     }
+                    }
 
 
- 
-
-                } else if (keyWord.equals("PRODUCTINFO") ) {
+                } else if (keyWord.equals("PRODUCTINFO")) {
                     //Listen for product name
                     //Listen for store name
                     //Write back ArrayList of info
@@ -226,14 +216,13 @@ public class MarketplaceServer implements Runnable {
                                         //WHAT TO DO HERE?
 
                                     }
-                                    
+
 
                                 }
                             }
                         }
                     }
                     //Use ObjectOutputStream to send ArrayList back to client
-
 
 
                 } else if (keyWord.equals("GETPURCHASEHISTORY")) {
@@ -255,21 +244,17 @@ public class MarketplaceServer implements Runnable {
                     }
 
 
-
-
                 } else if (keyWord.equals("VIEWCART")) {
                     //Listen for username
                     //Return shopping cart for that username as ArrayList<String>
                     String userNameViewCart = in.nextLine();
-                    
+
                     //Scroll down to see method viewCart
                     ArrayList<String> viewCartList = viewCart(userNameViewCart);
                     //ArrayList of strings "ProductName;QuantityOfThatProductInCart"
                     oos.writeObject(viewCartList);
                     oos.flush(); //FLUSHING!!!
 
-
-                    
 
                 } else if (keyWord.equals("DELETEPRODUCTCART")) {
                     //Listen for productname
@@ -285,10 +270,10 @@ public class MarketplaceServer implements Runnable {
                                 if (buyerArrayList.get(i).getShoppingCart().get(j).getProductName().equals(delProductName) && buyerArrayList.get(i).getShoppingCart().get(j).getStoreName().equals(delStoreName)) {
                                     synchronized (objectForBuyerListModification) { //SYNCHRONIZED
                                         buyerArrayList.get(i).removeFromCart(buyerArrayList.get(i).getShoppingCart().get(j));
-                                         //Removes from shopping cart array list and writes to files
+                                        //Removes from shopping cart array list and writes to files
 
                                     }
-                                    
+
 
                                 }
 
@@ -297,9 +282,6 @@ public class MarketplaceServer implements Runnable {
                     }
                     oos.writeObject(viewCart(delUserName)); //Sends new shopping cart
                     oos.flush(); //FLUSHING!!!
-
-
-
 
 
                 } else if (keyWord.equals("PURCHASE")) {
@@ -353,31 +335,41 @@ public class MarketplaceServer implements Runnable {
                             }
                         }
                     }
-                    
 
 
+                } else if (keyWord.equals("CREATEACCBUYER")) {
+                    String buyerUsername = in.nextLine();
 
-                } else if (keyWord.equals("")) {
+                } else if (keyWord.equals("CREATEACCSELLER")) {
+                    String sellerUsername = in.nextLine();
+
+                } else if (keyWord.equals("LOGINBUYER")) {
+                    String buyerAccUsername = in.nextLine();
+                    String buyerAccPassword = in.nextLine();
+
+                } else if (keyWord.equals("LOGINSELLER")) {
+                    String sellerAccUsername = in.nextLine();
+                    String sellerAccPassword = in.nextLine();
 
                 }
-                
+
             }
 
-            //If reached here then client has logged out or closed the application
-            //Call writeToFiles method here
 
-            
-
-
-
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("Server Error!");
         }
 
+        //If reached here then client has logged out or closed the application
+        //Call writeToFiles method here
 
-    };
+
+    } catch(
+    IOException e)
+
+    {
+        e.printStackTrace();
+        System.out.println("Server Error!");
+    }
+
 
     public synchronized void writeToFiles(ArrayList<Buyer> buyerArrayList, ArrayList<Seller> sellerArrayList, ArrayList<Store> storeArrayList) {
 
@@ -395,14 +387,14 @@ public class MarketplaceServer implements Runnable {
             }
         }
         ArrayList<String> cartListUnique = new ArrayList<>();
-        for (String s: cartListDuplicate) {
+        for (String s : cartListDuplicate) {
             if (cartListUnique.indexOf(s) == -1) {
                 cartListUnique.add(s);
             }
         }
         //cartListUnique is a arrayList of unique items in the cart
-        ArrayList<String> viewCartList  = new ArrayList<>();
-        for (String uniqueS: cartListUnique) {
+        ArrayList<String> viewCartList = new ArrayList<>();
+        for (String uniqueS : cartListUnique) {
             viewCartList.add(String.format(uniqueS + ";%d", Collections.frequency(cartListDuplicate, uniqueS)));
         }
 
@@ -411,3 +403,4 @@ public class MarketplaceServer implements Runnable {
     }
 
 }
+
