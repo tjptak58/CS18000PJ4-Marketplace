@@ -54,7 +54,7 @@ public class MarketplaceServer implements Runnable {
         while(buyerLine != null) {
             String[] buyerArray = buyerLine.split(";");
             //Add to buyerArrayList
-            buyerArrayList.add(new Buyer(buyerArray[0], buyerArray[1], buyerArray[2], buyerArray[3], buyerArray[4]));
+            buyerArrayList.add(new Buyer(buyerArray[0], buyerArray[1], buyerArray[2], buyerArray[3]));
             buyerLine = bbfr.readLine();
 
         }
