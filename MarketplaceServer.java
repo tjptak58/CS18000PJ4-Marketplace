@@ -744,12 +744,26 @@ public class MarketplaceServer implements Runnable {
                     //ArrayList of strings of each product info
                     //Not implementing with 'quantity' for each product
                     //Will treat each unit as unique //Much easier that way
+                    ArrayList<String> sendProdInfo = new ArrayList<>();
+                    //Sending ArrayList of strings as "BuyerName;ProductName;StoreName;Price" IS THIS ENOUGH TODO
                     for (int i = 0; i < buyerArrayList.size(); i++) {
                         for (int j = 0; j < buyerArrayList.get(i).getShoppingCart().size(); j++) {
+                            //For each product in the shopping cart check if it belongs to a store that belongs to the seller
+                            for (int k = 0; k < marketPlace.size(); k++) {
+                                if (marketPlace.get(i).getStoreName().equals(buyerArrayList.get(i).getShoppingCart().get(j).getStoreName())) {
+                                    if (marketPlace.get(i).getSellerName().equals(sellerName)) {
+                                        sendProdInfo.add(buyerArrayList.get(i).getUsername() + ";" + buyerArrayList.get(i).getShoppingCart().get(j).getProductName() + ";" + buyerArrayList.get(i).getShoppingCart().get(j).getStoreName() + ";" + buyerArrayList.get(i).getShoppingCart().get(j).getPrice())
+
+                                    }
+                                }
+                            }
                             
                         }
                     }
-                    
+                    oos.writeObject(sendProdInfo);
+                    oos.flush(); //FLUSHING!!!
+                    //Finished implementation w/o TODO
+
                 } else if (keyWord.equals("LOGINBUYER")) {
                     String buyerUsername = in.nextLine();
                     String buyerPassword = in.nextLine();
