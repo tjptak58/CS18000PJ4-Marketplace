@@ -204,9 +204,18 @@ public class MarketplaceServer implements Runnable {
                                                 for (int u = 0; u < quantity; u++) {
                                                     //addToCart method does not reduce quantity of available product by 'quantity'
                                                     //Need to do so seperately
-                                                    buyerArrayList.get(i).addToCart(marketPlace.get(j).getProducts().get(k));
+                                                    synchronized (objectForBuyerListModification) {
+                                                        buyerArrayList.get(i).addToCart(marketPlace.get(j).getProducts().get(k));
+
+                                                    }
+                                                    
                                                     //Reducind available quantity by 1
-                                                    marketPlace.get(j).getProducts().get(k).setQuantity(marketPlace.get(j).getProducts().get(k).getQuantity() - 1);
+                                                    synchronized (objectForMarketPlace) {
+                                                        marketPlace.get(j).getProducts().get(k).setQuantity(marketPlace.get(j).getProducts().get(k).getQuantity() - 1);
+
+
+                                                    }
+                                                    
 
                                                 }
 
@@ -522,21 +531,63 @@ public class MarketplaceServer implements Runnable {
 
 
                 } else if (keyWord.equals("ADDPRODUCT")) {
-                    //Listen for String
+                    //Listen for String "ProductName;StoreName;Description;Quantity;Price"
                     //Each string is productfields separated by ;
                     //LISTEN FOR STORENAME!! TODO
                 
                     String addProductInfO = in.nextLine();  
+                    String[] prodArray = addProductInfO.split(";");
+                    Product newProd = new Product(prodArray[0], prodArray[1], prodArray[2], Integer.parseInt(prodArray[3]), Double.parseDouble(prodArray[4])  );
                     String storeName = in.nextLine();
                     //Check that each of the product names does not exist already
-                    //HERE
+                    boolean productNameExists = false;
+                    for (int i = 0; i < marketPlace.size(); i++) {
+                        if (marketPlace.get(i).getStoreName().equals(storeName)) {
+                            for (int j = 0; j < marketPlace.get(i).getProducts().size(); j++) {
+                                if (marketPlace.get(i).getProducts().get(j).getProductName().equals(newProd.getProductName())) {
+                                    productNameExists = true;
+                                }
+    
+                            }
+
+                        }
+                        
+                    }
+                    if (productNameExists) {
+                        pw.println("ERROR");
+                        pw.flush(); //FLUSHING!!!
+                    } else {
+                        pw.println("CONFIRM");
+                        for (int i = 0; i < marketPlace.size(); i++) {
+                            if (marketPlace.get(i).getStoreName().equals(storeName)) {
+                                synchronized (objectForMarketPlace) {
+                                    ArrayList<Product> curProdList = marketPlace.get(i).getProducts();
+                                    curProdList.add(newProd);
+                                    marketPlace.get(i).setProducts(curProdList);
+                                    //SINCE STORE OBJECTS IN MARKETPLACE AND SELLER FIELD ARE THE SAME CHANGES WILL GET REFLECTED AUTOMATICALLY
+                                }
+                            }
+                        }
+                    }
+                    //Finished implementation
 
 
 
 
 
                 } else if (keyWord.equals("EDITPRODUCT")) {
-                    //Listen for 
+                    //Listen for string "productName;storeName;newDescription;newQuantity;newPrice"
+                    //CANNOT EDIT productName, storeName, unitePurchased, customerList
+                    String newProdInfo = in.nextLine();
+                    String[] newProdArray = newProdInfo.split(";");
+                    for (int i = 0; i < marketPlace.size(); i++) {
+                        if (marketPlace.get(i).getStoreName().equals(newProdArray[1])) {
+                            for (int j = 0; j < marketPlace.get(i).getProducts().size(); j++) {
+
+                            }
+                        }
+                    }
+
 
 
                 } else if (keyWord.equals("DELETEPRODUCT")) {
@@ -609,12 +660,13 @@ public class MarketplaceServer implements Runnable {
 
 
 
-                } else if (keyWord.equals("VIEWDASHBOARD")) {
-                    //Keyword is for when client is trying to view dashboard of sellerstore
+                } else if (keyWord.equals("SALESBYSTORE")) {
                     //Listen for storeName
                     String storeNameDash = in.nextLine();
                     //WHAT TO DO HERE????
                     //TODO
+
+
 
 
 
@@ -641,7 +693,7 @@ public class MarketplaceServer implements Runnable {
                     oos.writeObject(contactInfo);
                     oos.flush(); //FLUSHING!!!
                     //Finished implementation
-                    
+
                 } else if (keyWord.equals("GETPRODUCTSINSTORE")) {
                     //Listen for storeName
                     String storeNameForProd = in.nextLine();
@@ -658,6 +710,12 @@ public class MarketplaceServer implements Runnable {
                     oos.writeObject(sendBackList);
                     oos.flush(); //FLUSHING!!!
                     //Finished implementation
+
+                } else if (keyWord.equals("NUMSALES")) {
+                    //Listen for storeName
+                    //Listen for productName
+                    String salesStoreName = in.nextLine();
+                    String salesProdName = in.nextLine();
                 }
                 
             }
