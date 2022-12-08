@@ -764,6 +764,44 @@ public class MarketplaceServer implements Runnable {
                     oos.flush(); //FLUSHING!!!
                     //Finished implementation w/o TODO
 
+                } else if (keyWord.equals("CREATEACCBUYER")) {
+                    String buyerAccUsername = in.nextLine();
+                    String buyerAccPassword = in.nextLine();
+                    String buyerAccEmail = in.nextLine();
+                    // Listens for username, password, and email of buyer
+
+                    for (int i = 0; i < buyerArrayList.size(); i++) {
+                        if (buyerAccUsername.equals(buyerArrayList.get(i).getUsername())) {
+                            pw.println("Username Already Exists");
+                        } else if (buyerAccEmail.equals(buyerArrayList.get(i).getEmail())) {
+                            pw.println("Email Already Exists");
+                        } else {
+                            buyerArrayList.add(new Buyer(buyerAccUsername, buyerAccPassword, buyerAccEmail, "buyer.txt"));
+                        }
+
+                    }
+                    pw.flush();
+                    pw.close();
+
+                } else if (keyWord.equals("CREATEACCSELLER")) {
+                    String sellerAccUsername = in.nextLine();
+                    String sellerAccPassword = in.nextLine();
+                    String sellerAccEmail = in.nextLine();
+                    // Listens for username, password, and email of buyer
+
+                    for (int i = 0; i < buyerArrayList.size(); i++) {
+                        if (sellerAccUsername.equals(sellerArrayList.get(i).getUsername())) {
+                            pw.println("Username Already Exists");
+                        } else if (sellerAccEmail.equals(sellerArrayList.get(i).getEmail())) {
+                            pw.println("Email Already Exists");
+                        } else {
+                            sellerArrayList.add(new Seller(sellerAccUsername, sellerAccPassword, sellerAccEmail, "seller.txt" ));
+                        }
+
+                    }
+                    pw.flush();
+                    pw.close(); 
+                    
                 } else if (keyWord.equals("LOGINBUYER")) {
                     String buyerUsername = in.nextLine();
                     String buyerPassword = in.nextLine();
@@ -805,7 +843,7 @@ public class MarketplaceServer implements Runnable {
 
             }
             
-
+            
 
             //If reached here then client has logged out or closed the application
             //Call writeToFiles method here
