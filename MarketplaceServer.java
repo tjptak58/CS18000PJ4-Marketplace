@@ -346,6 +346,7 @@ public class MarketplaceServer implements Runnable {
                                 synchronized (objectForMarketPlace) {
                                     for (int k = 0; k < marketPlace.size(); k++) {
                                         if (marketPlace.get(k).getStoreName().equals(buyerArrayList.get(i).getShoppingCart().get(j).getStoreName())) {
+                                            marketPlace.get(k).setStoreRevenue(marketPlace.get(k).getStoreRevenue() + buyerArrayList.get(i).getShoppingCart().get(j).getPrice());
 
 
                                         }
@@ -356,6 +357,7 @@ public class MarketplaceServer implements Runnable {
 
                         }
                     }
+                    //Finished implementation
 
 
                 } else if (keyWord.equals("GETACCOUNTINFO")) {
@@ -469,6 +471,7 @@ public class MarketplaceServer implements Runnable {
                             }
                         }
                     }
+                    //Finished implementation
                     
 
                 } else if (keyWord.equals("ADDSTORE")) {
@@ -515,21 +518,19 @@ public class MarketplaceServer implements Runnable {
                         pw.println("ERROR");
                         pw.flush();
                     }
+                    //Finished implementation
 
 
-                } else if (keyWord.equals("ADDPRODUCTS")) {
-                    //Listen for ArrayList<String>
+                } else if (keyWord.equals("ADDPRODUCT")) {
+                    //Listen for String
                     //Each string is productfields separated by ;
                     //LISTEN FOR STORENAME!! TODO
-                    ArrayList<String> prodLines = null;
-                    try {
-                        prodLines = (ArrayList<String>) ois.readObject();
-                    } catch (ClassNotFoundException e) {
-                        System.out.println("Class not found!") ; //Will never reach here
-                    }    
+                
+                    String addProductInfO = in.nextLine();  
                     String storeName = in.nextLine();
                     //Check that each of the product names does not exist already
                     //HERE
+
 
 
 
@@ -619,6 +620,7 @@ public class MarketplaceServer implements Runnable {
 
                 } else if (keyWord.equals("LOGOUT")) {
                     break; //Breaks out of while loop inside run method
+                    //Finished implementation
                 } else if (keyWord.equals("CONTACTSELLER")) {
                     //Listen for storename
                     //Send back ArrayList<String> with "SellerUsername"and SellerEmail as strings
@@ -639,6 +641,7 @@ public class MarketplaceServer implements Runnable {
                     oos.writeObject(contactInfo);
                     oos.flush(); //FLUSHING!!!
                     //Finished implementation
+                    
                 } else if (keyWord.equals("GETPRODUCTSINSTORE")) {
                     //Listen for storeName
                     String storeNameForProd = in.nextLine();
