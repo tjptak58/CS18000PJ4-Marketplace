@@ -34,7 +34,7 @@ public class LoginSellerOrBuyer extends JComponent implements ActionListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 frame.dispose();
-                LoginSeller login=new LoginSeller();
+                LoginBuyer loginBuyer=new LoginBuyer();
 
             }
         });
