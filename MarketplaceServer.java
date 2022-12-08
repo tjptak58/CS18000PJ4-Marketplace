@@ -161,14 +161,11 @@ public class MarketplaceServer implements Runnable {
                 //Listening for KEYWORDS and sending information back
                 //LISTEN FOR WHEN APPLICATION IS CLOSED AND FOR REFRESH!
                 String keyWord = in.nextLine();
-                if (keyWord.equals("GETSUPERNAMES")) {
+                if (keyWord.equals("GETSUPERSTORES")) {
                     //Send ArrayList of Strings containing all product names in marketplace
                     ArrayList<String> arrayListToSend = new ArrayList<>();
                     for (int j = 0; j < marketPlace.size(); j++) {
-                        for (int k = 0; k < marketPlace.get(j).getProducts().size(); k++) {
-                            arrayListToSend.add(marketPlace.get(j).getProducts().get(k).getProductName());
-
-                        }
+                        arrayListToSend.add(marketPlace.get(j).getStoreName());
                     }
                     //Send ArrayList back to client
                     oos.writeObject(arrayListToSend);
@@ -640,6 +637,22 @@ public class MarketplaceServer implements Runnable {
                         }
                     }
                     oos.writeObject(contactInfo);
+                    oos.flush(); //FLUSHING!!!
+                    //Finished implementation
+                } else if (keyWord.equals("GETPRODUCTSINSTORE")) {
+                    //Listen for storeName
+                    String storeNameForProd = in.nextLine();
+                    //Send back ArrayList of ProductNames
+                    ArrayList<String> sendBackList = new ArrayList<>();
+                    for (int i = 0; i < marketPlace.size(); i++) {
+                        if (marketPlace.get(i).getStoreName().equals(storeNameForProd)) {
+                            for (int j = 0; j < marketPlace.get(i).getProducts().size(); j++) {
+                                sendBackList.add(marketPlace.get(i).getProducts().get(j).getProductName());
+                            }
+
+                        }
+                    }
+                    oos.writeObject(sendBackList);
                     oos.flush(); //FLUSHING!!!
                     //Finished implementation
                 }
