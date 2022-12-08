@@ -768,6 +768,8 @@ public class MarketplaceServer implements Runnable {
                     String buyerAccUsername = in.nextLine();
                     String buyerAccPassword = in.nextLine();
                     String buyerAccEmail = in.nextLine();
+                    String cart = in.nextLine();
+                    String history = in.nextLine();
                     // Listens for username, password, and email of buyer
 
                     for (int i = 0; i < buyerArrayList.size(); i++) {
@@ -776,7 +778,7 @@ public class MarketplaceServer implements Runnable {
                         } else if (buyerAccEmail.equals(buyerArrayList.get(i).getEmail())) {
                             pw.println("Email Already Exists");
                         } else {
-                            buyerArrayList.add(new Buyer(buyerAccUsername, buyerAccPassword, buyerAccEmail, "buyer.txt"));
+                            buyerArrayList.add(new Buyer(buyerAccUsername, buyerAccPassword, buyerAccEmail, cart, history));
                         }
 
                     }
