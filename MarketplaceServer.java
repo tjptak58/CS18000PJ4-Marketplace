@@ -578,6 +578,7 @@ public class MarketplaceServer implements Runnable {
 
                 } else if (keyWord.equals("EDITPRODUCT")) {
                     //Listen for string "productName;storeName;newDescription;newQuantity;newPrice"
+                    //WHO IS CHECKING IF QUANTITY IS VALID/NON NEGATIVE INT AND PRICE IS VALID/NON NEGATIVE DOUBLE????
                     //CANNOT EDIT productName, storeName, unitePurchased, customerList
                     String newProdInfo = in.nextLine();
                     String[] newProdArray = newProdInfo.split(";");
@@ -586,6 +587,10 @@ public class MarketplaceServer implements Runnable {
                             for (int j = 0; j < marketPlace.get(i).getProducts().size(); j++) {
                                 if (marketPlace.get(i).getProducts().get(j).getProductName().equals(newProdArray[0])) {
                                     synchronized (objectForMarketPlace) {
+                                        marketPlace.get(i).getProducts().get(j).setDescription(newProdArray[2]);
+                                        marketPlace.get(i).getProducts().get(j).setQuantity(Integer.parseInt(newProdArray[3]));
+                                        marketPlace.get(i).getProducts().get(j).setPrice(Double.parseDouble(newProdArray[4]));
+
 
                                     }
                                 }
@@ -780,6 +785,7 @@ public class MarketplaceServer implements Runnable {
                 }
 
             }
+            
 
 
             //If reached here then client has logged out or closed the application
@@ -794,6 +800,8 @@ public class MarketplaceServer implements Runnable {
             e.printStackTrace();
             System.out.println("Server Error!");
         }
+
+    }   //Closes run method 
 
     public synchronized void writeToFiles(ArrayList<Buyer> buyerArrayList, ArrayList<Seller> sellerArrayList, ArrayList<Store> storeArrayList) {
         try {
