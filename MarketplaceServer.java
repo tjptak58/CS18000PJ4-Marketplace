@@ -739,9 +739,50 @@ public class MarketplaceServer implements Runnable {
                     for (int i = 0; i < buyerArrayList.size(); i++) {
                         //for (int j = 0; j < buyerArrayList)
                     }
+                    
+                } else if (keyWord.equals("LOGINBUYER")) {
+                    String buyerUsername = in.nextLine();
+                    String buyerPassword = in.nextLine();
+                    // Listen for username and password pf buyer
+
+                    for (int i = 0; i < buyerArrayList.size(); i++) {
+                        if (buyerUsername.equals(buyerArrayList.get(i).getUsername()) &&
+                                buyerPassword.equals(buyerArrayList.get(i).getPassword())) {
+                            pw.println("CONFIRM");
+                            // returns "CONFIRM" if username and password does not exist of buyer
+                        } else {
+                            pw.println("ERROR");
+                            // returns "ERROR" is username and password does not exist of buyer
+                        }
+                    }
+                    pw.flush();
+                    pw.close();
+
+
+                } else if (keyWord.equals("LOGINSELLER")) {
+                    String sellerUsername = in.nextLine();
+                    String sellerPassword = in.nextLine();
+                    // Listen for username and password of seller
+
+                    for (int i = 0; i < sellerArrayList.size(); i++) {
+                        if (sellerUsername.equals(sellerArrayList.get(i).getUsername()) &&
+                                sellerPassword.equals(sellerArrayList.get(i).getPassword())) {
+                            pw.println("CONFIRM");
+                            // returns "CONFIRM" if username and password does not exist of seller
+                        } else {
+                            pw.println("ERROR");
+                            // returns "ERROR" is username and password does not exist of seller
+                        }
+                    }
+                    pw.flush();
+                    pw.close();
+
                 }
-                
+
             }
+
+
+        }
 
             //If reached here then client has logged out or closed the application
             //Call writeToFiles method here
