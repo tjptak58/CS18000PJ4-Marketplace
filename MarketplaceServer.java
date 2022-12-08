@@ -752,7 +752,7 @@ public class MarketplaceServer implements Runnable {
                             for (int k = 0; k < marketPlace.size(); k++) {
                                 if (marketPlace.get(i).getStoreName().equals(buyerArrayList.get(i).getShoppingCart().get(j).getStoreName())) {
                                     if (marketPlace.get(i).getSellerName().equals(sellerName)) {
-                                        sendProdInfo.add(buyerArrayList.get(i).getUsername() + ";" + buyerArrayList.get(i).getShoppingCart().get(j).getProductName() + ";" + buyerArrayList.get(i).getShoppingCart().get(j).getStoreName() + ";" + buyerArrayList.get(i).getShoppingCart().get(j).getPrice())
+                                        sendProdInfo.add(buyerArrayList.get(i).getUsername() + ";" + buyerArrayList.get(i).getShoppingCart().get(j).getProductName() + ";" + buyerArrayList.get(i).getShoppingCart().get(j).getStoreName() + ";" + buyerArrayList.get(i).getShoppingCart().get(j).getPrice());
 
                                     }
                                 }
