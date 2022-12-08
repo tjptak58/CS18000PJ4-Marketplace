@@ -68,8 +68,8 @@ public class SellerInformation {
                     JOptionPane.showMessageDialog(null, "Error: email is not in the right format(needs to include @ and .)", "Seller Information",
                             JOptionPane.ERROR_MESSAGE);
                 } else {
-                    String hostName = "do later";
-                    int portNumber = 220; //do later
+                    String hostName = "localhost";
+                    int portNumber = 4242; //do later
 
                     try {
                         Socket echoSocket = new Socket(hostName, portNumber);        // 1st statement
