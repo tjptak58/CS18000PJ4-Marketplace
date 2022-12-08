@@ -26,6 +26,7 @@ public class MarketPlaceClient extends JComponent implements Runnable{
     static boolean loggedInAsBuyer;
     static boolean loggedInAsSeller;
     Socket socket;
+    static int portnumber;
     PrintWriter pw;
     Scanner in;
     ObjectOutputStream oos;
@@ -35,21 +36,21 @@ public class MarketPlaceClient extends JComponent implements Runnable{
     ArrayList<String> superStores = new ArrayList<String>();
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(new MarketPlaceClient());
+        SwingUtilities.invokeLater(new MarketPlaceClient(portnumber));
     }
 
-    public MarketPlaceClient() {
-        
+    public MarketPlaceClient(int portnumber) {
+        MarketPlaceClient.portnumber = portnumber;
+        run();
     }
 
     public void run() {
         try {
-            socket = new Socket("localhost", 4242);
+            socket = new Socket("localhost", 4242); //MarketPlaceClient.portnumber FIX
             pw = new PrintWriter(socket.getOutputStream());
             in = new Scanner(socket.getInputStream());
-            ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
-            ObjectInputStream ois = new ObjectInputStream(socket.getInputStream()); 
-            //https://stackoverflow.com/questions/8377291/objectinputstreamsocket-getinputstream-does-not-work
+            oos = new ObjectOutputStream(socket.getOutputStream());
+            ois = new ObjectInputStream(socket.getInputStream()); 
             loggedInAsBuyer = true;
             loggedInAsSeller = false;
             if (loggedInAsBuyer) {
@@ -81,17 +82,6 @@ public class MarketPlaceClient extends JComponent implements Runnable{
      * Creates the Home Page for Buyer
      */
     public void buyerMain(ArrayList<String> productNames) {
-        try {   
-            pw = new PrintWriter(socket.getOutputStream());
-            in = new Scanner(socket.getInputStream());
-            oos = new ObjectOutputStream(socket.getOutputStream());
-            ois = new ObjectInputStream(socket.getInputStream()); 
-            System.out.println("PASSED");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }  
-        
-        
         JFrame buyerMain = new JFrame("THE MARKETPLACE");
         Container buyerMainPanel = buyerMain.getContentPane();
         buyerMainPanel.setLayout(new BorderLayout());
@@ -224,6 +214,8 @@ public class MarketPlaceClient extends JComponent implements Runnable{
             }
         
         });
+
+        System.out.println("PASSED");
         String[] s = {"Sort the menu","Sort by price High to Low","Sort by price Low to High","Sort by quantity High to Low","Sort by quantity Low to Hight"};
         JComboBox sortBox = new JComboBox(s);
         try {
