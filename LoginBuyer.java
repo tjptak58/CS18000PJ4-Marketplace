@@ -21,6 +21,8 @@ public class LoginBuyer {
 
     JButton loginButton=new JButton("Login");
 
+    JButton backButton=new JButton("Back to Main Menu");
+
 
     ArrayList<String> usernameAndPasswordBuyer = new ArrayList<>();
 
@@ -106,10 +108,21 @@ public class LoginBuyer {
             }
         });
 
+        JPanel back=new JPanel();
+        back.add(backButton);
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frame.dispose();
+                LoginOrCreateAccount loginOrCreateAccount=new LoginOrCreateAccount();
+            }
+        });
+
         JPanel generalPanel = new JPanel(new GridLayout(0, 1));
         generalPanel.add(usernameInformation);
         generalPanel.add(passwordInformation);
         generalPanel.add(login);
+        generalPanel.add(backButton);
 
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setSize(500, 500);
