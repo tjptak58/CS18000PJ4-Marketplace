@@ -782,8 +782,6 @@ public class MarketplaceServer implements Runnable {
             }
 
 
-        }
-
             //If reached here then client has logged out or closed the application
             //Call writeToFiles method here
 
@@ -796,9 +794,6 @@ public class MarketplaceServer implements Runnable {
             e.printStackTrace();
             System.out.println("Server Error!");
         }
-
-
-    };
 
     public synchronized void writeToFiles(ArrayList<Buyer> buyerArrayList, ArrayList<Seller> sellerArrayList, ArrayList<Store> storeArrayList) {
         try {
