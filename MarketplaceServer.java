@@ -770,7 +770,7 @@ public class MarketplaceServer implements Runnable {
                     String buyerAccEmail = in.nextLine();
                     String cart = in.nextLine();
                     String history = in.nextLine();
-                    // Listens for username, password, and email of buyer
+                    // Listens for username, password, email, cart, and history of buyer
 
                     for (int i = 0; i < buyerArrayList.size(); i++) {
                         if (buyerAccUsername.equals(buyerArrayList.get(i).getUsername())) {
