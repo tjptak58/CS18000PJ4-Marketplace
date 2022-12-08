@@ -9,12 +9,13 @@ public class LoginSuccessful {
         JLabel loginSuccessful=new JLabel("      Login Successful!");
         JButton continueButton=new JButton("Continue");
 
+
         continueButton.setBounds(100, 250, 300, 50);
         continueButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 frame.dispose();
-                LoginOrCreateAccount loginOrCreateAccount =new LoginOrCreateAccount();
+                MarketPlaceClient marketPlaceClient=new MarketPlaceClient(portNumber);
             }
         });
         loginSuccessful.setBounds(150,175,500,50);
