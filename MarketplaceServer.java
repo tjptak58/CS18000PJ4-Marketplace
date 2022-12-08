@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -583,6 +584,11 @@ public class MarketplaceServer implements Runnable {
                     for (int i = 0; i < marketPlace.size(); i++) {
                         if (marketPlace.get(i).getStoreName().equals(newProdArray[1])) {
                             for (int j = 0; j < marketPlace.get(i).getProducts().size(); j++) {
+                                if (marketPlace.get(i).getProducts().get(j).getProductName().equals(newProdArray[0])) {
+                                    synchronized (objectForMarketPlace) {
+
+                                    }
+                                }
 
                             }
                         }
@@ -627,6 +633,8 @@ public class MarketplaceServer implements Runnable {
                             }
                         }
                     }
+                    //Not sending anything back
+                    //Finished implementation
 
                 
 
@@ -665,6 +673,8 @@ public class MarketplaceServer implements Runnable {
                     String storeNameDash = in.nextLine();
                     //WHAT TO DO HERE????
                     //TODO
+                    //Return purchase log for that store
+
 
 
 
@@ -716,6 +726,19 @@ public class MarketplaceServer implements Runnable {
                     //Listen for productName
                     String salesStoreName = in.nextLine();
                     String salesProdName = in.nextLine();
+
+                } else if (keyWord.equals("NUMINCART")) {
+                    //Listen for sellerName
+                    /*
+                     * Sellers can view the number of products currently in customer shopping carts, along with the store and details associated with the products. 
+                     */
+                    String sellerName = in.nextLine();
+                    //ArrayList of strings of each product info
+                    //Not implementing with 'quantity' for each product
+                    //Will treat each unit as unique //Much easier that way
+                    for (int i = 0; i < buyerArrayList.size(); i++) {
+                        //for (int j = 0; j < buyerArrayList)
+                    }
                 }
                 
             }
@@ -737,6 +760,29 @@ public class MarketplaceServer implements Runnable {
     };
 
     public synchronized void writeToFiles(ArrayList<Buyer> buyerArrayList, ArrayList<Seller> sellerArrayList, ArrayList<Store> storeArrayList) {
+        try {
+            File bf = new File("buyer.txt");
+            /**if (!bf.exists()) {
+                bf.createNewFile();
+            } **/ //Not required since file creation is done at the beginning of the main method
+            FileWriter wbf = new FileWriter(bf, false);
+            PrintWriter pwbf = new PrintWriter(wbf);
+            for (int i = 0; i < buyerArrayList.size(); i++) {
+                pwbf.println(buyerArrayList.get(i).getUsername() + ";" + buyerArrayList.get(i).getPassword() + ";" + buyerArrayList.get(i).getEmail() + ";" + buyerArrayList.get(i).getCart() + ";" + buyerArrayList.get(i).getHistory());
+                pwbf.flush();
+            }
+
+            File sf = new File("seller.txt");
+            FileWriter wsf = new FileWriter(sf, false);
+            PrintWriter pwsf = new PrintWriter(wsf);
+            for (int i = 0; i < sellerArrayList.size(); i++) {
+
+            }
+
+            
+        } catch (IOException e) {
+
+        } 
 
 
 
