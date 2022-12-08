@@ -205,12 +205,13 @@ public class Buyer extends Person{
                 pw.flush();
 
             }
+            pw.close();
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        } //NO FINALLY BLOCK HERE!!!
     }
 
     /*
@@ -247,12 +248,12 @@ public class Buyer extends Person{
      * history file.
      */
     public void purchase(Product p) {
-        p.setUnitsPurchased(p.getUnitsPurchased() + p.getQuantity()); //ADDED THIS LINE 11/12/22
+        p.setUnitsPurchased(p.getUnitsPurchased() + 1); //ADDED THIS LINE 11/12/22
         purchased.add(p);
         ArrayList<String> curList = p.getCustomerList();
         curList.add(this.getUsername());
         p.setCustomerList(curList);
-        shoppingCart.clear();
+        shoppingCart.remove(p);
         try {
             PrintWriter pw = new PrintWriter(new FileWriter(new File(history) , false));
             for (Product product : purchased) {
@@ -264,6 +265,7 @@ public class Buyer extends Person{
                 pw.flush();
 
             }
+            pw.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
