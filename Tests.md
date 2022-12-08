@@ -20,3 +20,6 @@ User Log in or Create Account
 15. user enter password via keyboard
 16. User selects login button
 17. User taken to new frame saying Login Successful
+Logged in as a Seller
+1. 
+2.
