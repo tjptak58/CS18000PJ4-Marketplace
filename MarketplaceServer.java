@@ -347,6 +347,12 @@ public class MarketplaceServer implements Runnable {
                                 }
                                 //Need to add to stores revenue
                                 synchronized (objectForMarketPlace) {
+                                    for (int k = 0; k < marketPlace.size(); k++) {
+                                        if (marketPlace.get(k).getStoreName().equals(buyerArrayList.get(i).getShoppingCart().get(j).getStoreName())) {
+
+
+                                        }
+                                    }
                                     
                                 }
                             }
@@ -518,7 +524,12 @@ public class MarketplaceServer implements Runnable {
                     //Listen for ArrayList<String>
                     //Each string is productfields separated by ;
                     //LISTEN FOR STORENAME!! TODO
-                    ArrayList<String> prodLines = (ArrayList<String>) ois.readObject();
+                    ArrayList<String> prodLines = null;
+                    try {
+                        prodLines = (ArrayList<String>) ois.readObject();
+                    } catch (ClassNotFoundException e) {
+                        System.out.println("Class not found!") ; //Will never reach here
+                    }    
                     String storeName = in.nextLine();
                     //Check that each of the product names does not exist already
                     //HERE
