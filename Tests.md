@@ -1,4 +1,6 @@
-User Log in or Create Account
+ 1.User Log in or Create Account
+ 
+ 
 1. User launches application
 2.User is asked to create account or login, user selects create account
 3. User is asked if they are a seller or buyer. User selects seller
@@ -20,6 +22,14 @@ User Log in or Create Account
 15. user enter password via keyboard
 16. User selects login button
 17. User taken to new frame saying Login Successful
-Logged in as a Seller
+
+Expected result: Application verifies the user's username and password and loads their homepage automatically. 
+
+Test Status: Passed'
+
+2  Logged in as a Seller
+
 1. 
 2.
+
+3. Logged in as a Buyer
