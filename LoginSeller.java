@@ -20,6 +20,8 @@ public class LoginSeller {
 
     JButton loginButton = new JButton("Login");
 
+    JButton backButton = new JButton("Back to Main Paige");
+
     ArrayList<String> usernameAndPasswordSeller = new ArrayList<>();
 
     LoginSeller() {
@@ -57,17 +59,17 @@ public class LoginSeller {
 
                     BufferedReader reader;
                     reader = new BufferedReader(new InputStreamReader(echoSocket.getInputStream()));
-                    String linesRead="";
+                    String linesRead = "";
 
                     while ((linesRead = reader.readLine()) != null) {
-                        if ( linesRead.contains("ERROR")) {
+                        if (linesRead.contains("ERROR")) {
                             JOptionPane.showMessageDialog(null, "Error: Username and/or password is wrong. Please try again", "Seller Information",
                                     JOptionPane.ERROR_MESSAGE);
                             reader.close();
                         } else if (linesRead.contains("CONFIRM")) {
                             reader.close();
                             frame.dispose();
-                            LoginSuccessful loginSuccessful=new LoginSuccessful();
+                            LoginSuccessful loginSuccessful = new LoginSuccessful();
                         }
                     }
                 } catch (IOException f) {
@@ -103,10 +105,21 @@ public class LoginSeller {
             }
         });
 
+        JPanel back = new JPanel();
+        back.add(backButton);
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frame.dispose();
+                LoginOrCreateAccount loginOrCreateAccount = new LoginOrCreateAccount();
+            }
+        });
+
         JPanel generalPanel = new JPanel(new GridLayout(0, 1));
         generalPanel.add(usernameInformation);
         generalPanel.add(passwordInformation);
         generalPanel.add(login);
+        generalPanel.add(backButton);
 
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setSize(500, 500);
