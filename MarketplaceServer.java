@@ -135,10 +135,11 @@ public class MarketplaceServer implements Runnable {
             }
         }
         //When main main method runs for the first time all static variables are initialized before entering infinite while loop
-
+        System.out.println("Started server....waiting for connection"); //DEBUGGING
         ServerSocket serverSocket = new ServerSocket(4242);
         while (true) {
             Socket socket = serverSocket.accept();
+            System.out.printf("Connection received from %s\n", socket); //DEBUGGING
             MarketplaceServer server  = new MarketplaceServer(socket);
             new Thread(server).start();
         }
@@ -257,6 +258,7 @@ public class MarketplaceServer implements Runnable {
 
                                     } catch (IOException e) {
                                         //WHAT TO DO HERE?
+                                        System.out.println("SERVER ERROR! WHAT ARE YOU DOINGVGFSFDFADFSDF3e");
 
                                     }
                                     
@@ -578,7 +580,7 @@ public class MarketplaceServer implements Runnable {
 
                 } else if (keyWord.equals("EDITPRODUCT")) {
                     //Listen for string "productName;storeName;newDescription;newQuantity;newPrice"
-                    //WHO IS CHECKING IF QUANTITY IS VALID/NON NEGATIVE INT AND PRICE IS VALID/NON NEGATIVE DOUBLE????
+                    //WHO IS CHECKING IF QUANTITY IS VALID/NON NEGATIVE INT AND PRICE IS VALID/NON NEGATIVE DOUBLE???? TODO
                     //CANNOT EDIT productName, storeName, unitePurchased, customerList
                     String newProdInfo = in.nextLine();
                     String[] newProdArray = newProdInfo.split(";");
@@ -598,6 +600,7 @@ public class MarketplaceServer implements Runnable {
                             }
                         }
                     }
+                    //Finished implementation w/o TODO
 
 
 
@@ -742,7 +745,9 @@ public class MarketplaceServer implements Runnable {
                     //Not implementing with 'quantity' for each product
                     //Will treat each unit as unique //Much easier that way
                     for (int i = 0; i < buyerArrayList.size(); i++) {
-                        //for (int j = 0; j < buyerArrayList)
+                        for (int j = 0; j < buyerArrayList.get(i).getShoppingCart().size(); j++) {
+                            
+                        }
                     }
                     
                 } else if (keyWord.equals("LOGINBUYER")) {
