@@ -41,7 +41,6 @@ public class MarketPlaceClient extends JComponent implements Runnable{
 
     public MarketPlaceClient(int portnumber) {
         MarketPlaceClient.portnumber = portnumber;
-        run();
     }
 
     public void run() {
@@ -51,8 +50,8 @@ public class MarketPlaceClient extends JComponent implements Runnable{
             in = new Scanner(socket.getInputStream());
             oos = new ObjectOutputStream(socket.getOutputStream());
             ois = new ObjectInputStream(socket.getInputStream()); 
-            loggedInAsBuyer = true;
-            loggedInAsSeller = false;
+            loggedInAsBuyer = false;
+            loggedInAsSeller = true;
             if (loggedInAsBuyer) {
                 pw.println("GETSUPERSTORES");
                 pw.flush();
@@ -117,9 +116,9 @@ public class MarketPlaceClient extends JComponent implements Runnable{
 
         JPanel buyerMainSouth = new JPanel(new FlowLayout());
         JButton purchaseHistory = new JButton("Purchase History");
-        purchaseHistory.addActionListener(new ActionListener() {      
-        ArrayList<String> history = new ArrayList<String>();    
+        purchaseHistory.addActionListener(new ActionListener() {         
             public void actionPerformed(ActionEvent e) {           //ACTION LISTENER - Link to the purchase history of the user
+                ArrayList<String> history = new ArrayList<String>(); 
                 try {
                     pw.println("GETPURCHASEHISTORY");
                     pw.println(username);
@@ -135,7 +134,7 @@ public class MarketPlaceClient extends JComponent implements Runnable{
         });
 
         JButton viewDashboard = new JButton("View Dashboard");
-        purchaseHistory.addActionListener(new ActionListener() {      
+        viewDashboard.addActionListener(new ActionListener() {      
             public void actionPerformed(ActionEvent e) {           //ACTION LISTENER - Link to the dashboard of a buyer
                 ArrayList<String> superStores = new ArrayList<String>();
                 try {
@@ -214,8 +213,6 @@ public class MarketPlaceClient extends JComponent implements Runnable{
             }
         
         });
-
-        System.out.println("PASSED");
         String[] s = {"Sort the menu","Sort by price High to Low","Sort by price Low to High","Sort by quantity High to Low","Sort by quantity Low to Hight"};
         JComboBox sortBox = new JComboBox(s);
         try {
@@ -271,16 +268,19 @@ public class MarketPlaceClient extends JComponent implements Runnable{
         } catch (Exception e) {
             e.printStackTrace();
         }
+        
+
         for (String store : superStores) {
+            ArrayList<String> pInStore = new ArrayList<String>();
             try {
                 pw.println("GETPRODUCTSINSTORE");
                 pw.println(store);
                 pw.flush();
-                productNames = (ArrayList<String>) ois.readObject(); //SERVERREQUEST - GETPRODUCTSINSTORE
+                pInStore = (ArrayList<String>) ois.readObject(); //SERVERREQUEST - GETPRODUCTSINSTORE
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            for (String product: productNames) {
+            for (String product: pInStore) {
                 JPanel product1 = new JPanel(new FlowLayout());
                 JLabel product1Text = new JLabel(product);
                 product1.add(product1Text);
@@ -303,7 +303,6 @@ public class MarketPlaceClient extends JComponent implements Runnable{
                         } catch (Exception e1) {
                             e1.printStackTrace();
                         }
-                        
                     }
                 });
                 product1.add(product1Add);
@@ -314,27 +313,27 @@ public class MarketPlaceClient extends JComponent implements Runnable{
                         buyerMain.dispose();
                         
                     }
-                
                 });
                 product1.add(product1Info);
                 panels.add(product1);
             }
+        }
 
-            for (JPanel p : panels) {  //Displays the panels
-                productsPanel.add(p);
-            }
-            JScrollPane scrollPane = new JScrollPane(productsPanel); 
-            buyerMainCentral.add(scrollPane , BorderLayout.CENTER);
-            buyerMain.add(buyerMainCentral, BorderLayout.CENTER);
+        for (JPanel p : panels) {  //Displays the panels
+            productsPanel.add(p);
+        }
+        JScrollPane scrollPane = new JScrollPane(productsPanel); 
+        buyerMainCentral.add(scrollPane , BorderLayout.CENTER);
+        buyerMain.add(buyerMainCentral, BorderLayout.CENTER);
             
-    
-            buyerMain.pack();
-            buyerMain.setSize(600, 400);
-            buyerMain.setLocationRelativeTo(null);
-            buyerMain.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-            buyerMain.setVisible(true);
+            
 
-            }
+        buyerMain.pack();
+        buyerMain.setSize(600, 400);
+        buyerMain.setLocationRelativeTo(null);
+        buyerMain.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        buyerMain.setVisible(true);
+
     }
 
     /*
@@ -780,15 +779,6 @@ public class MarketPlaceClient extends JComponent implements Runnable{
      * Opens the home page for a seller
      */
     public void sellerMain(ArrayList<String> storeNames) {
-        try {
-            pw = new PrintWriter(socket.getOutputStream());
-            in = new Scanner(socket.getInputStream());
-            ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
-            ObjectInputStream ois = new ObjectInputStream(socket.getInputStream()); 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        System.out.println("SASSED");
         JFrame sellerMain = new JFrame("THE MARKETPLACE");
         Container sellerMainPanel = sellerMain.getContentPane();
         sellerMainPanel.setLayout(new BorderLayout());
@@ -803,6 +793,7 @@ public class MarketPlaceClient extends JComponent implements Runnable{
                 pw.println("ADDSTORE"); //SERVERREQUEST - ADDSTORE
                 pw.println(s);
                 pw.flush();
+                sellerMain.dispose();
                 sellerMain(storeNames);
                 
             }
