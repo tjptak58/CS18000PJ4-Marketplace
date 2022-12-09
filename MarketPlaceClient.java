@@ -18,13 +18,13 @@ public class MarketPlaceClient extends JComponent implements Runnable{
     /**
      *Static string that stores the username of the logged in buyer or seller
      */
-    static String username;
+    String username;
 
     /**
      * Static booleans to determine whether a buyer or seller has logged in
      */
-    static boolean loggedInAsBuyer;
-    static boolean loggedInAsSeller;
+    boolean loggedInAsBuyer;
+    boolean loggedInAsSeller;
     Socket socket;
     static int portnumber;
     PrintWriter pw;
@@ -45,13 +45,15 @@ public class MarketPlaceClient extends JComponent implements Runnable{
 
     public void run() {
         try {
+            username = "tptak";
+            //username = "greg";
             socket = new Socket("localhost", 4242); //MarketPlaceClient.portnumber FIX
             pw = new PrintWriter(socket.getOutputStream());
             in = new Scanner(socket.getInputStream());
             oos = new ObjectOutputStream(socket.getOutputStream());
             ois = new ObjectInputStream(socket.getInputStream()); 
-            loggedInAsBuyer = false;
-            loggedInAsSeller = true;
+            loggedInAsBuyer = true;
+            loggedInAsSeller = false;
             if (loggedInAsBuyer) {
                 pw.println("GETSUPERSTORES");
                 pw.flush();
@@ -81,6 +83,15 @@ public class MarketPlaceClient extends JComponent implements Runnable{
      * Creates the Home Page for Buyer
      */
     public void buyerMain(ArrayList<String> productNames) {
+        try {
+            pw = new PrintWriter(socket.getOutputStream());
+            in = new Scanner(socket.getInputStream());
+            oos = new ObjectOutputStream(socket.getOutputStream());
+            ois = new ObjectInputStream(socket.getInputStream());     
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         JFrame buyerMain = new JFrame("THE MARKETPLACE");
         Container buyerMainPanel = buyerMain.getContentPane();
         buyerMainPanel.setLayout(new BorderLayout());
@@ -172,7 +183,7 @@ public class MarketPlaceClient extends JComponent implements Runnable{
             public void actionPerformed(ActionEvent e) {           //ACTION LISTENER - Link to the page to edit a buyer account
                 var info = new ArrayList<String>(); 
                 try {
-                    pw.println("GETACCOUNTINFO");
+                    pw.println("GETACCOUNTINFO");   //ROHANFIX Only works if the user is a buyer, not a seller
                     pw.println(username);
                     pw.flush();
                     info = (ArrayList<String>) ois.readObject(); //SERVERREQUEST GETACCOUNTINFO
@@ -340,6 +351,16 @@ public class MarketPlaceClient extends JComponent implements Runnable{
     * Creates the info page for unique products
     */
     public void displayProductInfo(String product , String store) {
+        try {
+            pw = new PrintWriter(socket.getOutputStream());
+            in = new Scanner(socket.getInputStream());
+            oos = new ObjectOutputStream(socket.getOutputStream());
+            ois = new ObjectInputStream(socket.getInputStream());     
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
         JFrame productInfo = new JFrame("THE MARKETPLACE");
         Container productInfoPanel = productInfo.getContentPane();
         productInfoPanel.setLayout(new BorderLayout());
@@ -458,6 +479,16 @@ public class MarketPlaceClient extends JComponent implements Runnable{
      * Creates the page for user to see their purchase history
      */
     public void displayPurchaseHistory(ArrayList<String> history) {
+        try {
+            pw = new PrintWriter(socket.getOutputStream());
+            in = new Scanner(socket.getInputStream());
+            oos = new ObjectOutputStream(socket.getOutputStream());
+            ois = new ObjectInputStream(socket.getInputStream());     
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
         JFrame purchaseHistory = new JFrame("THE MARKETPLACE");
         Container purchaseHistoryPanel = purchaseHistory.getContentPane();
         purchaseHistoryPanel.setLayout(new BorderLayout());
@@ -481,7 +512,7 @@ public class MarketPlaceClient extends JComponent implements Runnable{
         JButton exportProduct = new JButton("Export to File"); //Adds bottom buttons
         exportProduct.addActionListener(new ActionListener() {      
             public void actionPerformed(ActionEvent e) {           //Exports the purchase history to a file
-                exportHistory(exportText.getText());
+                exportHistory(exportText.getText() , history);
             }
         });
         JButton back = new JButton("Back");
@@ -524,6 +555,16 @@ public class MarketPlaceClient extends JComponent implements Runnable{
      * Allows the user to see and edit their cart or checkout.
      */
     public void displayCart(ArrayList<String> viewCart) {
+        try {
+            pw = new PrintWriter(socket.getOutputStream());
+            in = new Scanner(socket.getInputStream());
+            oos = new ObjectOutputStream(socket.getOutputStream());
+            ois = new ObjectInputStream(socket.getInputStream());     
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
         JFrame cart = new JFrame("THE MARKETPLACE");
         Container cartPanel = cart.getContentPane();
         cartPanel.setLayout(new BorderLayout());
@@ -564,13 +605,21 @@ public class MarketPlaceClient extends JComponent implements Runnable{
                 if (choice == JOptionPane.YES_OPTION) {
                     try {
                         pw.println("PURCHASE");  //SERVERREQUEST PURCHASE
-                        pw.flush();
-                        cart.dispose();
-                        pw.println("VIEWCART");
                         pw.println(username);
                         pw.flush();
-                        var viewCart = (ArrayList<String>) ois.readObject();  //SERVERREQUEST VIEWCART
-                        displayCart(viewCart);
+                        cart.dispose();
+                        pw.println("GETSUPERSTORES");
+                        pw.flush();
+                        superStores = (ArrayList<String>) ois.readObject(); //SERVERREQUEST GETSUPERSTORES
+                        productNames = new ArrayList<String>();
+                        for (String store : superStores) {
+                            pw.println("GETPRODUCTSINSTORE");
+                            pw.println(store);
+                            pw.flush();
+                            var productNamesProxy = (ArrayList<String>) ois.readObject(); //SERVERREQUEST GETPRODCUTSINSTORE
+                            productNames.addAll(productNamesProxy);
+                        }
+                        buyerMain(productNames);
                         JOptionPane.showMessageDialog(null, "Purchase Confirmed", "THE MARKETPLACE", JOptionPane.PLAIN_MESSAGE);
                     } catch (Exception e1) {
                         e1.printStackTrace();
@@ -636,6 +685,16 @@ public class MarketPlaceClient extends JComponent implements Runnable{
      * Opens a page for a user to edit their account
      */
     public void editAccount(ArrayList<String> edit) {
+        try {
+            pw = new PrintWriter(socket.getOutputStream());
+            in = new Scanner(socket.getInputStream());
+            oos = new ObjectOutputStream(socket.getOutputStream());
+            ois = new ObjectInputStream(socket.getInputStream());     
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        
         JFrame account = new JFrame("THE MARKETPLACE");
         Container accountPanel = account.getContentPane();
         accountPanel.setLayout(new BorderLayout());
@@ -661,12 +720,12 @@ public class MarketPlaceClient extends JComponent implements Runnable{
         
         JPanel password = new JPanel(new FlowLayout());
         JLabel passwordText = new JLabel("Password: ");
-        JTextField passwordField = new JTextField(returned.get(0)); //prepopulated with password
+        JTextField passwordField = new JTextField(returned.get(1)); //prepopulated with password
         password.add(passwordText);
         password.add(passwordField);
         JPanel email = new JPanel(new FlowLayout());
         JLabel emailText = new JLabel("Email: ");
-        JTextField emailField = new JTextField(returned.get(1)); //prepopulated with email
+        JTextField emailField = new JTextField(returned.get(0)); //prepopulated with email
         email.add(emailText);
         email.add(emailField);
 
@@ -676,14 +735,14 @@ public class MarketPlaceClient extends JComponent implements Runnable{
             public void actionPerformed(ActionEvent e) {   
                 account.dispose();      //ACTION LISTENER - Sends the user back to the main page
                 ArrayList<String> out = new ArrayList<String>();
-                String p = passwordText.getText();
-                String em = emailText.getText();
-                out.add(p);
+                String p = passwordField.getText();
+                String em = emailField.getText();
                 out.add(em);
+                out.add(p);
                 try {
                     pw.println("UPDATEACCOUNTINFO");
                     pw.println(username);
-                    oos.writeObject(out);
+                    oos.writeObject(out);  //FIX
                     pw.flush();
                     oos.flush();
                 } catch (Exception e1) {
@@ -789,12 +848,24 @@ public class MarketPlaceClient extends JComponent implements Runnable{
         JButton addStore = new JButton("Add Store");
         addStore.addActionListener(new ActionListener() {      
             public void actionPerformed(ActionEvent e) {   
-                String s = JOptionPane.showInputDialog(null, "Enter Store Name:");     //ACTION LISTENER - adds a store
-                pw.println("ADDSTORE"); //SERVERREQUEST - ADDSTORE
-                pw.println(s);
-                pw.flush();
-                sellerMain.dispose();
-                sellerMain(storeNames);
+                try {
+                    String s = JOptionPane.showInputDialog(null, "Enter Store Name:");     //ACTION LISTENER - adds a store
+                    pw.println("ADDSTORE"); //SERVERREQUEST - ADDSTORE
+                    pw.println(s);
+                    pw.println(username);
+                    pw.println(""); //FIX I don't need to have a file path for add store because you can import products
+                    pw.flush();
+                    String confirmation = in.nextLine();
+                    if (confirmation.equals("ERROR")) {
+                        JOptionPane.showMessageDialog(null, "There is already a store with that name", "ERROR", JOptionPane.ERROR_MESSAGE);
+                    }
+                    myStoreNames = (ArrayList<String>) ois.readObject(); // FIXROHAN THIS IS COMING BACK AS A STRING
+                    sellerMain.dispose();
+                           
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                }
+                sellerMain(myStoreNames); 
                 
             }
         
@@ -868,13 +939,15 @@ public class MarketPlaceClient extends JComponent implements Runnable{
                 var info = new ArrayList<String>(); 
                 try {
                    pw.println("GETACCOUNTINFO"); 
-                   pw.print(username);
+                   pw.println(username);
                    pw.flush();
                    info = (ArrayList<String>) ois.readObject(); //SERVERREQUEST GETACCOUNTINFO
+                   for (String s : info) {
+                    System.out.println(s);
+                   }
                 } catch (Exception e1) {
                     e1.printStackTrace();
                 } 
-                
                 editAccount(info);
                 sellerMain.dispose();
             }
@@ -1255,6 +1328,9 @@ public class MarketPlaceClient extends JComponent implements Runnable{
                     pw.println(output);
                     pw.flush();
                     confirmed = in.nextLine();
+                    if (confirmed.equals("ERROR")) {
+                        JOptionPane.showMessageDialog(null, "There is already a store with that name","Error", JOptionPane.ERROR_MESSAGE);
+                    }
                 } catch (Exception e1) {
                     e1.printStackTrace();
                 }
@@ -1334,6 +1410,20 @@ public class MarketPlaceClient extends JComponent implements Runnable{
         JPanel statsSouth = new JPanel(new FlowLayout());
         JTextField exportText = new JTextField("sales.txt");  //FilePath
         JButton exportProduct = new JButton("Export to File"); //Adds bottom buttons
+        exportProduct.addActionListener(new ActionListener() {      
+            public void actionPerformed(ActionEvent e) {           //Exports the purchase history to a file
+                ArrayList<String> returned = new ArrayList<String>(); 
+                try {
+                    pw.println("SALESBYSTORE");
+                    pw.println(storeName);
+                    pw.flush();
+                    returned = (ArrayList<String>) ois.readObject();//SERVERREQUEST - SALESSBYSTORE
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                }    
+                exportSales(exportText.getText() , returned);
+            }
+        });
         JButton back = new JButton("Back");
         back.addActionListener(new ActionListener() {      
             public void actionPerformed(ActionEvent e) {  
@@ -1561,22 +1651,34 @@ public class MarketPlaceClient extends JComponent implements Runnable{
         
     }
 
-    public boolean exportHistory(String path) {
+    public boolean exportHistory(String path , ArrayList<String> purchases) {
         try {
-            BufferedReader buf = new BufferedReader(new FileReader(new File(path)));
-            PrintWriter pw = new PrintWriter(new FileWriter(new File(path) , true));           
-            String s = buf.readLine();
-            while (true) {
-                if (s == null) {
-                    break;
-                } else {
-                    String[] split = s.split(";");
-                    Product p = new Product(split[0], split[1], split[2], Integer.parseInt(split[3]), Double.parseDouble(split[4]));
-                    pw.println(p.toString());
-                    s = buf.readLine();
-                }  
+            File f = new File(path);
+            if (!f.exists()) {
+                f.createNewFile();
             }
-            buf.close();
+            PrintWriter pw = new PrintWriter(new FileWriter(f, true));           
+            for (String sale : purchases) {
+                pw.println(sale); 
+            }
+            pw.close();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean exportSales(String path , ArrayList<String> sales) {
+        try {
+            File f = new File(path);
+            if (!f.exists()) {
+                f.createNewFile();
+            }
+            PrintWriter pw = new PrintWriter(new FileWriter(f, true));           
+            for (String sale : sales) {
+                pw.println(sale); 
+            }
             pw.close();
             return true;
         } catch (Exception e) {
