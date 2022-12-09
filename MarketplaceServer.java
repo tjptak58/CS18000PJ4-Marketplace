@@ -54,7 +54,7 @@ public class MarketplaceServer implements Runnable {
         while(buyerLine != null) {
             String[] buyerArray = buyerLine.split(";");
             //Add to buyerArrayList
-            buyerArrayList.add(new Buyer(buyerArray[0], buyerArray[1], buyerArray[2], buyerArray[3]));
+            buyerArrayList.add(new Buyer(buyerArray[0], buyerArray[1], buyerArray[2], buyerArray[3], buyerArray[4]));
             buyerLine = bbfr.readLine();
 
         }
@@ -519,6 +519,8 @@ public class MarketplaceServer implements Runnable {
                     //wHO IS CHECKING IF FILEPATH EXISTS?
                     Store addStore = new Store(addSellerName, addStoreName, addStorePath); 
                     //Add store to marketPlace and to seller's list of stores
+                    //PurchaseLog for this new store will be empty
+                    
                     boolean storeNameExists = false;
                     for (int i = 0; i < marketPlace.size(); i++) {
                         if (marketPlace.get(i).getStoreName().equals(addStoreName)) {
@@ -553,7 +555,7 @@ public class MarketplaceServer implements Runnable {
                         pw.println("ERROR");
                         pw.flush();
                     }
-                    //Finished implementation
+                    //Finished implementation w/ PurchaseLog
 
 
                 } else if (keyWord.equals("ADDPRODUCT")) {
