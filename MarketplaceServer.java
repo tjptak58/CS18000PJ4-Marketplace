@@ -178,8 +178,10 @@ public class MarketplaceServer implements Runnable {
                 //Loop until client closes application or logs out
                 //Listening for KEYWORDS and sending information back
                 //LISTEN FOR WHEN APPLICATION IS CLOSED AND FOR REFRESH!
+                
                 String keyWord = in.nextLine();
                 if (keyWord.equals("GETSUPERSTORES")) {
+                    System.out.println("CLIENT CALLED GETSUPERSTORES");
                     //Send ArrayList of Strings containing all product names in marketplace
                     ArrayList<String> arrayListToSend = new ArrayList<>();
                     for (int j = 0; j < marketPlace.size(); j++) {
@@ -422,23 +424,35 @@ public class MarketplaceServer implements Runnable {
                     //Returns ArrayList<String> with UserName and Password as strings
                     String viewAccUserName = in.nextLine();
                     ArrayList<String> sendInfoList = new ArrayList<>();
+                    boolean foundAccount = false;
                     for (int i = 0; i < buyerArrayList.size(); i++) {
                         if (buyerArrayList.get(i).getUsername().equals(viewAccUserName)) {
                             sendInfoList.add(buyerArrayList.get(i).getEmail());
                             sendInfoList.add(buyerArrayList.get(i).getPassword());
+                            //System.out.println(buyerArrayList.get(i).getEmail() + " " + buyerArrayList.get(i).getPassword()); DEBUGGING REMOVE LATER
+                            foundAccount = true;
+
                         }
+                    }
+                    if (!foundAccount) {
+                        //Traverse sellerArrayList
+                        //here
                     }
                     oos.writeObject(sendInfoList);
                     oos.flush(); //FLUSHING!!!
                     //Finished implementation
 
                 } else if (keyWord.equals("UPDATEACCOUNTINFO")) {
+                    System.out.println("client called UPDATEACCOUNTINFO!!!!");
                     //Listen for username
                     //Listen for ArrayList<String>
                     String updateUserName = in.nextLine();
                     ArrayList<String> newInfo = null; //ASSUMING FIRST STRING IS NEW EMAIL AND SECOND STRING IS NEW PASSWORD TODO !!!
+
                     try {
                         newInfo = (ArrayList<String>) ois.readObject();
+                        System.out.println(newInfo.get(0) + " " + newInfo.get(1));
+                        System.out.println("RECIEVED NEW INFO !!!!");
 
                     } catch (Exception e) {
                         System.out.println("Class Not Found!"); //Will never reach here since class will always be defined
@@ -452,7 +466,6 @@ public class MarketplaceServer implements Runnable {
                             }
                         }
                     }
-                    //Finished implementation
                     
 
 
@@ -537,10 +550,10 @@ public class MarketplaceServer implements Runnable {
                     //LISTEN FOR SELLERNAME TODO!!
                     String addSellerName = in.nextLine();
                     //LiSTEN FOR FILEPATH OF STORE!!!
-                    String addStorePath = in.nextLine();
+                    String addStorePath = addStoreName + "StorePath.txt";
                     //wHO IS CHECKING IF FILEPATH EXISTS?
                     //Listen for filePathToPurchaseLog
-                    String addStoreLogPath = in.nextLine();
+                    String addStoreLogPath = addStoreName + "StoreLogPath.txt";
                     Store addStore = new Store(addSellerName, addStoreName, addStorePath, addStoreLogPath); 
                     //Add store to marketPlace and to seller's list of stores
                     //PurchaseLog for this new store will be empty
@@ -800,7 +813,7 @@ public class MarketplaceServer implements Runnable {
                     for (int i = 0; i < marketPlace.size(); i++) {
                         if (marketPlace.get(i).getStoreName().equals(salesStoreName)) {
                             for (int j = 0; j < marketPlace.get(i).getPurchaseLog().size(); j++) {
-                                
+
                             }
                         
 
