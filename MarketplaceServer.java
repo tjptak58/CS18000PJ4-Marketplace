@@ -54,7 +54,7 @@ public class MarketplaceServer implements Runnable {
         while(buyerLine != null) {
             String[] buyerArray = buyerLine.split(";");
             //Add to buyerArrayList
-            buyerArrayList.add(new Buyer(buyerArray[0], buyerArray[1], buyerArray[2], buyerArray[3]));
+            buyerArrayList.add(new Buyer(buyerArray[0], buyerArray[1], buyerArray[2], buyerArray[3], buyerArray[4]));
             buyerLine = bbfr.readLine();
 
         }
@@ -120,8 +120,24 @@ public class MarketplaceServer implements Runnable {
 
 
             }
+            String storeLogFile = storeArray[4]; 
+            File logf = new File(storeLogFile);
+            FileReader frlogf = new FileReader(logf);
+            BufferedReader bfrlogf = new BufferedReader(frlogf);
+            String storeLogLine = bfrlogf.readLine();
+            ArrayList<Purchase> purchaseLogLoopArray = new ArrayList<>();
+            while (storeLogLine != null) {
+                String[] loopLogArray = storeLogLine.split(";");
+                //storeLogLine has format productName;revenue;buyerUserName
+                //Creating a new purchase object for this line
+                Purchase loopPurchase = new Purchase(loopLogArray[0], Double.parseDouble(loopLogArray[1]), loopLogArray[2]);
+                purchaseLogLoopArray.add(loopPurchase);
+                storeLogLine = bfrlogf.readLine();
+
+            }
+
             //Adding store to marketplace
-            marketPlace.add( new Store (storeArray[0], storeArray[1], storeFile, storeProducts, Double.parseDouble(storeArray[2])));
+            marketPlace.add( new Store (storeArray[0], storeArray[1], storeFile, storeProducts, Double.parseDouble(storeArray[2]), purchaseLogLoopArray));
             storeLine = blfr.readLine();
 
 
@@ -363,6 +379,13 @@ public class MarketplaceServer implements Runnable {
 
                                         }
                                     }
+                                    //Adding to purchaseLog to store for each object in shopping cart
+                                    //Outer for loop moves through shopping cart
+                                    for (int c = 0; c < marketPlace.size(); c++) {
+                                        if (buyerArrayList.get(i).getShoppingCart().get(j).getStoreName().equals(marketPlace.get(c).getStoreName())) {
+                                            marketPlace.get(c).addPurchaseLog(new Purchase(buyerArrayList.get(i).getShoppingCart().get(j).getProductName(), buyerArrayList.get(i).getShoppingCart().get(j).getPrice(), buyerArrayList.get(i).getUsername()));
+                                        }
+                                    }
                                     
                                 }
                             }
@@ -496,6 +519,8 @@ public class MarketplaceServer implements Runnable {
                     //wHO IS CHECKING IF FILEPATH EXISTS?
                     Store addStore = new Store(addSellerName, addStoreName, addStorePath); 
                     //Add store to marketPlace and to seller's list of stores
+                    //PurchaseLog for this new store will be empty
+                    
                     boolean storeNameExists = false;
                     for (int i = 0; i < marketPlace.size(); i++) {
                         if (marketPlace.get(i).getStoreName().equals(addStoreName)) {
@@ -530,7 +555,7 @@ public class MarketplaceServer implements Runnable {
                         pw.println("ERROR");
                         pw.flush();
                     }
-                    //Finished implementation
+                    //Finished implementation w/ PurchaseLog
 
 
                 } else if (keyWord.equals("ADDPRODUCT")) {
@@ -768,7 +793,9 @@ public class MarketplaceServer implements Runnable {
                     String buyerAccUsername = in.nextLine();
                     String buyerAccPassword = in.nextLine();
                     String buyerAccEmail = in.nextLine();
-                    // Listens for username, password, and email of buyer
+                    String cart = in.nextLine();
+                    String history = in.nextLine();
+                    // Listens for username, password, email, cart, and history of buyer
 
                     for (int i = 0; i < buyerArrayList.size(); i++) {
                         if (buyerAccUsername.equals(buyerArrayList.get(i).getUsername())) {
@@ -776,7 +803,7 @@ public class MarketplaceServer implements Runnable {
                         } else if (buyerAccEmail.equals(buyerArrayList.get(i).getEmail())) {
                             pw.println("Email Already Exists");
                         } else {
-                            buyerArrayList.add(new Buyer(buyerAccUsername, buyerAccPassword, buyerAccEmail, "buyer.txt"));
+                            buyerArrayList.add(new Buyer(buyerAccUsername, buyerAccPassword, buyerAccEmail, cart, history));
                         }
 
                     }

@@ -33,22 +33,27 @@ public class Store {
      */
     private double storeRevenue;
 
+    private ArrayList<Purchase> purchaseLog;
 
+    //Constructor for a new store
     public Store(String sellerName , String storeName , String filePath) {
         this.sellerName = sellerName;
         this.storeName = storeName;
         this.filePath = filePath;
         products = new ArrayList<Product>();
         storeRevenue = 0;
+        purchaseLog = new ArrayList<Purchase>();
 
     }
-
-    public Store(String sellerName, String storeName , String filePath, ArrayList<Product> products, double storeRevenue) {
+    
+    //Constructor for an existing store
+    public Store(String sellerName, String storeName , String filePath, ArrayList<Product> products, double storeRevenue, ArrayList<Purchase> purchaseLog) {
         this.sellerName = sellerName;
         this.storeName = storeName;
         this.filePath = filePath;
         this.products = products;
         this.storeRevenue = storeRevenue;
+        this.purchaseLog = purchaseLog;
 
     }
 
@@ -58,6 +63,15 @@ public class Store {
         filePath = null;
         products = null;
         storeRevenue = 0;
+        purchaseLog = null;
+    }
+
+    public ArrayList<Purchase> getPurchaseLog() {
+        return purchaseLog;
+    }
+
+    public void setPurchaseLog(ArrayList<Purchase> purchaseLog) {
+        this.purchaseLog = purchaseLog;
     }
 
     public String getSellerName() {
@@ -106,6 +120,10 @@ public class Store {
 
     public void setStoreRevenue(double storeRevenue) {
         this.storeRevenue = storeRevenue;
+    }
+
+    public void addPurchaseLog(Purchase newPurchase) {
+        this.purchaseLog.add(newPurchase);
     }
 
     //Create a getNumberOfSales method that sums up number of units sold for each product in that store

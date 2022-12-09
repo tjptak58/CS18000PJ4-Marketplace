@@ -63,13 +63,28 @@ public class SellerInformation {
         createAccount.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                boolean flag=false;
                 if (!email.getText().contains("@") && (!email.getText().contains("."))) {
 
                     JOptionPane.showMessageDialog(null, "Error: email is not in the right format(needs to include @ and .)", "Seller Information",
                             JOptionPane.ERROR_MESSAGE);
-                } else {
-                    String hostName = "do later";
-                    int portNumber = 220; //do later
+                    flag = true;
+                }
+                    if (statistics.getText().equals("buyer.txt") ||
+                           statistics.getText().equals("seller.txt") || statistics.getText().equals("storeListFile.txt")) {
+                        JOptionPane.showMessageDialog(null, "Error: Can not use this txt file)", "Seller Information",
+                                JOptionPane.ERROR_MESSAGE);
+                        flag=true;
+                    }
+                    File f =new File(statistics.getText());
+                    if (f.exists()) {
+                        JOptionPane.showMessageDialog(null, "Error: File Already Exists. Please Enter a new one", "Seller Information",
+                                JOptionPane.ERROR_MESSAGE);
+                        flag=true;
+                    }
+                if (!flag){
+                    String hostName = "localhost";
+                    int portNumber = 4242; //do later
 
                     try {
                         Socket echoSocket = new Socket(hostName, portNumber);        // 1st statement
@@ -102,8 +117,8 @@ public class SellerInformation {
 //                                            new InputStreamReader(System.in))
 
 //
-                    } catch (IOException f) {
-                        f.printStackTrace();
+                    } catch (IOException g) {
+                        g.printStackTrace();
                     }
 
                 }

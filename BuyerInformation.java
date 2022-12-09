@@ -7,71 +7,100 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 public class BuyerInformation {
-    JFrame frame=new JFrame();
+    JFrame frame = new JFrame();
 
-    JLabel buyerInformation =new JLabel("           Enter Account Information Below");
+    JLabel buyerInformation = new JLabel("           Enter Account Information Below");
 
-    JLabel enterUsername= new JLabel("Enter New Username");
-    JLabel enterPassword=new JLabel("Enter New Password");
+    JLabel enterUsername = new JLabel("Enter New Username");
+    JLabel enterPassword = new JLabel("Enter New Password");
 
-    JLabel enterEmail=new JLabel("Enter your email");
+    JLabel enterEmail = new JLabel("Enter your email");
 
-    JLabel enterPurchaseHistoru=new JLabel("Enter your purchase history filepath");
+    JLabel enterPurchaseHistoru = new JLabel("Enter your purchase history filepath");
 
-    JLabel enterShoppingCart=new JLabel("Enter your shopping cart filepath");
+    JLabel enterShoppingCart = new JLabel("Enter your shopping cart filepath");
 
-    JLabel enterStatistics1=new JLabel("statistics");
-    JTextField username=new JTextField(9);
-    JTextField password=new JTextField(9);
+    JLabel enterStatistics1 = new JLabel("statistics");
+    JTextField username = new JTextField(9);
+    JTextField password = new JTextField(9);
 
-    JTextField email=new JTextField(9);
+    JTextField email = new JTextField(9);
 
-    JTextField purchaseHistory= new JTextField(5);
+    JTextField purchaseHistory = new JTextField(5);
 
-    JTextField shoppingCart=new JTextField(6);
+    JTextField shoppingCart = new JTextField(6);
 
-    JButton createAccount=new JButton("Create Account!");
+    JButton createAccount = new JButton("Create Account!");
 
     ArrayList<String> usernameAndPasswordBuyer = new ArrayList<>();
 
-    BuyerInformation(){
-        JPanel textAtTop= new JPanel(new BorderLayout(10,10));
+    BuyerInformation() {
+        JPanel textAtTop = new JPanel(new BorderLayout(10, 10));
         textAtTop.add(buyerInformation);
         // username [anel
-        JPanel usernameInformation= new JPanel(new BorderLayout(10,10));
+        JPanel usernameInformation = new JPanel(new BorderLayout(10, 10));
         usernameInformation.add(enterUsername, BorderLayout.LINE_START);
         usernameInformation.add(username, BorderLayout.LINE_END);
         //password panel
-        JPanel passwordInformation=new JPanel(new BorderLayout(10,10));
-        passwordInformation.add(enterPassword,BorderLayout.LINE_START);
-        passwordInformation.add(password,BorderLayout.LINE_END);
+        JPanel passwordInformation = new JPanel(new BorderLayout(10, 10));
+        passwordInformation.add(enterPassword, BorderLayout.LINE_START);
+        passwordInformation.add(password, BorderLayout.LINE_END);
         // email panel
-        JPanel emailInformation=new JPanel(new BorderLayout(10,10));
+        JPanel emailInformation = new JPanel(new BorderLayout(10, 10));
         emailInformation.add(enterEmail, BorderLayout.LINE_START);
         emailInformation.add(email, BorderLayout.LINE_END);
         // purchase history
-        JPanel purchaseHistoryInformation=new JPanel(new BorderLayout(10,10));
+        JPanel purchaseHistoryInformation = new JPanel(new BorderLayout(10, 10));
         purchaseHistoryInformation.add(enterPurchaseHistoru, BorderLayout.LINE_START);
-        purchaseHistoryInformation.add(purchaseHistory,BorderLayout.LINE_END);
+        purchaseHistoryInformation.add(purchaseHistory, BorderLayout.LINE_END);
         // shopping cart
-        JPanel shoppingCartInformation=new JPanel(new BorderLayout(10,10));
+        JPanel shoppingCartInformation = new JPanel(new BorderLayout(10, 10));
         shoppingCartInformation.add(enterShoppingCart, BorderLayout.LINE_START);
-        shoppingCartInformation.add(shoppingCart,BorderLayout.LINE_END);
+        shoppingCartInformation.add(shoppingCart, BorderLayout.LINE_END);
         // general panel
 
-        JPanel createNewAccount=new JPanel( );
+        JPanel createNewAccount = new JPanel();
         createNewAccount.add(createAccount);
         createAccount.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                boolean flag=false;
                 if (!email.getText().contains("@") && (!email.getText().contains("."))) {
 
                     JOptionPane.showMessageDialog(null, "Error: email is not in the right format(needs to include @ and .)", "Seller Information",
                             JOptionPane.ERROR_MESSAGE);
-                } else {
-                    String hostName = "do later";
-                    int portNumber = 220; //do later
+                    flag = true;
+                }
+                    
+                    if (purchaseHistory.getText().equals("buyer.txt") ||
+                            purchaseHistory.getText().equals("seller.txt") || purchaseHistory.getText().equals("storeListFile.txt")) {
+                        JOptionPane.showMessageDialog(null, "Error: Can not use this txt file)", "Seller Information",
+                                JOptionPane.ERROR_MESSAGE);
+                        flag=true;
+                    }
+                    if (shoppingCart.getText().equals("buyer.txt") ||
+                            shoppingCart.getText().equals("seller.txt") || shoppingCart.getText().equals("storeListFile.txt")) {
+                        JOptionPane.showMessageDialog(null, "Error: Can not use this txt file)", "Seller Information",
+                                JOptionPane.ERROR_MESSAGE);
+                        flag=true;
+                    }
+                File f =new File(purchaseHistory.getText());
+                if (f.exists()) {
+                    JOptionPane.showMessageDialog(null, "Error: File Already Exists. Please Enter a new one", "Seller Information",
+                            JOptionPane.ERROR_MESSAGE);
+                    flag=true;
+                }
+                File file=new File(shoppingCart.getText());
+                if (file.exists()) {
+                    JOptionPane.showMessageDialog(null, "Error: File Already Exists. Please Enter a new one", "Seller Information",
+                            JOptionPane.ERROR_MESSAGE);
+                    flag=true;
+                }
+                    
+
+                if (!flag){
+                    String hostName = "localhost";
+                    int portNumber = 4242; //do later
 
                     try {
                         Socket echoSocket = new Socket(hostName, portNumber);        // 1st statement
@@ -91,10 +120,10 @@ public class BuyerInformation {
 
                         BufferedReader reader;
                         reader = new BufferedReader(new InputStreamReader(echoSocket.getInputStream()));
-                        String linesRead="";
+                        String linesRead = "";
 
                         while ((linesRead = reader.readLine()) != null) {
-                            if ( linesRead.contains("ERROR")) {
+                            if (linesRead.contains("ERROR")) {
                                 JOptionPane.showMessageDialog(null, "Error: Username already exists. Please Enter a new username", "Seller Information",
                                         JOptionPane.ERROR_MESSAGE);
                                 reader.close();
@@ -104,8 +133,8 @@ public class BuyerInformation {
                                 AccountCreated accountCreated = new AccountCreated();
                             }
                         }
-                    } catch (IOException f) {
-                        f.printStackTrace();
+                    } catch (IOException g) {
+                        g.printStackTrace();
                     }
 
                 }
@@ -181,7 +210,7 @@ public class BuyerInformation {
 //                }
 //            }
         });
-        JPanel panelGeneral=new JPanel(new GridLayout(0,1));
+        JPanel panelGeneral = new JPanel(new GridLayout(0, 1));
         panelGeneral.add(buyerInformation);
         panelGeneral.add(usernameInformation);
         panelGeneral.add(passwordInformation);
@@ -191,7 +220,7 @@ public class BuyerInformation {
         panelGeneral.add(createNewAccount);
 
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.setSize(300,300);
+        frame.setSize(300, 300);
         frame.setLocationRelativeTo(null);
         frame.add(panelGeneral);
         frame.setVisible(true);

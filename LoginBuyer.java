@@ -40,8 +40,8 @@ public class LoginBuyer {
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String hostName = "do later";
-                int portNumber = 220; //do later
+                String hostName = "localhost";
+                int portNumber = 4242; //do later
 
                 try {
                     Socket echoSocket = new Socket(hostName, portNumber);        // 1st statement
