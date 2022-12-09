@@ -1,10 +1,11 @@
 
+import javax.print.event.PrintJobListener;
 import javax.swing.*;
 import java.io.*;
 import java.awt.*; 
 import java.awt.event.*;
 import java.net.*;
-import java.util.*;
+import java.util.*; //QUESTION DO I NEED TO CREATE PW AND OOS FOR EVERY METHOD?
 
 /**
  * Main method for project that implements the marketplace
@@ -45,8 +46,8 @@ public class MarketPlaceClient extends JComponent implements Runnable{
 
     public void run() {
         try {
-            //username = "tptak";
-            username = "greg";
+            username = "tptak";
+            //username = "greg";
             socket = new Socket("localhost", 4242); //MarketPlaceClient.portnumber FIX
             pw = new PrintWriter(socket.getOutputStream());
             in = new Scanner(socket.getInputStream());
@@ -813,7 +814,6 @@ public class MarketPlaceClient extends JComponent implements Runnable{
                     } else {
                         myStoreNames = (ArrayList<String>) ois.readObject();
                     }
-                    
                            
                 } catch (Exception e1) {
                     e1.printStackTrace();
@@ -879,13 +879,31 @@ public class MarketPlaceClient extends JComponent implements Runnable{
         JButton dash = new JButton("View Dashboard");
         dash.addActionListener(new ActionListener() {      
             public void actionPerformed(ActionEvent e) {  
-                sellerDashboard();
+                sellerDashboard(true);
                 sellerMain.dispose();
             }
         
         });
         
         JPanel sellerMainSouth = new JPanel(new FlowLayout());
+        JButton viewInCart = new JButton("Products in Customer's carts");
+        viewInCart.addActionListener(new ActionListener() {      
+            public void actionPerformed(ActionEvent e) {           //ACTION LISTENER - Link to the page to edit a buyer account
+                var info = new ArrayList<String>(); 
+                try {
+                    pw.println("NUMINCART");   //ROHANFIX Only works if the user is a buyer, not a seller
+                    pw.println(username);
+                    pw.flush();
+                    info = (ArrayList<String>) ois.readObject(); //SERVERREQUEST NUMINCART
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                }
+                viewProductsInCarts(info);
+                sellerMain.dispose();
+            }
+        
+        });
+        
         JButton editAccount = new JButton("Edit Account");
         editAccount.addActionListener(new ActionListener() {      
             public void actionPerformed(ActionEvent e) { 
@@ -895,9 +913,6 @@ public class MarketPlaceClient extends JComponent implements Runnable{
                    pw.println(username);
                    pw.flush();
                    info = (ArrayList<String>) ois.readObject(); //SERVERREQUEST GETACCOUNTINFO
-                   for (String s : info) {
-                    System.out.println(s);
-                   }
                 } catch (Exception e1) {
                     e1.printStackTrace();
                 } 
@@ -915,6 +930,7 @@ public class MarketPlaceClient extends JComponent implements Runnable{
         
         });
         sellerMainSouth.add(sellerDashboard); 
+        sellerMainSouth.add(viewInCart);
         sellerMainSouth.add(editAccount);
         sellerMainSouth.add(logout);
         sellerMain.add(sellerMainSouth , BorderLayout.SOUTH);
@@ -1399,7 +1415,7 @@ public class MarketPlaceClient extends JComponent implements Runnable{
         stats.requestFocus();
     }
 
-    public void sellerDashboard() { //FIX NEEDS TO BE ABLE TO SORT DASHBOARD
+    public void sellerDashboard(Boolean sorted) { //FIX NEEDS TO BE ABLE TO SORT DASHBOARD
         try {
             pw.println("VIEWSTORES");
             pw.println(username);
@@ -1408,6 +1424,9 @@ public class MarketPlaceClient extends JComponent implements Runnable{
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        ArrayList<String> customers = new ArrayList<>(); 
+        ArrayList<String> products = new ArrayList<>();
 
         JFrame sellerDash = new JFrame("THE MARKETPLACE");
         Container sellerDashPanel = sellerDash.getContentPane();
@@ -1418,11 +1437,29 @@ public class MarketPlaceClient extends JComponent implements Runnable{
         sellerDashNorth.add(title);
         sellerDash.add(sellerDashNorth, BorderLayout.NORTH);
 
+        JPanel sort = new JPanel(new FlowLayout());
+        String[] s = {"Sort the menu","Best Sellers","Worst Sellers"};
+        JComboBox sortBox = new JComboBox(s);
+        sort.add(sortBox);
+        sortBox.addItemListener(listener -> {
+            String choice;
+            JComboBox getSelection = (JComboBox) listener.getSource();
+            choice = (String) getSelection.getSelectedItem();
+            if (choice == s[1]) { 
+                sellerDash.dispose();
+                sellerDashboard(true);
+            } else if (choice == s[2]) {
+                sellerDash.dispose();
+                sellerDashboard(false);
+            }
+        
+        });
+       
+        sellerDashNorth.add(sort);
+
         JPanel sellerDashCentral = new JPanel();
         BoxLayout boxlayout = new BoxLayout(sellerDashCentral, BoxLayout.Y_AXIS); //Add Product info
         sellerDashCentral.setLayout(boxlayout);
-        ArrayList<String> customers = new ArrayList<String>();
-        ArrayList<String> products = new ArrayList<String>();
         
         for (String store : myStoreNames) {
             try {
@@ -1435,6 +1472,7 @@ public class MarketPlaceClient extends JComponent implements Runnable{
             }
             sellerDashCentral.add(new JLabel(store));
             sellerDashCentral.add(new JLabel("CUSTOMERS:"));
+            customers = sortBestCustomers(customers , store , sorted);
             for (String customer : customers) {
                 sellerDashCentral.add(new JLabel(customer));
             }
@@ -1446,7 +1484,7 @@ public class MarketPlaceClient extends JComponent implements Runnable{
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
+            products = sortBestProducts(products , store , sorted);
             sellerDashCentral.add(new JLabel("PRODUCTS:"));
             for (String product : products) {
                 sellerDashCentral.add(new JLabel(product));
@@ -1461,20 +1499,13 @@ public class MarketPlaceClient extends JComponent implements Runnable{
         JPanel sellerDashSouth = new JPanel(new FlowLayout());
         JButton back = new JButton("Back");
         back.addActionListener(new ActionListener() {      
-            public void actionPerformed(ActionEvent e) {           //Send the user back to the buyer home
+            public void actionPerformed(ActionEvent e) {  
                 try {
-                    pw.println("GETSUPERSTORES");
+                    pw.println("VIEWSTORES");
+                    pw.println(username);
                     pw.flush();
-                    myStoreNames = (ArrayList<String>) ois.readObject(); //SERVERREQUEST GETSUPERSTORES
-                    productNames = new ArrayList<String>();
-                    for (String store : myStoreNames) {
-                        pw.println("GETPRODUCTSINSTORE");
-                        pw.println(store);
-                        pw.flush();
-                        var productNamesProxy = (ArrayList<String>) ois.readObject(); //SERVERREQUEST GETPRODCUTSINSTORE
-                        productNames.addAll(productNamesProxy);
-                    }
-                    buyerMain(productNames);
+                    myStoreNames = (ArrayList<String>) ois.readObject(); //SERVERREQUEST VIEWSTORES
+                    sellerMain(myStoreNames);
                     sellerDash.dispose();
                 } catch (Exception e1) {
                     e1.printStackTrace();
@@ -1775,14 +1806,127 @@ public class MarketPlaceClient extends JComponent implements Runnable{
     }
 
     /*
-     * Sorts an Arraylist of products based on number sold
+     * Sorts an Arraylist of stores based on number of products sold
      * Sorts highest price to lowest if highToLow = true
      * if it's false, sorts lowest to highest
      */
     public ArrayList<String> sortProductsSold(ArrayList<String> stores , boolean highToLow) {
         ArrayList<String> output = new ArrayList<String>();
         ArrayList<String> s = stores;
-        return output;  //FIX
+        while (s.size() > 0) {
+            int max = 0;
+            String picked = "";
+            int index = 0;
+            for (int i = 0 ; i < s.size() ; i++) {
+                int count = 0;
+                try {
+                    pw.println("VIEWPRODUCTS");
+                    pw.println(s.get(i));
+                    pw.flush();
+                    ArrayList<String> products = (ArrayList<String>) ois.readObject();
+                    for (String product : products) {
+                        pw.println("NUMSALES");
+                        pw.println(s.get(i));
+                        pw.println(product);
+                        pw.flush();
+                        ArrayList<String> returned = (ArrayList<String>) ois.readObject();
+                        int num = Integer.parseInt(returned.get(0));
+                        count += num;
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                if (count > max) {
+                    picked = s.get(i);
+                    index = i;
+                } 
+            }   
+            output.add(picked);
+            s.remove(index); 
+        }
+        if (highToLow) {
+            return output;
+        } else {
+            ArrayList<String> reversed = new ArrayList<String>();
+            for (int i = output.size() - 1 ; i >= 0 ; i--) {
+                reversed.add(output.get(i));
+            }
+            return reversed;
+        }
+    }
+
+    public ArrayList<String> sortBestCustomers(ArrayList<String> customers , String storeName, boolean highToLow) {
+        ArrayList<String> output = new ArrayList<String>();
+        ArrayList<String> s = customers;
+        while (s.size() > 0) {
+            int max = 0;
+            String picked = "";
+            int index = 0;
+            for (int i = 0 ; i < s.size() ; i++) {
+                int num = 0;
+                try {
+                    pw.println("CUSTOMERPURCHASES");
+                    pw.println(s.get(i));
+                    pw.print(storeName);
+                    pw.flush();
+                    num = in.nextInt();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                if (num > max) {
+                    picked = s.get(i);
+                    index = i;
+                } 
+            }   
+            output.add(picked);
+            s.remove(index); 
+        }
+        if (highToLow) {
+            return output;
+        } else {
+            ArrayList<String> reversed = new ArrayList<String>();
+            for (int i = output.size() - 1 ; i >= 0 ; i--) {
+                reversed.add(output.get(i));
+            }
+            return reversed;
+        }
+    }
+
+    public ArrayList<String> sortBestProducts(ArrayList<String> products , String storeName, boolean highToLow) {
+        ArrayList<String> output = new ArrayList<String>();
+        ArrayList<String> s = products;
+        while (s.size() > 0) {
+            int max = 0;
+            String picked = "";
+            int index = 0;
+            for (int i = 0 ; i < s.size() ; i++) {
+                int num = 0;
+                try {
+                    pw.println("NUMSALES");
+                    pw.println(storeName);
+                    pw.print(s.get(i));
+                    pw.flush();
+                    num = in.nextInt();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                if (num > max) {
+                    picked = s.get(i);
+                    index = i;
+                } 
+            }   
+            output.add(picked);
+            s.remove(index); 
+        }
+        if (highToLow) {
+            return output;
+        } else {
+            ArrayList<String> reversed = new ArrayList<String>();
+            for (int i = output.size() - 1 ; i >= 0 ; i--) {
+                reversed.add(output.get(i));
+            }
+            return reversed;
+        }
     }
 
     /*
@@ -1793,7 +1937,38 @@ public class MarketPlaceClient extends JComponent implements Runnable{
     public ArrayList<String> sortMostShopped(ArrayList<String> stores , boolean highToLow) {
         ArrayList<String> output = new ArrayList<String>();
         ArrayList<String> s = stores;
-        return output; //FIX
+        while (s.size() > 0) {
+            int max = 0;
+            String picked = "";
+            int index = 0;
+            for (int i = 0 ; i < s.size() ; i++) {
+                int count = 0;
+                try {
+                    pw.println("CUSTOMERPURCHASES");
+                    pw.println(username);
+                    pw.flush();
+                    int products = in.nextInt();
+                    count += products;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                if (count > max) {
+                    picked = s.get(i);
+                    index = i;
+                } 
+            }   
+            output.add(picked);
+            s.remove(index); 
+        }
+        if (highToLow) {
+            return output;
+        } else {
+            ArrayList<String> reversed = new ArrayList<String>();
+            for (int i = output.size() - 1 ; i >= 0 ; i--) {
+                reversed.add(output.get(i));
+            }
+            return reversed;
+        }
     }
 
     /*
@@ -1889,5 +2064,59 @@ public class MarketPlaceClient extends JComponent implements Runnable{
             e.printStackTrace();
             return false;
         }
+    }
+
+    public void viewProductsInCarts(ArrayList<String> info) {
+        JFrame viewcart = new JFrame("THE MARKETPLACE");
+        Container viewcartpanel = viewcart.getContentPane();
+        viewcartpanel.setLayout(new BorderLayout());
+
+        JPanel viewcartNorth = new JPanel(new FlowLayout());
+        JLabel title = new JLabel("<html><h1>Products in Customers Carts</h1></html>");     //Createds title
+        viewcartNorth.add(title);
+        viewcart.add(viewcartNorth, BorderLayout.NORTH);
+
+        JPanel productsPanel = new JPanel();
+        BoxLayout boxlayout = new BoxLayout(productsPanel, BoxLayout.Y_AXIS); //Variable number of products from product list
+        productsPanel.setLayout(boxlayout);
+        ArrayList<JPanel> panels = new ArrayList<JPanel>();
+        for (String s : info) {
+            JPanel jp = new JPanel();
+            JLabel jl = new JLabel(s);
+            jp.add(jl);
+            panels.add(jp);
+        }
+
+        viewcart.add(viewcartNorth, BorderLayout.NORTH);
+        viewcart.add(productsPanel, BorderLayout.CENTER);
+
+        JPanel viewcartSouth = new JPanel(new FlowLayout());
+
+        JButton back = new JButton("Back");
+        back.addActionListener(new ActionListener() {      
+            public void actionPerformed(ActionEvent e) {  
+                try {
+                    pw.println("VIEWSTORES");
+                    pw.println(username);
+                    pw.flush();
+                    myStoreNames = (ArrayList<String>) ois.readObject(); //SERVERREQUEST VIEWSTORES
+                    sellerMain(myStoreNames);
+                    viewcart.dispose();
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                }
+            }
+        
+        });
+        viewcartSouth.add(back);
+        viewcart.add(viewcartSouth, BorderLayout.SOUTH);
+
+
+        viewcart.pack();
+        viewcart.setSize(600, 400);
+        viewcart.setLocationRelativeTo(null);
+        viewcart.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        viewcart.setVisible(true);
+        viewcart.requestFocus();
     }
 }
