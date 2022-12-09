@@ -437,12 +437,19 @@ public class MarketplaceServer implements Runnable {
                     if (!foundAccount) {
                         //Traverse sellerArrayList
                         //here
+                        for (int i = 0; i < sellerArrayList.size(); i++) {
+                            if (sellerArrayList.get(i).getUsername().equals(viewAccUserName)) {
+                                sendInfoList.add(sellerArrayList.get(i).getEmail());
+                                sendInfoList.add(sellerArrayList.get(i).getPassword());
+                            }
+                        }
                     }
                     oos.writeObject(sendInfoList);
                     oos.flush(); //FLUSHING!!!
                     //Finished implementation
 
                 } else if (keyWord.equals("UPDATEACCOUNTINFO")) {
+                    //Add implementation for seller too!! TODO
                     System.out.println("client called UPDATEACCOUNTINFO!!!!");
                     //Listen for username
                     //Listen for ArrayList<String>
@@ -458,14 +465,28 @@ public class MarketplaceServer implements Runnable {
                         System.out.println("Class Not Found!"); //Will never reach here since class will always be defined
                     }
                     //Updating info
+                    boolean accFound = false;
                     for (int i = 0; i < buyerArrayList.size(); i++) {
                         if (buyerArrayList.get(i).getUsername().equals(updateUserName)) {
+                            accFound = true;
                             synchronized (objectForBuyerListModification) { //SYNCHRONIZED!!!
                                 buyerArrayList.get(i).setEmail(newInfo.get(0));
                                 buyerArrayList.get(i).setPassword(newInfo.get(1));
                             }
                         }
                     }
+                    if (!accFound) {
+                        for (int i = 0; i < sellerArrayList.size(); i++) {
+                            if (sellerArrayList.get(i).getUsername().equals(updateUserName)) {
+                                synchronized (objectForSellerListModification) {
+                                    sellerArrayList.get(i).setEmail(newInfo.get(0));
+                                    sellerArrayList.get(i).setPassword(newInfo.get(1));
+                                }
+                            }
+                        }
+                    }
+
+                    //Added implementation for seller 9/12/22
                     
 
 
