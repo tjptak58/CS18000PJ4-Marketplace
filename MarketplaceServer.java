@@ -120,8 +120,24 @@ public class MarketplaceServer implements Runnable {
 
 
             }
+            String storeLogFile = storeArray[4]; 
+            File logf = new File(storeLogFile);
+            FileReader frlogf = new FileReader(logf);
+            BufferedReader bfrlogf = new BufferedReader(frlogf);
+            String storeLogLine = bfrlogf.readLine();
+            ArrayList<Purchase> purchaseLogLoopArray = new ArrayList<>();
+            while (storeLogLine != null) {
+                String[] loopLogArray = storeLogLine.split(";");
+                //storeLogLine has format productName;revenue;buyerUserName
+                //Creating a new purchase object for this line
+                Purchase loopPurchase = new Purchase(loopLogArray[0], Double.parseDouble(loopLogArray[1]), loopLogArray[2]);
+                purchaseLogLoopArray.add(loopPurchase);
+                storeLogLine = bfrlogf.readLine();
+
+            }
+
             //Adding store to marketplace
-            marketPlace.add( new Store (storeArray[0], storeArray[1], storeFile, storeProducts, Double.parseDouble(storeArray[2])));
+            marketPlace.add( new Store (storeArray[0], storeArray[1], storeFile, storeProducts, Double.parseDouble(storeArray[2]), purchaseLogLoopArray));
             storeLine = blfr.readLine();
 
 
@@ -361,6 +377,13 @@ public class MarketplaceServer implements Runnable {
                                             marketPlace.get(k).setStoreRevenue(marketPlace.get(k).getStoreRevenue() + buyerArrayList.get(i).getShoppingCart().get(j).getPrice());
 
 
+                                        }
+                                    }
+                                    //Adding to purchaseLog to store for each object in shopping cart
+                                    //Outer for loop moves through shopping cart
+                                    for (int c = 0; c < marketPlace.size(); c++) {
+                                        if (buyerArrayList.get(i).getShoppingCart().get(j).getStoreName().equals(marketPlace.get(c).getStoreName())) {
+                                            marketPlace.get(c).addPurchaseLog(new Purchase(buyerArrayList.get(i).getShoppingCart().get(j).getProductName(), buyerArrayList.get(i).getShoppingCart().get(j).getPrice(), buyerArrayList.get(i).getUsername()));
                                         }
                                     }
                                     

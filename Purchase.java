@@ -17,19 +17,20 @@ public class Purchase {
     //Write back to purchase log file when server thread ends
 
     //Creating fields for this class
-    private Product purchasedProduct;
+    private String purchasedProductName;
     private double saleRevenue;
     private String buyerUserName;
+    
     //QUANTITY WILL ALWAYS BE ONE
     
-    public Purchase(Product purchaseProduct, double saleRevenue, String buyerUserName) {
-        this.purchasedProduct = purchaseProduct;
+    public Purchase(String purchasedProductName, double saleRevenue, String buyerUserName) {
+        this.purchasedProductName = purchasedProductName;
         this.saleRevenue = saleRevenue;
         this.buyerUserName = buyerUserName;
     }
 
-    public Product getProduct() {
-        return purchasedProduct;
+    public String getProductName() {
+        return purchasedProductName;
     }
 
     public double getSaleRevenue() {
