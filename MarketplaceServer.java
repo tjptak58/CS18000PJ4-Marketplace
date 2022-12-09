@@ -835,6 +835,7 @@ public class MarketplaceServer implements Runnable {
                         if (marketPlace.get(i).getStoreName().equals(salesStoreName)) {
                             for (int j = 0; j < marketPlace.get(i).getPurchaseLog().size(); j++) {
 
+
                             }
                         
 
@@ -948,7 +949,28 @@ public class MarketplaceServer implements Runnable {
                     pw.flush();
                     pw.close();
 
-                }
+                } else if (keyWord.equals("CUSTOMERPURCHASES")) {
+                    //Listen for username
+                    //Listen for storename
+                    String userName = in.nextLine();
+                    String storeName = in.nextLine();
+                    //Send back int numberOfPurchasesFromThisStoreByUsername
+                    int count = 0;
+                    for (int i = 0; i < marketPlace.size(); i++) {
+                        if (marketPlace.get(i).getStoreName().equals(storeName)) {
+                            for (int j = 0; j < marketPlace.get(i).getPurchaseLog().size(); j++) {
+                                if (marketPlace.get(i).getPurchaseLog().get(j).getBuyerUsername().equals(userName)) {
+                                    count += 1;
+                                }
+
+                            }
+                        }
+                    }
+                    pw.println(count);
+                    pw.flush(); //FLUSHING!!!
+                    //CLIENT MUST LISTEN FOR AN INT AND THEN CONSUME NEW LINE CHAR USING SCANNER!!!
+
+                 }
 
             }
             
@@ -981,13 +1003,28 @@ public class MarketplaceServer implements Runnable {
                 pwbf.println(buyerArrayList.get(i).getUsername() + ";" + buyerArrayList.get(i).getPassword() + ";" + buyerArrayList.get(i).getEmail() + ";" + buyerArrayList.get(i).getCart() + ";" + buyerArrayList.get(i).getHistory());
                 pwbf.flush();
             }
-
+            
             File sf = new File("seller.txt");
             FileWriter wsf = new FileWriter(sf, false);
             PrintWriter pwsf = new PrintWriter(wsf);
             for (int i = 0; i < sellerArrayList.size(); i++) {
+                pwsf.println(sellerArrayList.get(i).getUsername() + ";" + sellerArrayList.get(i).getPassword() + ";" + sellerArrayList.get(i).getEmail() + ";" + sellerArrayList.get(i).getFilePath());
+                pwsf.flush();
 
             }
+
+            File slf = new File("storeListFile.txt");
+            FileWriter wslf = new FileWriter(slf, false);
+            PrintWriter pwslf = new PrintWriter(wslf);
+            for (int i = 0; i < marketPlace.size(); i++) {
+                pwslf.println(marketPlace.get(i).getSellerName() + ";" + marketPlace.get(i).getStoreName() + ";" + marketPlace.get(i).getStoreRevenue() + ";" + marketPlace.get(i).getFilePath() + ";" + marketPlace.get(i).getFilePathToPurchaseLog());
+                pwslf.flush();
+            }
+
+            //Closing all open streams
+            pwbf.close();
+            pwsf.close();
+            pwslf.close();
 
             
         } catch (IOException e) {
