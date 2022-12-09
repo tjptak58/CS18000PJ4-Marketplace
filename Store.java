@@ -35,11 +35,14 @@ public class Store {
 
     private ArrayList<Purchase> purchaseLog;
 
+    private String filePathToPurchaseLog;
+
     //Constructor for a new store
-    public Store(String sellerName , String storeName , String filePath) {
+    public Store(String sellerName , String storeName , String filePath, String filePathToPurchaseLog) {
         this.sellerName = sellerName;
         this.storeName = storeName;
         this.filePath = filePath;
+        this.filePathToPurchaseLog = filePathToPurchaseLog;
         products = new ArrayList<Product>();
         storeRevenue = 0;
         purchaseLog = new ArrayList<Purchase>();
@@ -47,13 +50,14 @@ public class Store {
     }
     
     //Constructor for an existing store
-    public Store(String sellerName, String storeName , String filePath, ArrayList<Product> products, double storeRevenue, ArrayList<Purchase> purchaseLog) {
+    public Store(String sellerName, String storeName , String filePath, ArrayList<Product> products, double storeRevenue, ArrayList<Purchase> purchaseLog, String filePathToPurchaseLog) {
         this.sellerName = sellerName;
         this.storeName = storeName;
         this.filePath = filePath;
         this.products = products;
         this.storeRevenue = storeRevenue;
         this.purchaseLog = purchaseLog;
+        this.filePathToPurchaseLog = filePathToPurchaseLog;
 
     }
 
@@ -64,10 +68,19 @@ public class Store {
         products = null;
         storeRevenue = 0;
         purchaseLog = null;
+        filePathToPurchaseLog = null;
     }
 
     public ArrayList<Purchase> getPurchaseLog() {
         return purchaseLog;
+    }
+
+    public String getFilePathToPurchaseLog() {
+        return filePathToPurchaseLog;
+    }
+
+    public void setFilePathToPurchaseLog(String filePathToPurchaseLog) {
+        this.filePathToPurchaseLog = filePathToPurchaseLog;
     }
 
     public void setPurchaseLog(ArrayList<Purchase> purchaseLog) {

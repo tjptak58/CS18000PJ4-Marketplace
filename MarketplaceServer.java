@@ -137,7 +137,7 @@ public class MarketplaceServer implements Runnable {
             }
 
             //Adding store to marketplace
-            marketPlace.add( new Store (storeArray[0], storeArray[1], storeFile, storeProducts, Double.parseDouble(storeArray[2]), purchaseLogLoopArray));
+            marketPlace.add( new Store (storeArray[0], storeArray[1], storeFile, storeProducts, Double.parseDouble(storeArray[2]), purchaseLogLoopArray, storeArray[4]));
             storeLine = blfr.readLine();
 
 
@@ -384,6 +384,28 @@ public class MarketplaceServer implements Runnable {
                                     for (int c = 0; c < marketPlace.size(); c++) {
                                         if (buyerArrayList.get(i).getShoppingCart().get(j).getStoreName().equals(marketPlace.get(c).getStoreName())) {
                                             marketPlace.get(c).addPurchaseLog(new Purchase(buyerArrayList.get(i).getShoppingCart().get(j).getProductName(), buyerArrayList.get(i).getShoppingCart().get(j).getPrice(), buyerArrayList.get(i).getUsername()));
+                                            //Write to purchaseLog file of cth store
+                                            String cthLogFile = marketPlace.get(c).getFilePathToPurchaseLog();
+                                            try {
+                                                File loopLogFile = new File (cthLogFile);
+                                                //CREATING FILE IF IT DOESNT EXIST
+                                                if (!loopLogFile.exists()) {
+                                                    loopLogFile.createNewFile();
+
+                                                }
+                                                FileWriter logFileWriter = new FileWriter(loopLogFile, true); //APPENDING!!
+                                                PrintWriter logPw = new PrintWriter(logFileWriter);
+                                                logPw.println(buyerArrayList.get(i).getShoppingCart().get(j).getProductName() + ";" + buyerArrayList.get(i).getShoppingCart().get(j).getPrice() + ";" + buyerArrayList.get(i).getUsername());
+                                                logPw.flush(); //FLUSHING!!
+                                                logPw.close();
+
+                                            } catch (IOException e) {
+                                                System.out.println("Server error! IOException Occured!");
+                                            }
+                                            
+
+
+                                        
                                         }
                                     }
                                     
@@ -517,7 +539,9 @@ public class MarketplaceServer implements Runnable {
                     //LiSTEN FOR FILEPATH OF STORE!!!
                     String addStorePath = in.nextLine();
                     //wHO IS CHECKING IF FILEPATH EXISTS?
-                    Store addStore = new Store(addSellerName, addStoreName, addStorePath); 
+                    //Listen for filePathToPurchaseLog
+                    String addStoreLogPath = in.nextLine();
+                    Store addStore = new Store(addSellerName, addStoreName, addStorePath, addStoreLogPath); 
                     //Add store to marketPlace and to seller's list of stores
                     //PurchaseLog for this new store will be empty
                     
@@ -555,7 +579,8 @@ public class MarketplaceServer implements Runnable {
                         pw.println("ERROR");
                         pw.flush();
                     }
-                    //Finished implementation w/ PurchaseLog
+                    //CHANGED IMPLEMENTATION 12/9/22!!!!
+                    //Finished implementation w/ PurchaseLog 
 
 
                 } else if (keyWord.equals("ADDPRODUCT")) {
@@ -703,10 +728,21 @@ public class MarketplaceServer implements Runnable {
 
                 } else if (keyWord.equals("SALESBYSTORE")) {
                     //Listen for storeName
-                    String storeNameDash = in.nextLine();
-                    //WHAT TO DO HERE????
-                    //TODO
+                    String storeNameDash = in.nextLine();                    
                     //Return purchase log for that store
+                    ArrayList<Purchase> logFileForStore = null;
+                    for (int i = 0; i < marketPlace.size(); i++) {
+                        if (marketPlace.get(i).getStoreName().equals(storeNameDash)) {
+                            logFileForStore = marketPlace.get(i).getPurchaseLog();
+                        }
+                    }
+                    ArrayList<String> sendBackLog = new ArrayList<>();
+                    for (int i = 0; i < logFileForStore.size(); i++) {
+                        sendBackLog.add(logFileForStore.get(i).getProductName() + ";" + logFileForStore.get(i).getSaleRevenue() + ";" + logFileForStore.get(i).getBuyerUsername());
+                    }
+                    oos.writeObject(sendBackLog);
+                    oos.flush(); //FLUSHING!!!
+                    //FINISHED IMPLEMENTATION
 
 
 
@@ -759,6 +795,9 @@ public class MarketplaceServer implements Runnable {
                     //Listen for productName
                     String salesStoreName = in.nextLine();
                     String salesProdName = in.nextLine();
+                    for (int i = 0; i < marketPlace.size(); i++) {
+                        
+                    }
 
                 } else if (keyWord.equals("NUMINCART")) {
                     //Listen for sellerName
