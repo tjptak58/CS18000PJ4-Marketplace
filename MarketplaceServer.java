@@ -795,8 +795,17 @@ public class MarketplaceServer implements Runnable {
                     //Listen for productName
                     String salesStoreName = in.nextLine();
                     String salesProdName = in.nextLine();
+                    String sendBackInfo = "";
+                    //SENDING BACK STRING WITH INFO numberOfUnitsSold;TotalRevenueFromSales
                     for (int i = 0; i < marketPlace.size(); i++) {
+                        if (marketPlace.get(i).getStoreName().equals(salesStoreName)) {
+                            for (int j = 0; j < marketPlace.get(i).getPurchaseLog().size(); j++) {
+                                
+                            }
                         
+
+                        }
+
                     }
 
                 } else if (keyWord.equals("NUMINCART")) {
