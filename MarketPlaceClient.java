@@ -27,10 +27,10 @@ public class MarketPlaceClient extends JComponent implements Runnable{
     boolean loggedInAsSeller;
     Socket socket;
     static int portnumber;
-    PrintWriter pw;
-    Scanner in;
-    ObjectOutputStream oos;
-    ObjectInputStream ois;
+    static PrintWriter pw;
+    static Scanner in;
+    static ObjectOutputStream oos;
+    static ObjectInputStream ois;
     ArrayList<String> myStoreNames = new ArrayList<String>();
     ArrayList<String> productNames = new ArrayList<String>();
     ArrayList<String> superStores = new ArrayList<String>();
@@ -45,15 +45,15 @@ public class MarketPlaceClient extends JComponent implements Runnable{
 
     public void run() {
         try {
-            username = "tptak";
-            //username = "greg";
+            //username = "tptak";
+            username = "greg";
             socket = new Socket("localhost", 4242); //MarketPlaceClient.portnumber FIX
             pw = new PrintWriter(socket.getOutputStream());
             in = new Scanner(socket.getInputStream());
             oos = new ObjectOutputStream(socket.getOutputStream());
             ois = new ObjectInputStream(socket.getInputStream()); 
-            loggedInAsBuyer = true;
-            loggedInAsSeller = false;
+            loggedInAsBuyer = false;
+            loggedInAsSeller = true;
             if (loggedInAsBuyer) {
                 pw.println("GETSUPERSTORES");
                 pw.flush();
@@ -83,15 +83,6 @@ public class MarketPlaceClient extends JComponent implements Runnable{
      * Creates the Home Page for Buyer
      */
     public void buyerMain(ArrayList<String> productNames) {
-        try {
-            pw = new PrintWriter(socket.getOutputStream());
-            in = new Scanner(socket.getInputStream());
-            oos = new ObjectOutputStream(socket.getOutputStream());
-            ois = new ObjectInputStream(socket.getInputStream());     
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
         JFrame buyerMain = new JFrame("THE MARKETPLACE");
         Container buyerMainPanel = buyerMain.getContentPane();
         buyerMainPanel.setLayout(new BorderLayout());
@@ -351,16 +342,7 @@ public class MarketPlaceClient extends JComponent implements Runnable{
     * Creates the info page for unique products
     */
     public void displayProductInfo(String product , String store) {
-        try {
-            pw = new PrintWriter(socket.getOutputStream());
-            in = new Scanner(socket.getInputStream());
-            oos = new ObjectOutputStream(socket.getOutputStream());
-            ois = new ObjectInputStream(socket.getInputStream());     
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-
+        
         JFrame productInfo = new JFrame("THE MARKETPLACE");
         Container productInfoPanel = productInfo.getContentPane();
         productInfoPanel.setLayout(new BorderLayout());
@@ -479,16 +461,6 @@ public class MarketPlaceClient extends JComponent implements Runnable{
      * Creates the page for user to see their purchase history
      */
     public void displayPurchaseHistory(ArrayList<String> history) {
-        try {
-            pw = new PrintWriter(socket.getOutputStream());
-            in = new Scanner(socket.getInputStream());
-            oos = new ObjectOutputStream(socket.getOutputStream());
-            ois = new ObjectInputStream(socket.getInputStream());     
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-
         JFrame purchaseHistory = new JFrame("THE MARKETPLACE");
         Container purchaseHistoryPanel = purchaseHistory.getContentPane();
         purchaseHistoryPanel.setLayout(new BorderLayout());
@@ -555,16 +527,6 @@ public class MarketPlaceClient extends JComponent implements Runnable{
      * Allows the user to see and edit their cart or checkout.
      */
     public void displayCart(ArrayList<String> viewCart) {
-        try {
-            pw = new PrintWriter(socket.getOutputStream());
-            in = new Scanner(socket.getInputStream());
-            oos = new ObjectOutputStream(socket.getOutputStream());
-            ois = new ObjectInputStream(socket.getInputStream());     
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-
         JFrame cart = new JFrame("THE MARKETPLACE");
         Container cartPanel = cart.getContentPane();
         cartPanel.setLayout(new BorderLayout());
@@ -685,16 +647,6 @@ public class MarketPlaceClient extends JComponent implements Runnable{
      * Opens a page for a user to edit their account
      */
     public void editAccount(ArrayList<String> edit) {
-        try {
-            pw = new PrintWriter(socket.getOutputStream());
-            in = new Scanner(socket.getInputStream());
-            oos = new ObjectOutputStream(socket.getOutputStream());
-            ois = new ObjectInputStream(socket.getInputStream());     
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        
         JFrame account = new JFrame("THE MARKETPLACE");
         Container accountPanel = account.getContentPane();
         accountPanel.setLayout(new BorderLayout());
@@ -853,14 +805,15 @@ public class MarketPlaceClient extends JComponent implements Runnable{
                     pw.println("ADDSTORE"); //SERVERREQUEST - ADDSTORE
                     pw.println(s);
                     pw.println(username);
-                    pw.println(""); //FIX I don't need to have a file path for add store because you can import products
                     pw.flush();
                     String confirmation = in.nextLine();
+                    System.out.println(confirmation);
                     if (confirmation.equals("ERROR")) {
                         JOptionPane.showMessageDialog(null, "There is already a store with that name", "ERROR", JOptionPane.ERROR_MESSAGE);
+                    } else {
+                        myStoreNames = (ArrayList<String>) ois.readObject();
                     }
-                    myStoreNames = (ArrayList<String>) ois.readObject(); // FIXROHAN THIS IS COMING BACK AS A STRING
-                    sellerMain.dispose();
+                    
                            
                 } catch (Exception e1) {
                     e1.printStackTrace();
