@@ -9,11 +9,10 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Scanner;
 
-import javax.swing.plaf.basic.BasicSplitPaneUI.KeyboardUpLeftHandler;
+//import javax.swing.plaf.basic.BasicSplitPaneUI.KeyboardUpLeftHandler;
 /*
  * 12/09/22
  * TODO
@@ -934,13 +933,16 @@ public class MarketPlaceServer implements Runnable {
                         }
                     }
                     if (userInfoExists) {
-                        pw.println("ERROR");
+                        pw.println("ERROR User Information Already Exists");
                     } else {
                         pw.println("CONFIRM");
+                        synchronized (objectForBuyerListModification) {
+                            buyerArrayList.add(new Buyer(buyerAccUsername, buyerAccPassword, buyerAccEmail, cart, history));
+                        }
                     }
 
 
-                    pw.flush();
+                    pw.flush(); //FLUSHING!!!
                     pw.close();
 
                 } else if (keyWord.equals("CREATEACCSELLER")) {
@@ -949,15 +951,40 @@ public class MarketPlaceServer implements Runnable {
                     String sellerAccEmail = in.nextLine();
                     // Listens for username, password, and email of buyer
 
-                    for (int i = 0; i < sellerArrayList.size(); i++) {
+                    /*for (int i = 0; i < sellerArrayList.size(); i++) {
                         if (sellerAccUsername.equals(sellerArrayList.get(i).getUsername())) {
                             pw.println("Username Already Exists");
                         } else if (sellerAccEmail.equals(sellerArrayList.get(i).getEmail())) {
                             pw.println("Email Already Exists");
                         } 
 
+                    } */
+                    boolean userInfoExists = false;
+                    for (int i = 0; i < buyerArrayList.size(); i++) {
+                        if (buyerArrayList.get(i).getUsername().equals(sellerAccUsername) || buyerArrayList.get(i).getEmail().equals(sellerAccEmail)) {
+                            userInfoExists = true;
+
+
+
+                        }
+                    } 
+                    //Traversing sellerArrayList too
+                    for (int i = 0; i < sellerArrayList.size(); i++) {
+                        if (sellerArrayList.get(i).getUsername().equals(sellerAccUsername) || sellerArrayList.get(i).getEmail().equals(sellerAccEmail)) {
+                            userInfoExists = true;
+
+                        }
                     }
-                    pw.flush();
+                    if (userInfoExists) {
+                        pw.println("ERROR User Information Already Exists");
+                    } else {
+                        pw.println("CONFIRM");
+                        synchronized (objectForSellerListModification) {
+                            sellerArrayList.add(new Seller(sellerAccUsername, sellerAccPassword, sellerAccEmail, sellerAccUsername + "FilePath.txt"));
+                        }
+                    }
+
+                    pw.flush(); //FLUSHING!!!
                     pw.close(); 
                     
                 } else if (keyWord.equals("LOGINBUYER")) {
