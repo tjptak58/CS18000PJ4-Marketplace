@@ -96,9 +96,9 @@ public class SellerInformation {
                         Socket echoSocket = new Socket(hostName, portNumber);        // 1st statement
                         PrintWriter pw =                                            // 2nd statement
                                 new PrintWriter(echoSocket.getOutputStream(), true);
-                        pw.println("CREATEBUYER");
+                        pw.println("CREATEACCSELLER");
                         pw.write(username.getText() + "; " + password.getText() + "; " + email.getText() + "; " + statistics.getText() + "\n");
-                        pw.close();
+
 
 
 
@@ -107,12 +107,11 @@ public class SellerInformation {
                         String linesRead="";
 
                             while ((linesRead = reader.readLine()) != null) {
-                                if ( linesRead.contains("ERROR")) {
+                                if ( linesRead.contains("ERROR User Information Already Exists")) {
                                     JOptionPane.showMessageDialog(null, "Error: Username already exists. Please Enter a new username", "Seller Information",
                                             JOptionPane.ERROR_MESSAGE);
-                                    reader.close();
+
                                 } else if (linesRead.contains("CONFIRM")) {
-                                    reader.close();
                                     frame.dispose();
                                     AccountCreated accountCreated = new AccountCreated();
                                 }
