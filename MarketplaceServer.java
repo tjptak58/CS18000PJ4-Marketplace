@@ -14,7 +14,14 @@ import java.util.Collections;
 import java.util.Scanner;
 
 import javax.swing.plaf.basic.BasicSplitPaneUI.KeyboardUpLeftHandler;
-
+/*
+ * 12/09/22
+ * TODO
+ * FileCreating wherever required
+ * use gatekeeper object for createaccount part
+ * Check for filewriting wherever required
+ * 
+ */
 
 /**
  * Information on files is shared between server threads so filereading and filewriting methods
@@ -978,6 +985,8 @@ public class MarketplaceServer implements Runnable {
 
             //If reached here then client has logged out or closed the application
             //Call writeToFiles method here
+            writeToFiles(buyerArrayList, sellerArrayList, marketPlace);
+            System.out.println("Disconnected from server....");
 
             
 
@@ -1028,6 +1037,7 @@ public class MarketplaceServer implements Runnable {
 
             
         } catch (IOException e) {
+            System.out.println("Server Error! Unable to write back to files!");
 
         } 
 
