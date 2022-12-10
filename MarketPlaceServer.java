@@ -644,7 +644,7 @@ public class MarketPlaceServer implements Runnable {
                 } else if (keyWord.equals("ADDPRODUCT")) {
                     //Listen for String "ProductName;StoreName;Description;Quantity;Price"
                     //Each string is productfields separated by ;
-                    //LISTEN FOR STORENAME!! TODO
+                    
                 
                     String addProductInfO = in.nextLine();  
                     String[] prodArray = addProductInfO.split(";");
@@ -669,6 +669,7 @@ public class MarketPlaceServer implements Runnable {
                         pw.flush(); //FLUSHING!!!
                     } else {
                         pw.println("CONFIRM");
+                        pw.flush(); //FLUSHING!!!
                         for (int i = 0; i < marketPlace.size(); i++) {
                             if (marketPlace.get(i).getStoreName().equals(storeName)) {
                                 synchronized (objectForMarketPlace) {
@@ -903,8 +904,9 @@ public class MarketPlaceServer implements Runnable {
                     String cart = in.nextLine();
                     String history = in.nextLine();
                     // Listens for username, password, email, cart, and history of buyer
+                    //boolean userExists = false;
 
-                    for (int i = 0; i < buyerArrayList.size(); i++) {
+                    /*for (int i = 0; i < buyerArrayList.size(); i++) {
                         if (buyerAccUsername.equals(buyerArrayList.get(i).getUsername())) {
                             pw.println("Username Already Exists");
                         } else if (buyerAccEmail.equals(buyerArrayList.get(i).getEmail())) {
@@ -913,7 +915,31 @@ public class MarketPlaceServer implements Runnable {
                             buyerArrayList.add(new Buyer(buyerAccUsername, buyerAccPassword, buyerAccEmail, cart, history));
                         }
 
+                    } */
+                    
+                    boolean userInfoExists = false;
+                    for (int i = 0; i < buyerArrayList.size(); i++) {
+                        if (buyerArrayList.get(i).getUsername().equals(buyerAccUsername) || buyerArrayList.get(i).getEmail().equals(buyerAccEmail)) {
+                            userInfoExists = true;
+
+
+
+                        }
+                    } 
+                    //Traversing sellerArrayList too
+                    for (int i = 0; i < sellerArrayList.size(); i++) {
+                        if (sellerArrayList.get(i).getUsername().equals(buyerAccUsername) || sellerArrayList.get(i).getEmail().equals(buyerAccEmail)) {
+                            userInfoExists = true;
+
+                        }
                     }
+                    if (userInfoExists) {
+                        pw.println("ERROR");
+                    } else {
+                        pw.println("CONFIRM");
+                    }
+
+
                     pw.flush();
                     pw.close();
 
@@ -928,9 +954,7 @@ public class MarketPlaceServer implements Runnable {
                             pw.println("Username Already Exists");
                         } else if (sellerAccEmail.equals(sellerArrayList.get(i).getEmail())) {
                             pw.println("Email Already Exists");
-                        } else {
-                            sellerArrayList.add(new Seller(sellerAccUsername, sellerAccPassword, sellerAccEmail, "seller.txt" ));
-                        }
+                        } 
 
                     }
                     pw.flush();
