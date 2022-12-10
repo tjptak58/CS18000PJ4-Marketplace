@@ -70,6 +70,12 @@ public class SellerInformation {
                             JOptionPane.ERROR_MESSAGE);
                     flag = true;
                 }
+                if (username.getText().contains(";")|| password.getText().contains(";")
+                        || email.getText().contains(";") ||statistics.getText().contains(";")) {
+                    JOptionPane.showMessageDialog(null, "Error: None of the Fields should contain a semi colin (;)", "Seller Information",
+                            JOptionPane.ERROR_MESSAGE);
+                    flag = true;
+                }
                     if (statistics.getText().equals("buyer.txt") ||
                            statistics.getText().equals("seller.txt") || statistics.getText().equals("storeListFile.txt")) {
                         JOptionPane.showMessageDialog(null, "Error: Can not use this txt file)", "Seller Information",
