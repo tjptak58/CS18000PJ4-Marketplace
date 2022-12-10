@@ -71,7 +71,14 @@ public class BuyerInformation {
                             JOptionPane.ERROR_MESSAGE);
                     flag = true;
                 }
-                    
+                if (username.getText().contains(";")|| password.getText().contains(";")
+                        || email.getText().contains(";") ||purchaseHistory.getText().contains(";")||
+                        shoppingCart.getText().contains(";")) {
+                    JOptionPane.showMessageDialog(null, "Error: None of the Fields should contain a semi colin (;)", "Seller Information",
+                            JOptionPane.ERROR_MESSAGE);
+                    flag = true;
+                }
+
                     if (purchaseHistory.getText().equals("buyer.txt") ||
                             purchaseHistory.getText().equals("seller.txt") || purchaseHistory.getText().equals("storeListFile.txt")) {
                         JOptionPane.showMessageDialog(null, "Error: Can not use this txt file)", "Seller Information",
@@ -96,7 +103,7 @@ public class BuyerInformation {
                             JOptionPane.ERROR_MESSAGE);
                     flag=true;
                 }
-                    
+
 
                 if (!flag){
                     String hostName = "localhost";
