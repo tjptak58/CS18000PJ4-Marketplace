@@ -55,6 +55,9 @@ public class MarketPlaceServer implements Runnable {
         //FileReader for buyer.txt
         File bf = new File("buyer.txt");
         //Create file here if does not exist TODO
+        if (!bf.exists()) {
+            bf.createNewFile();
+        }
         FileReader bfr = new FileReader(bf);
         BufferedReader bbfr = new BufferedReader(bfr);
         String buyerLine = bbfr.readLine();
@@ -187,6 +190,7 @@ public class MarketPlaceServer implements Runnable {
                 //LISTEN FOR WHEN APPLICATION IS CLOSED AND FOR REFRESH!
                 
                 String keyWord = in.nextLine();
+                System.out.println(keyWord); //DEBUGGING
                 if (keyWord.equals("GETSUPERSTORES")) {
                     System.out.println("CLIENT CALLED GETSUPERSTORES");
                     //Send ArrayList of Strings containing all product names in marketplace
