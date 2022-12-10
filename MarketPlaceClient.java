@@ -5,7 +5,7 @@ import java.io.*;
 import java.awt.*; 
 import java.awt.event.*;
 import java.net.*;
-import java.util.*; //QUESTION DO I NEED TO CREATE PW AND OOS FOR EVERY METHOD?
+import java.util.*; //I NEED TO CREATE PW,OOS,OIS,SCANNER an close it for each instance we're calling the server
 
 /**
  * Main method for project that implements the marketplace
@@ -15,7 +15,7 @@ import java.util.*; //QUESTION DO I NEED TO CREATE PW AND OOS FOR EVERY METHOD?
  * @verion 11/14/22
  */
 
-public class MarketPlaceClient extends JComponent implements Runnable{
+public class MarketPlaceClient extends JComponent implements Runnable {
     /**
      *Static string that stores the username of the logged in buyer or seller
      */
@@ -28,10 +28,10 @@ public class MarketPlaceClient extends JComponent implements Runnable{
     boolean loggedInAsSeller;
     Socket socket;
     static int portnumber;
-    static PrintWriter pw;
+    /* static PrintWriter pw;
     static Scanner in;
     static ObjectOutputStream oos;
-    static ObjectInputStream ois;
+    static ObjectInputStream ois; */
     ArrayList<String> myStoreNames = new ArrayList<String>();
     ArrayList<String> productNames = new ArrayList<String>();
     ArrayList<String> superStores = new ArrayList<String>();
@@ -46,13 +46,13 @@ public class MarketPlaceClient extends JComponent implements Runnable{
 
     public void run() {
         try {
-            username = "tptak";
-            //username = "greg";
+            //username = "tptak";
+            username = "greg";
             socket = new Socket("localhost", 4242); //MarketPlaceClient.portnumber FIX
-            pw = new PrintWriter(socket.getOutputStream());
-            in = new Scanner(socket.getInputStream());
-            oos = new ObjectOutputStream(socket.getOutputStream());
-            ois = new ObjectInputStream(socket.getInputStream()); 
+            PrintWriter pw = new PrintWriter(socket.getOutputStream());
+            Scanner in = new Scanner(socket.getInputStream());
+            ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
+            ObjectInputStream ois = new ObjectInputStream(socket.getInputStream()); 
             loggedInAsBuyer = false;
             loggedInAsSeller = true;
             if (loggedInAsBuyer) {
@@ -75,6 +75,10 @@ public class MarketPlaceClient extends JComponent implements Runnable{
                 myStoreNames = (ArrayList<String>) ois.readObject(); //SERVERREQUEST VIEWSTORES
                 sellerMain(myStoreNames);           
         }
+        pw.close();
+        in.close();
+        oos.close();
+        ois.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -95,6 +99,18 @@ public class MarketPlaceClient extends JComponent implements Runnable{
                 buyerMain.dispose();
                 var productNames = new ArrayList<String>();
                 try {
+                    PrintWriter pw;
+                    Scanner in;
+                    ObjectOutputStream oos;
+                    ObjectInputStream ois;
+                    try {
+                        pw = new PrintWriter(socket.getOutputStream());
+                        in = new Scanner(socket.getInputStream());
+                        oos = new ObjectOutputStream(socket.getOutputStream());
+                        ois = new ObjectInputStream(socket.getInputStream());     
+                    } catch (Exception e1) {
+                        e1.printStackTrace();
+                    }    
                     pw.println("GETSUPERSTORES");
                     pw.flush();
                     superStores = (ArrayList<String>) ois.readObject(); //SERVERREQUEST GETSUPERSTORES
@@ -104,11 +120,16 @@ public class MarketPlaceClient extends JComponent implements Runnable{
                         pw.flush();
                         var productNamesProxy = (ArrayList<String>) ois.readObject(); //SERVERREQUEST GETPRODCUTSINSTORE
                     productNames.addAll(productNamesProxy);
+                    pw.close();
+                    in.close();
+                    oos.close();
+                    ois.close();
                 }
                 } catch (Exception exc) {
                     exc.printStackTrace();
                 }
                 buyerMain(productNames);  
+                
             }
         
         }); 
@@ -123,10 +144,26 @@ public class MarketPlaceClient extends JComponent implements Runnable{
             public void actionPerformed(ActionEvent e) {           //ACTION LISTENER - Link to the purchase history of the user
                 ArrayList<String> history = new ArrayList<String>(); 
                 try {
+                    PrintWriter pw;
+                    Scanner in;
+                    ObjectOutputStream oos;
+                    ObjectInputStream ois;
+                    try {
+                        pw = new PrintWriter(socket.getOutputStream());
+                        in = new Scanner(socket.getInputStream());
+                        oos = new ObjectOutputStream(socket.getOutputStream());
+                        ois = new ObjectInputStream(socket.getInputStream());     
+                    } catch (Exception e1) {
+                        e1.printStackTrace();
+                    }   
                     pw.println("GETPURCHASEHISTORY");
                     pw.println(username);
                     pw.flush();
                     history = (ArrayList<String>) ois.readObject(); //SERVERREQUEST GETPURCHASEHISTORY
+                    pw.close();
+                    in.close();
+                    oos.close();
+                    ois.close();
                 } catch (Exception e1) {
                     e1.printStackTrace();
                 }
@@ -141,9 +178,25 @@ public class MarketPlaceClient extends JComponent implements Runnable{
             public void actionPerformed(ActionEvent e) {           //ACTION LISTENER - Link to the dashboard of a buyer
                 ArrayList<String> superStores = new ArrayList<String>();
                 try {
+                    PrintWriter pw;
+                    Scanner in;
+                    ObjectOutputStream oos;
+                    ObjectInputStream ois;
+                    try {
+                        pw = new PrintWriter(socket.getOutputStream());
+                        in = new Scanner(socket.getInputStream());
+                        oos = new ObjectOutputStream(socket.getOutputStream());
+                        ois = new ObjectInputStream(socket.getInputStream());     
+                    } catch (Exception e1) {
+                        e1.printStackTrace();
+                    }  
                     pw.println("GETSUPERSTORES");
                     pw.flush();
                     superStores = (ArrayList<String>) ois.readObject(); //SERVERREQUEST GETSUPERSTORES
+                    pw.close();
+                    in.close();
+                    oos.close();
+                    ois.close();
                 } catch (Exception e1) {
                     e1.printStackTrace();
                 }
@@ -521,7 +574,6 @@ public class MarketPlaceClient extends JComponent implements Runnable{
         purchaseHistory.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         purchaseHistory.setVisible(true);
         purchaseHistory.requestFocus();
-
     }
 
     /*
@@ -1111,7 +1163,6 @@ public class MarketPlaceClient extends JComponent implements Runnable{
         editStore.setVisible(true);
         editStore.requestFocus();
     }
-
     /*
      * Opens a page for a seller to edit
      */
@@ -1785,7 +1836,7 @@ public class MarketPlaceClient extends JComponent implements Runnable{
             int index = 0;
             for (int i = 0 ; i < productsWithInfo.size() ; i++) {
                 String[] productSplit = productsWithInfo.get(i).split(";");
-                Integer quantity = Integer.parseInt(productSplit[3]);
+                int quantity = Integer.parseInt(productSplit[3]);
                 if (quantity >= max) {
                     max = quantity;
                     index = i;
