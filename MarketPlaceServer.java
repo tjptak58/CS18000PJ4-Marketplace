@@ -35,7 +35,7 @@ import javax.swing.plaf.basic.BasicSplitPaneUI.KeyboardUpLeftHandler;
  *
  */
 
-public class MarketplaceServer implements Runnable {
+public class MarketPlaceServer implements Runnable {
     Socket socket;
     static ArrayList<Buyer> buyerArrayList = new ArrayList<>();
     static ArrayList<Seller> sellerArrayList = new ArrayList<>();
@@ -47,7 +47,7 @@ public class MarketplaceServer implements Runnable {
     Object objectForMarketPlace = new Object();
 
     //Constructor for this class
-    public MarketplaceServer(Socket socket) {
+    public MarketPlaceServer(Socket socket) {
         this.socket = socket;
     }
 
@@ -163,7 +163,7 @@ public class MarketplaceServer implements Runnable {
         while (true) {
             Socket socket = serverSocket.accept();
             System.out.printf("Connection received from %s\n", socket); //DEBUGGING
-            MarketplaceServer server  = new MarketplaceServer(socket);
+            MarketPlaceServer server  = new MarketPlaceServer(socket);
             new Thread(server).start();
         }
 
