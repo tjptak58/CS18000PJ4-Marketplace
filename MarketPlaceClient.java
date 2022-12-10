@@ -52,15 +52,15 @@ public class MarketPlaceClient extends JComponent implements Runnable {
 
     public void run() {  //can't close, use shutdownOutput()
         try {
-            username = "tptak";
-            //username = "greg";
+            //username = "tptak";
+            username = "greg";
             socket = new Socket("localhost", 4242); //MarketPlaceClient.portnumber FIX
             pw = new PrintWriter(socket.getOutputStream());
             in = new Scanner(socket.getInputStream());
             oos = new ObjectOutputStream(socket.getOutputStream());
             ois = new ObjectInputStream(socket.getInputStream()); 
-            loggedInAsBuyer = true;
-            loggedInAsSeller = false;
+            loggedInAsBuyer = false;
+            loggedInAsSeller = true;
             if (loggedInAsBuyer) {
                 pw.println("GETSUPERSTORES");
                 pw.flush();
@@ -292,11 +292,7 @@ public class MarketPlaceClient extends JComponent implements Runnable {
                 pw.println("GETPRODUCTSINSTORE");
                 pw.println(store);
                 pw.flush();
-                pInStore = (ArrayList<String>) ois.readObject(); //SERVERREQUEST - GETPRODUCTSINSTORE
-                
-                
-                oos.reset();
-                ;     
+                pInStore = (ArrayList<String>) ois.readObject(); //SERVERREQUEST - GETPRODUCTSINSTORE 
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -379,11 +375,7 @@ public class MarketPlaceClient extends JComponent implements Runnable {
             pw.println(product);
             pw.println(store);
             pw.flush();
-            info = in.nextLine(); //SERVERREQUEST PRODUCTINFO
-            
-            
-            oos.reset();
-            ;        
+            info = in.nextLine(); //SERVERREQUEST PRODUCTINFO      
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -417,10 +409,6 @@ public class MarketPlaceClient extends JComponent implements Runnable {
                         JOptionPane.showMessageDialog(null, "This item is out of stock for your purchase amount", 
                         "ERROR", JOptionPane.ERROR_MESSAGE);
                     } 
-                    
-                    
-                    oos.reset();
-                    ;    
                 } catch (Exception e1) {
                     e1.printStackTrace();
                 }
@@ -1074,7 +1062,6 @@ public class MarketPlaceClient extends JComponent implements Runnable {
                     try {
                         pw.println("ADDPRODUCT");     //SERVERREQUEST ADDPRODUCT
                         pw.println(i);
-                        pw.println(line);
                         pw.flush();
                         String returned = in.nextLine();
                         if (returned.equals("ERROR")) {
@@ -1320,22 +1307,19 @@ public class MarketPlaceClient extends JComponent implements Runnable {
         create.addActionListener(new ActionListener() {   
             public void actionPerformed(ActionEvent e) {
                 String pInfo = "";
-                ArrayList<String> output = new ArrayList<String>();
-                pInfo += productNameText.getText() + ";";
+                pInfo += productNameField.getText() + ";";
                 pInfo += storeName + ";";
-                pInfo += descriptionText.getText() + ";";
-                pInfo += quantityText.getText() + ";";
-                pInfo += priceText.getText();
-                output.add(pInfo);
+                pInfo += descriptionField.getText() + ";";
+                pInfo += quantityField.getText() + ";";
+                pInfo += priceField.getText();
+                System.out.println(pInfo);
                 String confirmed = "";
                 try {
                     pw.println("ADDPRODUCT");
-                    pw.println(output);
+                    pw.println(pInfo);
+                    pw.println(storeName);
                     pw.flush();
                     confirmed = in.nextLine();
-                    if (confirmed.equals("ERROR")) {
-                        JOptionPane.showMessageDialog(null, "There is already a store with that name","Error", JOptionPane.ERROR_MESSAGE);
-                    }
                 } catch (Exception e1) {
                     e1.printStackTrace();
                 }
@@ -2054,10 +2038,6 @@ public class MarketPlaceClient extends JComponent implements Runnable {
                     pw.println(line);
                     pw.println(store);
                     productInfo = in.nextLine();
-                    
-                    
-                    oos.reset();
-                    ;
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
