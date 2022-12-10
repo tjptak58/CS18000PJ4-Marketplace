@@ -72,6 +72,10 @@ public class MarketPlaceServer implements Runnable {
 
         //FileReader for seller.txt
         File sf = new File("seller.txt");
+        //Creating file if does not exist
+        if (!sf.exists()) {
+            sf.createNewFile();
+        }
         FileReader sfr = new FileReader(sf);
         BufferedReader bsfr = new BufferedReader(sfr);
         String sellerLine = bsfr.readLine();
@@ -84,6 +88,12 @@ public class MarketPlaceServer implements Runnable {
 
         //FileReader for storeListFile.txt
         File lf = new File("storeListFile.txt");
+        //Creating file if does not exist
+        if (!lf.exists()) {
+            lf.createNewFile();
+        }
+
+        
         FileReader lfr = new FileReader(lf);
         BufferedReader blfr = new BufferedReader(lfr);
         String storeLine = blfr.readLine();
@@ -190,6 +200,9 @@ public class MarketPlaceServer implements Runnable {
                 //LISTEN FOR WHEN APPLICATION IS CLOSED AND FOR REFRESH!
                 
                 String keyWord = in.nextLine();
+                if (keyWord.charAt(0) == 'y') {
+                    keyWord = keyWord.substring(1);
+                }
                 System.out.println(keyWord); //DEBUGGING
                 if (keyWord.equals("GETSUPERSTORES")) {
                     System.out.println("CLIENT CALLED GETSUPERSTORES");
@@ -330,7 +343,7 @@ public class MarketPlaceServer implements Runnable {
                     
                     //Scroll down to see method viewCart
                     ArrayList<String> viewCartList = viewCart(userNameViewCart);
-                    //ArrayList of strings "ProductName;QuantityOfThatProductInCart"
+                    //ArrayList of strings "ProductName;StoreNameOfProduct;QuantityOfThatProductInCart"
                     oos.writeObject(viewCartList);
                     oos.flush(); //FLUSHING!!!
                     //Finished implementation
@@ -910,7 +923,7 @@ public class MarketPlaceServer implements Runnable {
                     String sellerAccEmail = in.nextLine();
                     // Listens for username, password, and email of buyer
 
-                    for (int i = 0; i < buyerArrayList.size(); i++) {
+                    for (int i = 0; i < sellerArrayList.size(); i++) {
                         if (sellerAccUsername.equals(sellerArrayList.get(i).getUsername())) {
                             pw.println("Username Already Exists");
                         } else if (sellerAccEmail.equals(sellerArrayList.get(i).getEmail())) {
@@ -1069,7 +1082,15 @@ public class MarketPlaceServer implements Runnable {
         //cartListUnique is an arrayList of unique items in the cart
         ArrayList<String> viewCartList  = new ArrayList<>();
         for (String uniqueS: cartListUnique) {
-            viewCartList.add(String.format(uniqueS + ";%d", Collections.frequency(cartListDuplicate, uniqueS)));
+            for (int i = 0; i < marketPlace.size(); i++) {
+                for (int j = 0; j < marketPlace.get(i).getProducts().size(); j++) {
+                    if (marketPlace.get(i).getProducts().get(j).getProductName().equals(uniqueS)) {
+                        viewCartList.add(String.format(uniqueS + ";" + marketPlace.get(i).getProducts().get(j).getStoreName() + ";%d", Collections.frequency(cartListDuplicate, uniqueS)));
+
+                    }
+                }
+            }
+            
         }
 
         return viewCartList;
