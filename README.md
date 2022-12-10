@@ -8,6 +8,11 @@ Shreya Kamath - Submitted Review and Planning Report on Brightspace.
 
 Tyler Ptak - Submitted Vocareum workspace.
 
+
+Login and Create Account Classes (LoginOrCreateAccount, LoginSellerOrBuyer, LoginBuyer, LoginSeller, LoginSuccessful, 
+BuyerInformation, SellerInformation, AccountCreated)
+All of these were classes which went from one frame to another depending on what method was called upon when using the GUI. BuyerInformation and SellerInformation had all the information related to the buyer and seller when creating an account respectively.
+
 Marketplace Class: 
 The main method, which starts with the login. The user has. the option to create an account or log in with an existing account. 
 They are asked to log in or create an account as a seller or buyer. 
