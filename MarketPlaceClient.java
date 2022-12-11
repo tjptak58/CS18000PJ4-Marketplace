@@ -56,15 +56,15 @@ public class MarketPlaceClient extends JComponent implements Runnable {
 
     public void run() {  //can't close, use shutdownOutput()
         try {
-            //username = "tptak";
-            username = "greg";
-            socket = new Socket("localhost", MarketPlaceClient.portnumber);
+            username = "tptak";
+            //username = "greg";
+            socket = new Socket("localhost", 4242); //MarketplaceClient.portnumber
             pw = new PrintWriter(socket.getOutputStream());
             in = new Scanner(socket.getInputStream());
             oos = new ObjectOutputStream(socket.getOutputStream());
             ois = new ObjectInputStream(socket.getInputStream()); 
-            loggedInAsBuyer = false;
-            loggedInAsSeller = true;
+            loggedInAsBuyer = true;
+            loggedInAsSeller = false;
             if (loggedInAsBuyer) {
                 pw.println("GETSUPERSTORES");
                 pw.flush();
@@ -96,6 +96,21 @@ public class MarketPlaceClient extends JComponent implements Runnable {
      */
     public void buyerMain(ArrayList<String> productNames) {
         JFrame buyerMain = new JFrame("THE MARKETPLACE");
+        buyerMain.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                if (JOptionPane.showConfirmDialog(buyerMain, 
+                    "Are you sure you want to close this window?", "Close Window?", 
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION){
+                    pw.println("LOGOUT");
+                    pw.flush();
+                    buyerMain.dispose();
+                }
+            }
+        });
+
+
         Container buyerMainPanel = buyerMain.getContentPane();
         buyerMainPanel.setLayout(new BorderLayout());
 
@@ -362,6 +377,19 @@ public class MarketPlaceClient extends JComponent implements Runnable {
     public void displayProductInfo(String product , String store) {
         
         JFrame productInfo = new JFrame("THE MARKETPLACE");
+        productInfo.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                if (JOptionPane.showConfirmDialog(productInfo, 
+                    "Are you sure you want to close this window?", "Close Window?", 
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION){
+                    pw.println("LOGOUT");
+                    pw.flush();
+                    productInfo.dispose();
+                }
+            }
+        });
         Container productInfoPanel = productInfo.getContentPane();
         productInfoPanel.setLayout(new BorderLayout());
 
@@ -482,6 +510,19 @@ public class MarketPlaceClient extends JComponent implements Runnable {
     public void displayPurchaseHistory(ArrayList<String> history) {
 
         JFrame purchaseHistory = new JFrame("THE MARKETPLACE");
+        purchaseHistory.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                if (JOptionPane.showConfirmDialog(purchaseHistory, 
+                    "Are you sure you want to close this window?", "Close Window?", 
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION){
+                    pw.println("LOGOUT");
+                    pw.flush();
+                    purchaseHistory.dispose();
+                }
+            }
+        });
         Container purchaseHistoryPanel = purchaseHistory.getContentPane();
         purchaseHistoryPanel.setLayout(new BorderLayout());
 
@@ -548,6 +589,19 @@ public class MarketPlaceClient extends JComponent implements Runnable {
     public void displayCart(ArrayList<String> viewCart) {
 
         JFrame cart = new JFrame("THE MARKETPLACE");
+        cart.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                if (JOptionPane.showConfirmDialog(cart, 
+                    "Are you sure you want to close this window?", "Close Window?", 
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION){
+                    pw.println("LOGOUT");
+                    pw.flush();
+                    cart.dispose();
+                }
+            }
+        });
         Container cartPanel = cart.getContentPane();
         cartPanel.setLayout(new BorderLayout());
 
@@ -670,6 +724,19 @@ public class MarketPlaceClient extends JComponent implements Runnable {
     public void editAccount(ArrayList<String> edit) {
 
         JFrame account = new JFrame("THE MARKETPLACE");
+        account.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                if (JOptionPane.showConfirmDialog(account, 
+                    "Are you sure you want to close this window?", "Close Window?", 
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION){
+                    pw.println("LOGOUT");
+                    pw.flush();
+                    account.dispose();
+                }
+            }
+        });
         Container accountPanel = account.getContentPane();
         accountPanel.setLayout(new BorderLayout());
 
@@ -807,6 +874,19 @@ public class MarketPlaceClient extends JComponent implements Runnable {
     public void sellerMain(ArrayList<String> storeNames) {
 
         JFrame sellerMain = new JFrame("THE MARKETPLACE");
+        sellerMain.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                if (JOptionPane.showConfirmDialog(sellerMain, 
+                    "Are you sure you want to close this window?", "Close Window?", 
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION){
+                    pw.println("LOGOUT");
+                    pw.flush();
+                    sellerMain.dispose();
+                }
+            }
+        });
         Container sellerMainPanel = sellerMain.getContentPane();
         sellerMainPanel.setLayout(new BorderLayout());
 
@@ -967,6 +1047,19 @@ public class MarketPlaceClient extends JComponent implements Runnable {
     public void displayEditStore(String line) {
 
         JFrame editStore = new JFrame("THE MARKETPLACE");
+        editStore.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                if (JOptionPane.showConfirmDialog(editStore, 
+                    "Are you sure you want to close this window?", "Close Window?", 
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION){
+                    pw.println("LOGOUT");
+                    pw.flush();
+                    editStore.dispose();
+                }
+            }
+        });
         Container editStorePanel = editStore.getContentPane();
         editStorePanel.setLayout(new BorderLayout());
 
@@ -1146,6 +1239,19 @@ public class MarketPlaceClient extends JComponent implements Runnable {
         } 
         String[] infoSplit = info.split(";");
         JFrame editProduct = new JFrame("THE MARKETPLACE");
+        editProduct.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                if (JOptionPane.showConfirmDialog(editProduct, 
+                    "Are you sure you want to close this window?", "Close Window?", 
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION){
+                    pw.println("LOGOUT");
+                    pw.flush();
+                    editProduct.dispose();
+                }
+            }
+        });
         Container editProductPanel = editProduct.getContentPane();
         editProductPanel.setLayout(new BorderLayout());
 
@@ -1259,6 +1365,19 @@ public class MarketPlaceClient extends JComponent implements Runnable {
     public void displayAddProduct(String storeName) {                               //UPDATE TO ADD EVERYTHING
 
         JFrame addProduct = new JFrame("THE MARKETPLACE");
+        addProduct.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                if (JOptionPane.showConfirmDialog(addProduct, 
+                    "Are you sure you want to close this window?", "Close Window?", 
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION){
+                    pw.println("LOGOUT");
+                    pw.flush();
+                    addProduct.dispose();
+                }
+            }
+        });
         Container addProductPanel = addProduct.getContentPane();
         addProductPanel.setLayout(new BorderLayout());
 
@@ -1399,6 +1518,19 @@ public class MarketPlaceClient extends JComponent implements Runnable {
     public void displaySales(String storeName) {
 
         JFrame stats = new JFrame("THE MARKETPLACE");
+        stats.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                if (JOptionPane.showConfirmDialog(stats, 
+                    "Are you sure you want to close this window?", "Close Window?", 
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION){
+                    pw.println("LOGOUT");
+                    pw.flush();
+                    stats.dispose();
+                }
+            }
+        });
         Container statsPanel = stats.getContentPane();
         statsPanel.setLayout(new BorderLayout());
 
@@ -1488,6 +1620,19 @@ public class MarketPlaceClient extends JComponent implements Runnable {
         ArrayList<String> products = new ArrayList<>();
 
         JFrame sellerDash = new JFrame("THE MARKETPLACE");
+        sellerDash.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                if (JOptionPane.showConfirmDialog(sellerDash, 
+                    "Are you sure you want to close this window?", "Close Window?", 
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION){
+                    pw.println("LOGOUT");
+                    pw.flush();
+                    sellerDash.dispose();
+                }
+            }
+        });
         Container sellerDashPanel = sellerDash.getContentPane();
         sellerDashPanel.setLayout(new BorderLayout());
 
@@ -1588,6 +1733,19 @@ public class MarketPlaceClient extends JComponent implements Runnable {
     public void buyerDashboard(ArrayList<String> superStores) {
 
         JFrame buyerDash = new JFrame("THE MARKETPLACE");
+        buyerDash.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                if (JOptionPane.showConfirmDialog(buyerDash, 
+                    "Are you sure you want to close this window?", "Close Window?", 
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION){
+                    pw.println("LOGOUT");
+                    pw.flush();
+                    buyerDash.dispose();
+                }
+            }
+        });
         Container buyerDashPanel = buyerDash.getContentPane();
         buyerDashPanel.setLayout(new BorderLayout());
 
@@ -2146,6 +2304,19 @@ public class MarketPlaceClient extends JComponent implements Runnable {
 
     public void viewProductsInCarts(ArrayList<String> info) {
         JFrame viewcart = new JFrame("THE MARKETPLACE");
+        viewcart.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                if (JOptionPane.showConfirmDialog(viewcart, 
+                    "Are you sure you want to close this window?", "Close Window?", 
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION){
+                    pw.println("LOGOUT");
+                    pw.flush();
+                    viewcart.dispose();
+                }
+            }
+        });
         Container viewcartpanel = viewcart.getContentPane();
         viewcartpanel.setLayout(new BorderLayout());
 
