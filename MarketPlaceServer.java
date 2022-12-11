@@ -1100,6 +1100,33 @@ public class MarketPlaceServer implements Runnable {
                     pw.flush(); //FLUSHING!!!
                     //CLIENT MUST LISTEN FOR AN INT AND THEN CONSUME NEW LINE CHAR USING SCANNER!!!
 
+                 } else if (keyWord.equals("CUSTOMERLIST")) {
+                    //Listen for storeName
+                    String storeForList = in.nextLine();
+                    ArrayList<String> duplicateList = new ArrayList<>();
+                    for (int i = 0; i < marketPlace.size(); i++) {
+                        if (marketPlace.get(i).getStoreName().equals(storeForList)) {
+                            for (int j = 0; j < marketPlace.get(i).getPurchaseLog().size(); j++) {
+                                duplicateList.add(marketPlace.get(i).getPurchaseLog().get(j).getBuyerUsername());
+                            }
+
+                        }
+                    }
+                    ArrayList<String> newList = new ArrayList<>();
+                    for (int i = 0; i < duplicateList.size(); i++) {
+                        if(newList.indexOf(duplicateList.get(i)) == -1) {
+                            newList.add(duplicateList.get(i));
+                        }
+                    }
+                    ArrayList<String> sendInfoList = new ArrayList<>();
+                    for (int i = 0; i < newList.size(); i++) {
+                        sendInfoList.add(newList.get(i) + ";" + Collections.frequency(duplicateList, newList.get(i)));
+
+                    }
+                    //Sends back ArrayList of Stirng "Username;NumberOFPurchasesByUsername"
+                    oos.writeObject(sendInfoList);
+                    oos.flush(); //FLUSHING!!!
+                    //Finished implementation
                  }
 
             }
