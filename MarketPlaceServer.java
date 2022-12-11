@@ -117,7 +117,7 @@ public class MarketPlaceServer implements Runnable {
                 ArrayList<String> customerList = new ArrayList<>();
                 //If a customer has bought the same product multiple times then their name appears multiple times in the ArrayList
                 if (productArray[6].indexOf(",") == -1) {
-                    if (productArray[6] != null) {
+                    if (productArray[6] != "") {
                         //If here then only one customer has purchased the product
                         customerList.add(productArray[6]);
 
