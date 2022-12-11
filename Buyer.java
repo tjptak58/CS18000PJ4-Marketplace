@@ -159,6 +159,7 @@ public class Buyer extends Person{
 
     public boolean addToCart(Product product) {
         int available = product.getQuantity();
+        this.shoppingCart.add(product);        
         if (available - product.getQuantity() >= 0) {
             shoppingCart.add(product);
             try {
