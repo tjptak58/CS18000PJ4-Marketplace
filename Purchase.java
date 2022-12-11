@@ -44,5 +44,10 @@ public class Purchase {
     //No setters required 
 
 
+    public String purchaseFileString() {
+        String s = "";
+        s += purchasedProductName + ";" + saleRevenue + ";" + buyerUserName;
+        return s;
+    }
     
 }
