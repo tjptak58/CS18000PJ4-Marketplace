@@ -45,12 +45,14 @@ public class LoginBuyer {
 
                 try {
                     Socket echoSocket = new Socket(hostName, portNumber);        // 1st statement
+                    ObjectOutputStream oos = new ObjectOutputStream(echoSocket.getOutputStream());
                     PrintWriter pw =                                            // 2nd statement
                             new PrintWriter(echoSocket.getOutputStream(), true);
                     pw.println("LOGINBUYER");
                     pw.println(username.getText());
                     pw.println(password.getText());
-                  
+
+
 //
                     //    BufferedReader in =                                          // 3rd statement
 //                                    new BufferedReader(
@@ -67,16 +69,19 @@ public class LoginBuyer {
                         if ( linesRead.contains("ERROR")) {
                             JOptionPane.showMessageDialog(null, "Error: Username and/or password is wrong. Please try again", "Seller Information",
                                     JOptionPane.ERROR_MESSAGE);
-                            
+
                         } else if (linesRead.contains("CONFIRM")) {
-                            
+                            JOptionPane.showMessageDialog(null, "Error: Username and/or password is wrong. Please try again", "Seller Information",
+                                    JOptionPane.ERROR_MESSAGE);
+                            pw.println("LOGOUT");
                             frame.dispose();
-                            LoginSuccessful loginSuccessful=new LoginSuccessful();
+                            MarketPlaceClient marketPlaceClient=new MarketPlaceClient(4242, username.getText(), true,false);
                         }
                     }
                 } catch (IOException f) {
                     f.printStackTrace();
                 }
+
 //                usernameAndPasswordBuyer.clear();
 //                // read from file
 //                try {
