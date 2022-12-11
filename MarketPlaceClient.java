@@ -19,13 +19,13 @@ public class MarketPlaceClient extends JComponent implements Runnable {
     /**
      *Static string that stores the username of the logged in buyer or seller
      */
-    String username;
+    static String username;
 
     /**
      * Static booleans to determine whether a buyer or seller has logged in
      */
-    boolean loggedInAsBuyer;
-    boolean loggedInAsSeller;
+    static boolean loggedInAsBuyer;
+    static boolean loggedInAsSeller;
     Socket socket;
     static int portnumber;
     /* static PrintWriter pw;
@@ -43,18 +43,22 @@ public class MarketPlaceClient extends JComponent implements Runnable {
 
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(new MarketPlaceClient(portnumber));
+        SwingUtilities.invokeLater(new MarketPlaceClient(portnumber , username , loggedInAsBuyer , loggedInAsSeller));
     }
 
-    public MarketPlaceClient(int portnumber) {
+    public MarketPlaceClient(int portnumber , String username , boolean loggedInAsBuyer , boolean loggedInAsSeller) {
         MarketPlaceClient.portnumber = portnumber;
+        MarketPlaceClient.username = username;
+        MarketPlaceClient.loggedInAsBuyer = loggedInAsBuyer;
+        MarketPlaceClient.loggedInAsSeller = loggedInAsSeller;
+
     }
 
     public void run() {  //can't close, use shutdownOutput()
         try {
             //username = "tptak";
             username = "greg";
-            socket = new Socket("localhost", 4242); //MarketPlaceClient.portnumber FIX
+            socket = new Socket("localhost", MarketPlaceClient.portnumber);
             pw = new PrintWriter(socket.getOutputStream());
             in = new Scanner(socket.getInputStream());
             oos = new ObjectOutputStream(socket.getOutputStream());
@@ -702,8 +706,8 @@ public class MarketPlaceClient extends JComponent implements Runnable {
                 try {
                     pw.println("UPDATEACCOUNTINFO");
                     pw.println(username);
-                    oos.writeObject(out);
                     pw.flush();
+                    oos.writeObject(out);
                     oos.flush();   
                 } catch (Exception e1) {
                     e1.printStackTrace();
