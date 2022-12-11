@@ -52,11 +52,11 @@ public class SellerInformation {
         emailInformation.add(enterEmail, BorderLayout.LINE_START);
         emailInformation.add(email, BorderLayout.LINE_END);
         // statistics panel
-        JPanel statisticsInformation= new JPanel(new BorderLayout(10,10));
-        statisticsInformation.add(enterStatistics,BorderLayout.LINE_START);
+//        JPanel statisticsInformation= new JPanel(new BorderLayout(10,10));
+//        statisticsInformation.add(enterStatistics,BorderLayout.LINE_START);
        // statisticsInformation.add(enterStatistics1,BorderLayout.AFTER_LINE_ENDS);
 
-        statisticsInformation.add(statistics, BorderLayout.LINE_END);
+      //  statisticsInformation.add(statistics, BorderLayout.LINE_END);
         //Button Create new Account
         JPanel createNewAccount=new JPanel( );
         createNewAccount.add(createAccount);
@@ -97,7 +97,10 @@ public class SellerInformation {
                         PrintWriter pw =                                            // 2nd statement
                                 new PrintWriter(echoSocket.getOutputStream(), true);
                         pw.println("CREATEACCSELLER");
-                        pw.write(username.getText() + "; " + password.getText() + "; " + email.getText() + "; " + statistics.getText() + "\n");
+                        pw.println(username.getText());
+                        pw.println(password.getText());
+                        pw.println(email.getText());
+                      //  pw.write(username.getText() + "; " + password.getText() + "; " + email.getText() + "; " + statistics.getText() + "\n");
 
 
 
@@ -135,7 +138,7 @@ public class SellerInformation {
         panelGeneral.add(usernameInformation);
         panelGeneral.add(passwordInformation);
         panelGeneral.add(emailInformation);
-        panelGeneral.add(statisticsInformation);
+     //   panelGeneral.add(statisticsInformation);
         panelGeneral.add(createNewAccount);
 
 
