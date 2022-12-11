@@ -197,7 +197,7 @@ public class Buyer extends Person{
         int available = product.getQuantity();
         this.shoppingCart.add(product);        
         if (available - product.getQuantity() >= 0) {
-            shoppingCart.add(product);
+            //shoppingCart.add(product);
             try {
                 PrintWriter pw = new PrintWriter(new FileWriter(new File(cart) , true));
                 pw.println(product.fileString());
