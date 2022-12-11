@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class LoginSeller {
 
@@ -61,11 +62,17 @@ public class LoginSeller {
 //                                    new BufferedReader(
 //                                            new InputStreamReader(System.in))
 
-                    BufferedReader reader;
-                    reader = new BufferedReader(new InputStreamReader(echoSocket.getInputStream()));
-                    String linesRead = "";
+//                    BufferedReader reader;
+//                    reader = new BufferedReader(new InputStreamReader(echoSocket.getInputStream()));
+//                    String linesRead = "";
+                    Scanner in = new Scanner(echoSocket.getInputStream());
 
-                    while ((linesRead = reader.readLine()) != null) {
+                    String linesRead="";
+
+                    linesRead=in.nextLine();
+
+                  //  while ((linesRead = reader.readLine()) != null) {
+
                         if (linesRead.contains("ERROR")) {
                             JOptionPane.showMessageDialog(null, "Error: Username and/or password is wrong. Please try again", "Seller Information",
                                     JOptionPane.ERROR_MESSAGE);
@@ -77,7 +84,7 @@ public class LoginSeller {
                             frame.dispose();
                             MarketPlaceClient marketPlaceClient=new MarketPlaceClient(4242, username.getText(), false,true);
                         }
-                    }
+                  //  }
                 } catch (IOException f) {
                     f.printStackTrace();
                 }
