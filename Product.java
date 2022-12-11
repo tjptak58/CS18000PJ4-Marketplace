@@ -65,6 +65,7 @@ public class Product {
         this.price = price;
         this.unitsPurchased = 0;
         this.customerList = new ArrayList<String>();
+        customerList.add("Test");
     }
 
     public String getProductName() {
