@@ -7,25 +7,27 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class LoginSeller {
+public class LoginBuyer {
 
-    JFrame frame = new JFrame();
+    JFrame frame=new JFrame();
 
-    JLabel enterYourUsername = new JLabel("Enter your username");
+    JLabel enterYourUsername=new JLabel("Enter your username");
 
 
-    JTextField username = new JTextField(20);
 
-    JLabel enterYourPassword = new JLabel("Enter your password");
-    JTextField password = new JTextField(20);
+    JTextField username =new JTextField(20);
 
-    JButton loginButton = new JButton("Login");
+    JLabel enterYourPassword=new JLabel("Enter your password");
+    JTextField password=new JTextField(20);
 
-    JButton backButton = new JButton("Back to Main Paige");
+    JButton loginButton=new JButton("Login");
 
-    ArrayList<String> usernameAndPasswordSeller = new ArrayList<>();
+    JButton backButton=new JButton("Back to Main Menu");
 
-    LoginSeller() {
+
+    ArrayList<String> usernameAndPasswordBuyer = new ArrayList<>();
+
+    LoginBuyer(){
         JPanel usernameInformation = new JPanel(new BorderLayout(10, 10));
         usernameInformation.add(enterYourUsername, BorderLayout.LINE_START);
         usernameInformation.add(username, BorderLayout.LINE_END);
@@ -47,11 +49,9 @@ public class LoginSeller {
                     ObjectOutputStream oos = new ObjectOutputStream(echoSocket.getOutputStream());
                     PrintWriter pw =                                            // 2nd statement
                             new PrintWriter(echoSocket.getOutputStream(), true);
-                    pw.println("LOGINSELLER");
+                    pw.println("LOGINBUYER");
                     pw.println(username.getText());
                     pw.println(password.getText());
-
-                   // pw.write(username.getText() + "; " + password.getText() + "\n");
 
 
 //
@@ -62,51 +62,47 @@ public class LoginSeller {
 //                                    new BufferedReader(
 //                                            new InputStreamReader(System.in))
 
-//                    BufferedReader reader;
-//                    reader = new BufferedReader(new InputStreamReader(echoSocket.getInputStream()));
-//                    String linesRead = "";
+
                     Scanner in = new Scanner(echoSocket.getInputStream());
 
                     String linesRead="";
 
                     linesRead=in.nextLine();
-
-                  //  while ((linesRead = reader.readLine()) != null) {
-
-                        if (linesRead.contains("ERROR")) {
+                        if ( linesRead.contains("ERROR")) {
                             JOptionPane.showMessageDialog(null, "Error: Username and/or password is wrong. Please try again", "Seller Information",
                                     JOptionPane.ERROR_MESSAGE);
 
                         } else if (linesRead.contains("CONFIRM")) {
-                            JOptionPane.showMessageDialog(null, "Login Successful", "Seller Information",
+                            JOptionPane.showMessageDialog(null, "Login Succesful. Please try again", "Seller Information",
                                     JOptionPane.INFORMATION_MESSAGE);
                             pw.println("LOGOUT");
                             frame.dispose();
-                            MarketPlaceClient marketPlaceClient=new MarketPlaceClient(4242, username.getText(), false,true);
+                            MarketPlaceClient marketPlaceClient=new MarketPlaceClient(4242, username.getText(), true,false);
                         }
-                  //  }
+
                 } catch (IOException f) {
                     f.printStackTrace();
                 }
-//                usernameAndPasswordSeller.clear();
+
+//                usernameAndPasswordBuyer.clear();
 //                // read from file
 //                try {
 //                    BufferedReader bfr = new BufferedReader(new FileReader("/Users/vijayvittal/IdeaProjects/Project/Project4/src/Seller.txt"));
 //                    String line = "";
 //                    while ((line = bfr.readLine()) != null) {
-//                        usernameAndPasswordSeller.add(line);
+//                        usernameAndPasswordBuyer.add(line);
 //                    }
 //                    bfr.close();
 //                } catch (IOException f) {
 //                    f.printStackTrace();
 //                }
 //                // if there is only one element in array list
-//                String[] split = usernameAndPasswordSeller.get(0).split(";");
+//                String[] split = usernameAndPasswordBuyer.get(0).split(";");
 //                String passwordTrim = split[1].trim();
-//                if (usernameAndPasswordSeller.size() == 1) {
+//                if (usernameAndPasswordBuyer.size() == 1) {
 //                    // if username and password or in arraylist
-//                    if ((usernameAndPasswordSeller.get(0).substring(0,  // request from server username and password of each account
-//                            usernameAndPasswordSeller.get(0).indexOf(";")).contains(username.getText())) && passwordTrim.contains(password.getText())) {
+//                    if ((usernameAndPasswordBuyer.get(0).substring(0,
+//                            usernameAndPasswordBuyer.get(0).indexOf(";")).contains(username.getText())) && passwordTrim.contains(password.getText())) {
 //                        LoginSuccessful loginSuccessful = new LoginSuccessful();
 //                    } else {
 //                        JOptionPane.showMessageDialog(null, "Error: Username and/or Password is incorrect)", "Login Seller",
@@ -115,16 +111,17 @@ public class LoginSeller {
 //                } else {
 //                    // do the same thing for size 1 but for all other sizes of array list
 //                }
+//            }
             }
         });
 
-        JPanel back = new JPanel();
+        JPanel back=new JPanel();
         back.add(backButton);
         backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 frame.dispose();
-                LoginOrCreateAccount loginOrCreateAccount = new LoginOrCreateAccount();
+                LoginOrCreateAccount loginOrCreateAccount=new LoginOrCreateAccount();
             }
         });
 
@@ -139,6 +136,8 @@ public class LoginSeller {
         frame.setLocationRelativeTo(null);
         frame.add(generalPanel);
         frame.setVisible(true);
+
+
 
     }
 }
