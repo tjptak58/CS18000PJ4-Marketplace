@@ -366,7 +366,7 @@ public class MarketPlaceClient extends JComponent implements Runnable {
         buyerMain.pack();
         buyerMain.setSize(600, 400);
         buyerMain.setLocationRelativeTo(null);
-        buyerMain.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        buyerMain.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         buyerMain.setVisible(true);
 
     }
@@ -499,7 +499,7 @@ public class MarketPlaceClient extends JComponent implements Runnable {
 
         productInfo.setSize(600, 400);
         productInfo.setLocationRelativeTo(null);
-        productInfo.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        productInfo.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         productInfo.setVisible(true);
         productInfo.requestFocus();  //Requests focus for the frame
     }
@@ -578,7 +578,7 @@ public class MarketPlaceClient extends JComponent implements Runnable {
 
         purchaseHistory.setSize(600, 400);
         purchaseHistory.setLocationRelativeTo(null);
-        purchaseHistory.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        purchaseHistory.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         purchaseHistory.setVisible(true);
         purchaseHistory.requestFocus();
     }
@@ -713,7 +713,7 @@ public class MarketPlaceClient extends JComponent implements Runnable {
         cart.pack();
         cart.setSize(600, 400);
         cart.setLocationRelativeTo(null);
-        cart.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        cart.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         cart.setVisible(true);
         cart.requestFocus();
     }
@@ -863,7 +863,7 @@ public class MarketPlaceClient extends JComponent implements Runnable {
         account.pack();
         account.setSize(600, 400);
         account.setLocationRelativeTo(null);
-        account.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        account.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         account.setVisible(true);
         account.requestFocus();
     }
@@ -908,7 +908,13 @@ public class MarketPlaceClient extends JComponent implements Runnable {
                     if (confirmation.equals("ERROR")) {
                         JOptionPane.showMessageDialog(null, "There is already a store with that name", "ERROR", JOptionPane.ERROR_MESSAGE);
                     } else {
-                        myStoreNames = (ArrayList<String>) ois.readObject();
+                        String returned = in.nextLine();
+                        String[] split = returned.split(";");
+                        myStoreNames.clear();
+                        for (String sp : split) {
+                            myStoreNames.add(sp);
+                        }
+                        
                     }
                        
                 } catch (Exception e1) {
@@ -1035,7 +1041,7 @@ public class MarketPlaceClient extends JComponent implements Runnable {
         sellerMain.pack();
         sellerMain.setSize(600, 400);
         sellerMain.setLocationRelativeTo(null);
-        sellerMain.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        sellerMain.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         sellerMain.setVisible(true);
         sellerMain.requestFocus();
 
@@ -1218,7 +1224,7 @@ public class MarketPlaceClient extends JComponent implements Runnable {
         editStore.pack();
         editStore.setSize(600, 400);
         editStore.setLocationRelativeTo(null);
-        editStore.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        editStore.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         editStore.setVisible(true);
         editStore.requestFocus();
     }
@@ -1354,7 +1360,7 @@ public class MarketPlaceClient extends JComponent implements Runnable {
         editProduct.pack();
         editProduct.setSize(600, 400);
         editProduct.setLocationRelativeTo(null);
-        editProduct.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        editProduct.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         editProduct.setVisible(true);
         editProduct.requestFocus();
     }
@@ -1510,7 +1516,7 @@ public class MarketPlaceClient extends JComponent implements Runnable {
         addProduct.pack();
         addProduct.setSize(600, 400);
         addProduct.setLocationRelativeTo(null);
-        addProduct.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        addProduct.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         addProduct.setVisible(true);
         addProduct.requestFocus();
     }
@@ -1599,7 +1605,7 @@ public class MarketPlaceClient extends JComponent implements Runnable {
         stats.pack();
         stats.setSize(600, 400);
         stats.setLocationRelativeTo(null);
-        stats.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        stats.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         stats.setVisible(true);
         stats.requestFocus();
     }
@@ -1725,7 +1731,7 @@ public class MarketPlaceClient extends JComponent implements Runnable {
 
         sellerDash.setSize(600, 400);
         sellerDash.setLocationRelativeTo(null);
-        sellerDash.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        sellerDash.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         sellerDash.setVisible(true);
         sellerDash.requestFocus();
     }
@@ -1824,7 +1830,7 @@ public class MarketPlaceClient extends JComponent implements Runnable {
 
         buyerDash.setSize(600, 400);
         buyerDash.setLocationRelativeTo(null);
-        buyerDash.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        buyerDash.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         buyerDash.setVisible(true);
         buyerDash.requestFocus();
     }
@@ -2364,7 +2370,7 @@ public class MarketPlaceClient extends JComponent implements Runnable {
         viewcart.pack();
         viewcart.setSize(600, 400);
         viewcart.setLocationRelativeTo(null);
-        viewcart.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        viewcart.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         viewcart.setVisible(true);
         viewcart.requestFocus();
     }
