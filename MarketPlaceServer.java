@@ -1028,15 +1028,24 @@ public class MarketPlaceServer implements Runnable {
                     String buyerPassword = in.nextLine();
                     // Listen for username and password pf buyer
 
+                    boolean loginSuccessful = false;
                     for (int i = 0; i < buyerArrayList.size(); i++) {
                         if (buyerUsername.equals(buyerArrayList.get(i).getUsername()) &&
                                 buyerPassword.equals(buyerArrayList.get(i).getPassword())) {
-                            pw.println("CONFIRM");
+                            loginSuccessful = true;
+                        }    
                             // returns "CONFIRM" if username and password does not exist of buyer
-                        } else {
+                        /*} else {
                             pw.println("ERROR");
+                            pw.flush();
                             // returns "ERROR" is username and password does not exist of buyer
-                        }
+                        } */
+                    }
+                    if (loginSuccessful) {
+                        pw.println("CONFIRM");
+                    } else {
+                        pw.println("ERROR");
+
                     }
                     pw.flush();
                     pw.close();
@@ -1046,17 +1055,27 @@ public class MarketPlaceServer implements Runnable {
                     String sellerUsername = in.nextLine();
                     String sellerPassword = in.nextLine();
                     // Listen for username and password of seller
+                    boolean loginSuccessful = false;
 
                     for (int i = 0; i < sellerArrayList.size(); i++) {
                         if (sellerUsername.equals(sellerArrayList.get(i).getUsername()) &&
                                 sellerPassword.equals(sellerArrayList.get(i).getPassword())) {
-                            pw.println("CONFIRM");
+                                    loginSuccessful = true;
+                            /*pw.println("CONFIRM");
+                            pw.flush(); */
                             // returns "CONFIRM" if username and password does not exist of seller
-                        } else {
+                        } /*else {
                             pw.println("ERROR");
+                            pw.flush();
                             // returns "ERROR" is username and password does not exist of seller
-                        }
+                        } */
                     }
+                    if (loginSuccessful) {
+                        pw.println("CONFIRM");
+                    } else {
+                        pw.println("ERROR");
+                    }
+                    
                     pw.flush();
                     pw.close();
 
