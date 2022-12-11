@@ -46,8 +46,10 @@ public class LoginSeller {
                     PrintWriter pw =                                            // 2nd statement
                             new PrintWriter(echoSocket.getOutputStream(), true);
                     pw.println("LOGINSELLER");
-                    pw.write(username.getText() + "; " + password.getText() + "\n");
-                    pw.close();
+                    pw.println(username.getText());
+                    pw.println(password.getText());
+                   // pw.write(username.getText() + "; " + password.getText() + "\n");
+
 
 //
                     //    BufferedReader in =                                          // 3rd statement
@@ -65,9 +67,9 @@ public class LoginSeller {
                         if (linesRead.contains("ERROR")) {
                             JOptionPane.showMessageDialog(null, "Error: Username and/or password is wrong. Please try again", "Seller Information",
                                     JOptionPane.ERROR_MESSAGE);
-                            reader.close();
+
                         } else if (linesRead.contains("CONFIRM")) {
-                            reader.close();
+
                             frame.dispose();
                             LoginSuccessful loginSuccessful = new LoginSuccessful();
                         }
