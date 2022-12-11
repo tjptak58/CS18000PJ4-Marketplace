@@ -629,13 +629,18 @@ public class MarketPlaceServer implements Runnable {
                         System.out.println(marketPlace.size() + " : SIZE AFTER ADDING STORE");
                         pw.println("CONFIRM");
                         pw.flush(); //FLUSHING!!!
-                        ArrayList<String> addedList = new ArrayList<>();
+                        //ArrayList<String> addedList = new ArrayList<>();
+                        String sendMarketPlace = "";
                         for (int j = 0; j < marketPlace.size(); j++) {
-                            addedList.add(marketPlace.get(j).getStoreName());
+                            //addedList.add(marketPlace.get(j).getStoreName());
+                            sendMarketPlace += marketPlace.get(j).getStoreName() + ";";
                             System.out.println(marketPlace.get(j).getStoreName()); //DEBUGGING
                         }
-                        oos.writeObject(addedList);
-                        oos.flush();
+                        sendMarketPlace = sendMarketPlace.substring(0, sendMarketPlace.length() - 1); //Removes semicolon in the end
+                        //oos.writeObject(addedList);
+                        //oos.flush();
+                        pw.println(sendMarketPlace);
+                        pw.flush(); //FLUSHING
 
                     } else {
                         pw.println("ERROR");
@@ -1068,7 +1073,7 @@ public class MarketPlaceServer implements Runnable {
 
         } catch (IOException e) {
             e.printStackTrace();
-            System.out.println("Server Error!");
+            System.out.println("Server Error! Caught Exception in OUTERMOS TRY CATCH BLOCK");
         }
 
     }   //Closes run method 
@@ -1107,10 +1112,22 @@ public class MarketPlaceServer implements Runnable {
                 FileWriter loopStoreWriter = new FileWriter(loopStoreFile, false);
                 PrintWriter pwLoopStore = new PrintWriter(loopStoreWriter);
                 for (int j = 0; j < marketPlace.get(i).getProducts().size(); j++) {
-                    pwLoopStore.println(marketPlace.get(i).getProducts().get(j));
+                    pwLoopStore.println(marketPlace.get(i).getProducts().get(j).fileString()); //DOES FILESTRINGMETHOD DO WHAT I WANT??
+                    pwLoopStore.flush(); //FLUSHING!!!
+                    //here
 
 
                 }
+
+                File loopLogFile = new File (marketPlace.get(i).getFilePathToPurchaseLog());
+                FileWriter loopLogWriter = new FileWriter(loopLogFile, false);
+                PrintWriter pwLoopLogWriter = new PrintWriter (loopLogWriter);
+                for (int k = 0; k < marketPlace.get(i).getPurchaseLog().size(); k++) {
+                    pwLoopLogWriter.println();
+                }
+
+
+
                 
 
             }
