@@ -233,17 +233,44 @@ public class Buyer extends Person{
                 product.setQuantity(product.getQuantity() + 1);
             }
         }
+        ArrayList<String> linesFromCart = new ArrayList<>();
+        try {
+            
+            BufferedReader bfr = new BufferedReader(new FileReader(new File(cart)));
+            String line = bfr.readLine();
+            while (line != null) {
+                linesFromCart.add(line);
+                line = bfr.readLine();
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        for (int i = 0; i < linesFromCart.size(); i++) {
+            if (linesFromCart.get(i).substring(0, linesFromCart.get(i).indexOf(";")).equals(product.getProductName())) {
+                linesFromCart.remove(i);
+            }
+        }
+        
+        
+
         try {
             PrintWriter pw = new PrintWriter(new FileWriter(new File(cart) , false));
-            for (int i = 0; i < shoppingCart.size(); i++) {
-                pw.println(shoppingCart.get(i).fileString());
-                /**pw.print(shoppingCart.get(i).getStoreName() + ";");
-                pw.print(shoppingCart.get(i).getDescription() + ";");
-                pw.print(shoppingCart.get(i).getQuantity() + ";");
-                pw.print(shoppingCart.get(i).getPrice() + "\n"); **/
-                pw.flush();
+            if (linesFromCart.size() == 0) {
+                pw.println("");
+            } else {
+                for (int i = 0; i < linesFromCart.size(); i++) {
+                    pw.println(linesFromCart.get(i));
+                    /**pw.print(shoppingCart.get(i).getStoreName() + ";");
+                    pw.print(shoppingCart.get(i).getDescription() + ";");
+                    pw.print(shoppingCart.get(i).getQuantity() + ";");
+                    pw.print(shoppingCart.get(i).getPrice() + "\n"); **/
+                    pw.flush();
+    
+                }
 
             }
+            
             pw.close();
 
         } catch (FileNotFoundException e) {
@@ -300,6 +327,7 @@ public class Buyer extends Person{
         curList.add(this.getUsername());
         p.setCustomerList(curList);
         shoppingCart.remove(p);
+        //BufferedReader bfr = new BufferedReader(new FileReader(new File()))
         try {
             PrintWriter pw = new PrintWriter(new FileWriter(new File(history) , false));
             for (Product product : purchased) {
