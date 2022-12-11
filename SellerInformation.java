@@ -97,6 +97,7 @@ public class SellerInformation {
 
                     try {
                         Socket echoSocket = new Socket(hostName, portNumber);        // 1st statement
+                        ObjectOutputStream oos = new ObjectOutputStream(echoSocket.getOutputStream());
                         PrintWriter pw =                                            // 2nd statement
                                 new PrintWriter(echoSocket.getOutputStream(), true);
                         pw.println("CREATEACCSELLER");
