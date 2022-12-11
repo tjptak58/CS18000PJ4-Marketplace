@@ -291,7 +291,7 @@ public class MarketPlaceServer implements Runnable {
                                     writeInfo.add(marketPlace.get(i).getProducts().get(j).getDescription());
                                     String quantString = String.format("%d", marketPlace.get(i).getProducts().get(j).getQuantity());
                                     writeInfo.add(quantString);
-                                    String priceString = String.format("%d", marketPlace.get(i).getProducts().get(j).getPrice());
+                                    String priceString = String.format("%.2f", marketPlace.get(i).getProducts().get(j).getPrice());
                                     writeInfo.add(priceString);
                                     try {
                                         oos.writeObject(writeInfo);
