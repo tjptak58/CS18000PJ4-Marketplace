@@ -1,17 +1,19 @@
-# CS18000PJ4-Marketplace
+# CS18000PJ5-Marketplace
 How to run our marketplace: 
 Open up the terminal and enter two commands 
-javac Marketplace.java 
-java Marketplace.java 
+javac MarketPlaceServer.java 
+java MarketPlaceServer.java 
+javac LoginOrCreateAccount.java
+java LoginOrCreateAccount.java
 
 Shreya Kamath - Submitted Review and Planning Report on Brightspace. 
 
 Tyler Ptak - Submitted Vocareum workspace.
 
 
-Login and Create Account Classes (LoginOrCreateAccount, LoginSellerOrBuyer, LoginBuyer, LoginSeller, LoginSuccessful, 
+Login and Create Account Classes (LoginOrCreateAccount, LoginSellerOrBuyer, LoginBuyer, LoginSeller, 
 BuyerInformation, SellerInformation, AccountCreated)
-All of these were classes which went from one frame to another depending on what method was called upon when using the GUI. BuyerInformation and SellerInformation had all the information related to the buyer and seller when creating an account respectively.
+All of these were classes which went from one frame to another depending on what method was called upon when using the GUI. BuyerInformation and SellerInformation had all the information related to the buyer and seller when creating an account respectively. LoginOrCreateAccount is where the program starts on the client side asking the user if they want to login or create an account. LoginSeller and LoginBuyer are the login forms respecitvely for each class. Account Created is a new frame telling the user that the account was created.
 
 Marketplace Class: 
 The main method, which starts with the login. The user has. the option to create an account or log in with an existing account. 
