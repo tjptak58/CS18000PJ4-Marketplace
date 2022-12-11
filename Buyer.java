@@ -200,11 +200,12 @@ public class Buyer extends Person{
             shoppingCart.add(product);
             try {
                 PrintWriter pw = new PrintWriter(new FileWriter(new File(cart) , true));
-                pw.print(product.getProductName() + ";");
+                pw.println(product.fileString());
+                /**pw.print(product.getProductName() + ";");
                 pw.print(product.getStoreName() + ";");
                 pw.print(product.getDescription() + ";");
                 pw.print(Integer.toString(product.getQuantity()) + ";");
-                pw.print(Double.toString(product.getPrice()) + "\n");
+                pw.print(Double.toString(product.getPrice()) + "\n"); **/
                 pw.flush();
                 pw.close();
 
@@ -234,11 +235,11 @@ public class Buyer extends Person{
         try {
             PrintWriter pw = new PrintWriter(new FileWriter(new File(cart) , false));
             for (int i = 0; i < shoppingCart.size(); i++) {
-                pw.print(shoppingCart.get(i).getProductName() + ";");
-                pw.print(shoppingCart.get(i).getStoreName() + ";");
+                pw.println(shoppingCart.get(i).fileString());
+                /**pw.print(shoppingCart.get(i).getStoreName() + ";");
                 pw.print(shoppingCart.get(i).getDescription() + ";");
                 pw.print(shoppingCart.get(i).getQuantity() + ";");
-                pw.print(shoppingCart.get(i).getPrice() + "\n");
+                pw.print(shoppingCart.get(i).getPrice() + "\n"); **/
                 pw.flush();
 
             }
@@ -301,11 +302,11 @@ public class Buyer extends Person{
         try {
             PrintWriter pw = new PrintWriter(new FileWriter(new File(history) , false));
             for (Product product : purchased) {
-                pw.print(product.getProductName() + ";");
-                pw.print(product.getStoreName() + ";");
+                pw.println(product.fileString());
+                /**pw.print(product.getStoreName() + ";");
                 pw.print(product.getDescription() + ";");
                 pw.print(Integer.toString(product.getQuantity()) + ";");
-                pw.print(Double.toString(product.getPrice()) + "\n");
+                pw.print(Double.toString(product.getPrice())); **/
                 pw.flush();
 
             }
