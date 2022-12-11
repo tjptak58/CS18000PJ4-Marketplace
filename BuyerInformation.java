@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class BuyerInformation {
     JFrame frame = new JFrame();
@@ -130,11 +131,16 @@ public class BuyerInformation {
 //                                    new BufferedReader(
 //                                            new InputStreamReader(System.in))
 
-                        BufferedReader reader;
-                        reader = new BufferedReader(new InputStreamReader(echoSocket.getInputStream()));
-                        String linesRead = "";
+//                        BufferedReader reader;
+//                        reader = new BufferedReader(new InputStreamReader(echoSocket.getInputStream()));
+                      //  String linesRead = "";
+                        Scanner in = new Scanner(echoSocket.getInputStream());
 
-                        while ((linesRead = reader.readLine()) != null) {
+                        String linesRead="";
+
+                        linesRead=in.nextLine();
+
+
                             if (linesRead.contains("ERROR User Information Already Exists")) {
                                 JOptionPane.showMessageDialog(null, "Error: Username already exists. Please Enter a new username", "Seller Information",
                                         JOptionPane.ERROR_MESSAGE);
@@ -144,7 +150,7 @@ public class BuyerInformation {
                                 frame.dispose();
                                 AccountCreated accountCreated = new AccountCreated();
                             }
-                        }
+
                     } catch (IOException g) {
                         g.printStackTrace();
                     }
