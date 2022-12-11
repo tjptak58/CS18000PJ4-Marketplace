@@ -35,6 +35,20 @@ public class SellerInformation {
     ArrayList<String> usernameAndPasswordSeller = new ArrayList<>();
 
     SellerInformation(){
+        String hostName = "localhost";
+        int portNumber = 4242; //do later
+        Socket echoSocket ;
+        PrintWriter pw = null;
+        BufferedReader reader;
+        try {
+         // 1st statement
+    echoSocket = new Socket(hostName, portNumber);
+                                               // 2nd statement
+          pw=  new PrintWriter(echoSocket.getOutputStream(), true);
+    reader= new BufferedReader(new InputStreamReader(echoSocket.getInputStream()));
+} catch (IOException g) {
+                g.printStackTrace();
+            }
 
         // text
         JPanel textAtTop= new JPanel(new BorderLayout(10,10));
@@ -60,6 +74,7 @@ public class SellerInformation {
         //Button Create new Account
         JPanel createNewAccount=new JPanel( );
         createNewAccount.add(createAccount);
+
         createAccount.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -89,24 +104,25 @@ public class SellerInformation {
                         flag=true;
                     }
                 if (!flag){
-                    String hostName = "localhost";
-                    int portNumber = 4242; //do later
-
-                    try {
-                        Socket echoSocket = new Socket(hostName, portNumber);        // 1st statement
-                        PrintWriter pw =                                            // 2nd statement
-                                new PrintWriter(echoSocket.getOutputStream(), true);
+//                    String hostName = "localhost";
+//                    int portNumber = 4242; //do later
+//
+//                    try {
+//                        Socket echoSocket = new Socket(hostName, portNumber);        // 1st statement
+//                        PrintWriter pw =                                            // 2nd statement
+//                                new PrintWriter(echoSocket.getOutputStream(), true);
                         pw.println("CREATEACCSELLER");
                         pw.println(username.getText());
                         pw.println(password.getText());
                         pw.println(email.getText());
+
                       //  pw.write(username.getText() + "; " + password.getText() + "; " + email.getText() + "; " + statistics.getText() + "\n");
 
 
 
 
-                        BufferedReader reader;
-                        reader = new BufferedReader(new InputStreamReader(echoSocket.getInputStream()));
+//                        BufferedReader reader;
+//                        reader = new BufferedReader(new InputStreamReader(echoSocket.getInputStream()));
                         String linesRead="";
 
                             while ((linesRead = reader.readLine()) != null) {
@@ -125,9 +141,9 @@ public class SellerInformation {
 //                                            new InputStreamReader(System.in))
 
 //
-                    } catch (IOException g) {
-                        g.printStackTrace();
-                    }
+//                    } catch (IOException g) {
+//                        g.printStackTrace();
+//                    }
 
                 }
             }
