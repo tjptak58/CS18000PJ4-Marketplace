@@ -79,18 +79,18 @@ public class BuyerInformation {
                     flag = true;
                 }
 
-                    if (purchaseHistory.getText().equals("buyer.txt") ||
-                            purchaseHistory.getText().equals("seller.txt") || purchaseHistory.getText().equals("storeListFile.txt")) {
-                        JOptionPane.showMessageDialog(null, "Error: Can not use this txt file)", "Seller Information",
-                                JOptionPane.ERROR_MESSAGE);
-                        flag=true;
-                    }
-                    if (shoppingCart.getText().equals("buyer.txt") ||
-                            shoppingCart.getText().equals("seller.txt") || shoppingCart.getText().equals("storeListFile.txt")) {
-                        JOptionPane.showMessageDialog(null, "Error: Can not use this txt file)", "Seller Information",
-                                JOptionPane.ERROR_MESSAGE);
-                        flag=true;
-                    }
+//                    if (purchaseHistory.getText().equals("buyer.txt") ||
+//                            purchaseHistory.getText().equals("seller.txt") || purchaseHistory.getText().equals("storeListFile.txt")) {
+//                        JOptionPane.showMessageDialog(null, "Error: Can not use this txt file)", "Seller Information",
+//                                JOptionPane.ERROR_MESSAGE);
+//                        flag=true;
+//                    }
+//                    if (shoppingCart.getText().equals("buyer.txt") ||
+//                            shoppingCart.getText().equals("seller.txt") || shoppingCart.getText().equals("storeListFile.txt")) {
+//                        JOptionPane.showMessageDialog(null, "Error: Can not use this txt file)", "Seller Information",
+//                                JOptionPane.ERROR_MESSAGE);
+//                        flag=true;
+//                    }
                 File f =new File(purchaseHistory.getText());
                 if (f.exists()) {
                     JOptionPane.showMessageDialog(null, "Error: File Already Exists. Please Enter a new one", "Seller Information",
@@ -111,12 +111,14 @@ public class BuyerInformation {
 
                     try {
                         Socket echoSocket = new Socket(hostName, portNumber);        // 1st statement
+                        ObjectOutputStream oos = new ObjectOutputStream(echoSocket.getOutputStream());
                         PrintWriter pw =                                            // 2nd statement
                                 new PrintWriter(echoSocket.getOutputStream(), true);
                         pw.println("CREATEACCBUYER");
                         pw.println(username.getText());
                         pw.println(password.getText());
                         pw.println(email.getText());
+
                       //  pw.write(username.getText() + "; " + password.getText() + "; " + email.getText()  + "\n");
 
 
