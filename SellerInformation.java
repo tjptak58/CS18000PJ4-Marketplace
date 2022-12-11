@@ -79,18 +79,18 @@ public class SellerInformation {
                             JOptionPane.ERROR_MESSAGE);
                     flag = true;
                 }
-                    if (statistics.getText().equals("buyer.txt") ||
-                           statistics.getText().equals("seller.txt") || statistics.getText().equals("storeListFile.txt")) {
-                        JOptionPane.showMessageDialog(null, "Error: Can not use this txt file)", "Seller Information",
-                                JOptionPane.ERROR_MESSAGE);
-                        flag=true;
-                    }
-                    File f =new File(statistics.getText());
-                    if (f.exists()) {
-                        JOptionPane.showMessageDialog(null, "Error: File Already Exists. Please Enter a new one", "Seller Information",
-                                JOptionPane.ERROR_MESSAGE);
-                        flag=true;
-                    }
+//                    if (statistics.getText().equals("buyer.txt") ||
+//                           statistics.getText().equals("seller.txt") || statistics.getText().equals("storeListFile.txt")) {
+//                        JOptionPane.showMessageDialog(null, "Error: Can not use this txt file)", "Seller Information",
+//                                JOptionPane.ERROR_MESSAGE);
+//                        flag=true;
+//                    }
+//                    File f =new File(statistics.getText());
+//                    if (f.exists()) {
+//                        JOptionPane.showMessageDialog(null, "Error: File Already Exists. Please Enter a new one", "Seller Information",
+//                                JOptionPane.ERROR_MESSAGE);
+//                        flag=true;
+//                    }
                 if (!flag){
                     String hostName = "localhost";
                     int portNumber = 4242; //do later
