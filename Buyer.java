@@ -250,7 +250,14 @@ public class Buyer extends Person{
     public void purchase(Product p) {
         p.setUnitsPurchased(p.getUnitsPurchased() + 1); //ADDED THIS LINE 11/12/22
         purchased.add(p);
+    
         ArrayList<String> curList = p.getCustomerList();
+        if (curList.size() == 1) {
+            //Means only name is Test
+            if (curList.get(0).equals("Test")) {
+                curList.clear();
+            }
+        }
         curList.add(this.getUsername());
         p.setCustomerList(curList);
         shoppingCart.remove(p);
