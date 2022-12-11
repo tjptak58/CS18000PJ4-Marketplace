@@ -272,6 +272,8 @@ public class MarketPlaceServer implements Runnable {
                         }
                      }
                      //Finished implementation
+                     //Calling writeToFiles method
+                     writeToFiles(buyerArrayList, sellerArrayList, marketPlace);
 
 
  
@@ -377,6 +379,8 @@ public class MarketPlaceServer implements Runnable {
                     oos.writeObject(viewCart(delUserName)); //Sends new shopping cart
                     oos.flush(); //FLUSHING!!!
                     //Finished implementation
+                    //Calling writeToFiles method
+                    writeToFiles(buyerArrayList, sellerArrayList, marketPlace);
 
 
 
@@ -440,6 +444,8 @@ public class MarketPlaceServer implements Runnable {
                         }
                     }
                     //Finished implementation
+                    //Calling writeToFiles method
+                    writeToFiles(buyerArrayList, sellerArrayList, marketPlace);
 
 
                 } else if (keyWord.equals("GETACCOUNTINFO")) {
@@ -510,6 +516,8 @@ public class MarketPlaceServer implements Runnable {
                     }
 
                     //Added implementation for seller 9/12/22
+                    //Calling writeToFiles method
+                    writeToFiles(buyerArrayList, sellerArrayList, marketPlace);
                     
 
 
@@ -586,6 +594,8 @@ public class MarketPlaceServer implements Runnable {
                         }
                     }
                     //Finished implementation
+                    //Calling writeToFiles method
+                    writeToFiles(buyerArrayList, sellerArrayList, marketPlace);
                     
 
                 } else if (keyWord.equals("ADDSTORE")) {
@@ -648,6 +658,8 @@ public class MarketPlaceServer implements Runnable {
                     }
                     //CHANGED IMPLEMENTATION 12/9/22!!!!
                     //Finished implementation w/ PurchaseLog 
+                    //Calling writeToFiles method
+                    writeToFiles(buyerArrayList, sellerArrayList, marketPlace);
 
 
                 } else if (keyWord.equals("ADDPRODUCT")) {
@@ -691,6 +703,8 @@ public class MarketPlaceServer implements Runnable {
                         }
                     }
                     //Finished implementation
+                    //Calling writeToFiles method
+                    writeToFiles(buyerArrayList, sellerArrayList, marketPlace);
 
 
 
@@ -718,7 +732,9 @@ public class MarketPlaceServer implements Runnable {
                             }
                         }
                     }
-                    //Finished implementation w/o TODO
+                    //Finished implementation w/o 
+                    //Calling writeToFiles method
+                    writeToFiles(buyerArrayList, sellerArrayList, marketPlace);
 
 
 
@@ -761,6 +777,8 @@ public class MarketPlaceServer implements Runnable {
                     }
                     //Not sending anything back
                     //Finished implementation
+                    //Calling writeToFiles method
+                    writeToFiles(buyerArrayList, sellerArrayList, marketPlace);
 
                 
 
@@ -954,6 +972,8 @@ public class MarketPlaceServer implements Runnable {
 
                     pw.flush(); //FLUSHING!!!
                     pw.close();
+                    //Calling writeToFile method
+                    writeToFiles(buyerArrayList, sellerArrayList, marketPlace);
 
                 } else if (keyWord.equals("CREATEACCSELLER")) {
                     String sellerAccUsername = in.nextLine();
@@ -996,6 +1016,8 @@ public class MarketPlaceServer implements Runnable {
 
                     pw.flush(); //FLUSHING!!!
                     pw.close(); 
+                    //Calling writeFile method
+                    writeToFiles(buyerArrayList, sellerArrayList, marketPlace);
                     
                 } else if (keyWord.equals("LOGINBUYER")) {
                     String buyerUsername = in.nextLine();
@@ -1090,6 +1112,26 @@ public class MarketPlaceServer implements Runnable {
                 pwbf.println(buyerArrayList.get(i).getUsername() + ";" + buyerArrayList.get(i).getPassword() + ";" + buyerArrayList.get(i).getEmail() + ";" + buyerArrayList.get(i).getCart() + ";" + buyerArrayList.get(i).getHistory());
                 pwbf.flush();
                 //Write to cart and history of buyer too
+                File buyerCartFile = new File(buyerArrayList.get(i).getCart());
+                FileWriter writerCartFile = new FileWriter(buyerCartFile, false);
+                PrintWriter pWriterCartFile = new PrintWriter(writerCartFile);
+
+                for (int j = 0; j < buyerArrayList.get(i).getShoppingCart().size(); j++) {
+                    pWriterCartFile.println(buyerArrayList.get(i).getShoppingCart().get(j).fileString()); //CALLING FILESTRING METHOD FOR PRODUCT HERE !!!
+                    pWriterCartFile.flush();
+
+                }
+                pWriterCartFile.close();
+
+                File buyerHistoryFile = new File(buyerArrayList.get(i).getHistory());
+                FileWriter buyerHistoryWriter = new FileWriter(buyerHistoryFile, false);
+                PrintWriter pHistoryWriter = new PrintWriter(buyerHistoryWriter);
+
+                for (int j = 0; j < buyerArrayList.get(i).getPurchased().size(); j++) {
+                    pHistoryWriter.println(buyerArrayList.get(i).getPurchased().get(j).fileString());
+                    pHistoryWriter.flush();
+                }
+                pHistoryWriter.close();
             }
             
             File sf = new File("seller.txt");
@@ -1118,13 +1160,17 @@ public class MarketPlaceServer implements Runnable {
 
 
                 }
+                pwLoopStore.close();
 
                 File loopLogFile = new File (marketPlace.get(i).getFilePathToPurchaseLog());
                 FileWriter loopLogWriter = new FileWriter(loopLogFile, false);
                 PrintWriter pwLoopLogWriter = new PrintWriter (loopLogWriter);
                 for (int k = 0; k < marketPlace.get(i).getPurchaseLog().size(); k++) {
-                    pwLoopLogWriter.println();
+                    pwLoopLogWriter.println(marketPlace.get(i).getPurchaseLog().get(k).purchaseFileString());
+                    pwLoopLogWriter.flush(); //FLUSHING!!!
+                    
                 }
+                pwLoopLogWriter.close();
 
 
 
@@ -1136,6 +1182,7 @@ public class MarketPlaceServer implements Runnable {
             pwbf.close();
             pwsf.close();
             pwslf.close();
+            
 
             
         } catch (IOException e) {
