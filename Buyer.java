@@ -225,11 +225,12 @@ public class Buyer extends Person{
      * Removes a product from the shopping cart of the user
      */
     public void removeFromCart(Product product) {
-        product.setQuantity(product.getQuantity() + 1);
+        //product.setQuantity(product.getQuantity() + 1);
 
         for (int i = 0 ; i < shoppingCart.size() ; i++) {
             if (shoppingCart.get(i).getProductName().equals(product.getProductName())) {
                 shoppingCart.remove(i);
+                product.setQuantity(product.getQuantity() + 1);
             }
         }
         try {
