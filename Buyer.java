@@ -35,8 +35,26 @@ public class Buyer extends Person{
                 if (s == null) {
                     break;
                 } else {
-                    String[] split = s.split(";");
-                    shoppingCart.add(new Product(split[0], split[1], split[2], Integer.parseInt(split[3]), Double.parseDouble(split[4])));
+                    String[] productArray = s.split(";");
+                    ArrayList<String> customerList = new ArrayList<>();
+                    //If a customer has bought the same product multiple times then their name appears multiple times in the ArrayList
+                    if (productArray[6].indexOf(",") == -1) {
+                        if (productArray[6] != "") {
+                        //If here then only one customer has purchased the product
+                        customerList.add(productArray[6]);
+
+                        }
+                    } else {
+                        //More than one customer has purchased the product
+                        String[] customerL = productArray[6].split(",");
+                        for (int i = 0; i < customerL.length; i++) {
+                             customerList.add(customerL[i]);
+                        }
+
+                    }
+                    this.shoppingCart.add(new Product(productArray[0], productArray[1], productArray[2], Integer.parseInt(productArray[3]), Double.parseDouble(productArray[4]), Integer.parseInt(productArray[5]), customerList ));
+                    /**String[] split = s.split(";");
+                    shoppingCart.add(new Product(split[0], split[1], split[2], Integer.parseInt(split[3]), Double.parseDouble(split[4]))); **/
                     s = buf.readLine();
                 }  
             }
@@ -53,8 +71,26 @@ public class Buyer extends Person{
                 if (s == null) {
                     break;
                 } else {
-                    String[] split = s.split(";");
-                    purchased.add(new Product(split[0], split[1], split[2], Integer.parseInt(split[3]), Double.parseDouble(split[4])));
+                    String[] productArray = s.split(";");
+                    ArrayList<String> customerList = new ArrayList<>();
+                    //If a customer has bought the same product multiple times then their name appears multiple times in the ArrayList
+                    if (productArray[6].indexOf(",") == -1) {
+                        if (productArray[6] != "") {
+                        //If here then only one customer has purchased the product
+                        customerList.add(productArray[6]);
+
+                        }
+                    } else {
+                        //More than one customer has purchased the product
+                        String[] customerL = productArray[6].split(",");
+                        for (int i = 0; i < customerL.length; i++) {
+                             customerList.add(customerL[i]);
+                        }
+
+                    }
+                    this.purchased.add(new Product(productArray[0], productArray[1], productArray[2], Integer.parseInt(productArray[3]), Double.parseDouble(productArray[4]), Integer.parseInt(productArray[5]), customerList ));
+                    /**String[] split = s.split(";");
+                    purchased.add(new Product(split[0], split[1], split[2], Integer.parseInt(split[3]), Double.parseDouble(split[4])));**/
                     s = buftwo.readLine();
                 }  
             }
