@@ -673,16 +673,6 @@ public class MarketPlaceClient extends JComponent implements Runnable {
         JLabel title = new JLabel("<html><h1>EDIT ACCOUNT</h1></html>");     //Createds title
         accountNorth.add(title);
         account.add(accountNorth, BorderLayout.NORTH);
-        ArrayList<String> returned = new ArrayList<String>();
-        try {
-            pw.println("GETACCOUNTINFO");
-            pw.println(username);
-            pw.flush();
-            returned = (ArrayList<String>) ois.readObject(); //SERVERREQUEST - GETACCOUNTINFO
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
         JPanel accountCentral = new JPanel(new BorderLayout());
         JPanel accountFields = new JPanel();
         BoxLayout boxlayout = new BoxLayout(accountFields, BoxLayout.Y_AXIS);
@@ -690,12 +680,12 @@ public class MarketPlaceClient extends JComponent implements Runnable {
         
         JPanel password = new JPanel(new FlowLayout());
         JLabel passwordText = new JLabel("Password: ");
-        JTextField passwordField = new JTextField(returned.get(1)); //prepopulated with password
+        JTextField passwordField = new JTextField(edit.get(1)); //prepopulated with password
         password.add(passwordText);
         password.add(passwordField);
         JPanel email = new JPanel(new FlowLayout());
         JLabel emailText = new JLabel("Email: ");
-        JTextField emailField = new JTextField(returned.get(0)); //prepopulated with email
+        JTextField emailField = new JTextField(edit.get(0)); //prepopulated with email
         email.add(emailText);
         email.add(emailField);
 
@@ -703,7 +693,7 @@ public class MarketPlaceClient extends JComponent implements Runnable {
         JButton update = new JButton("Update");
         update.addActionListener(new ActionListener() {      
             public void actionPerformed(ActionEvent e) {   
-                account.dispose();      //ACTION LISTENER - Sends the user back to the main page
+                     //ACTION LISTENER - Sends the user back to the main page
                 ArrayList<String> out = new ArrayList<String>();
                 String p = passwordField.getText();
                 String em = emailField.getText();
@@ -712,7 +702,7 @@ public class MarketPlaceClient extends JComponent implements Runnable {
                 try {
                     pw.println("UPDATEACCOUNTINFO");
                     pw.println(username);
-                    oos.writeObject(out);  //FIX
+                    oos.writeObject(out);
                     pw.flush();
                     oos.flush();   
                 } catch (Exception e1) {
@@ -739,6 +729,7 @@ public class MarketPlaceClient extends JComponent implements Runnable {
                             e1.printStackTrace();
                         }
                     }
+                    account.dispose(); 
                     buyerMain(productNames);
                 } else if (loggedInAsSeller) {
                     try {
@@ -746,6 +737,7 @@ public class MarketPlaceClient extends JComponent implements Runnable {
                         pw.println(username);
                         pw.flush();
                         myStoreNames = (ArrayList<String>) ois.readObject(); //SERVERREQUEST GETSUPERSTORES
+                        account.dispose(); 
                         sellerMain(myStoreNames); 
                     } catch (Exception e1) {
                         e1.printStackTrace();
@@ -1052,7 +1044,7 @@ public class MarketPlaceClient extends JComponent implements Runnable {
         editStore.add(editStoreCentral, BorderLayout.CENTER);
 
         JPanel editStoreSouth = new JPanel(new FlowLayout());
-        JTextField importText = new JTextField(10);  //FilePath
+        JTextField importText = new JTextField(6);  //FilePath
         JButton importProduct = new JButton("Import");
         importProduct.addActionListener(new ActionListener() {      
             public void actionPerformed(ActionEvent e) {  //ACTIONLISTENER Import PRODUCATS
@@ -1086,7 +1078,7 @@ public class MarketPlaceClient extends JComponent implements Runnable {
             }
         
         });
-        JTextField exportText = new JTextField(10);  //FilePath
+        JTextField exportText = new JTextField(6);  //FilePath
         JButton exportProduct = new JButton("Export"); //Adds bottom buttons
         exportProduct.addActionListener(new ActionListener() {      
             public void actionPerformed(ActionEvent e) {  
@@ -1306,29 +1298,68 @@ public class MarketPlaceClient extends JComponent implements Runnable {
         JButton create = new JButton("Create");
         create.addActionListener(new ActionListener() {   
             public void actionPerformed(ActionEvent e) {
-                String pInfo = "";
-                pInfo += productNameField.getText() + ";";
-                pInfo += storeName + ";";
-                pInfo += descriptionField.getText() + ";";
-                pInfo += quantityField.getText() + ";";
-                pInfo += priceField.getText();
-                System.out.println(pInfo);
-                String confirmed = "";
-                try {
-                    pw.println("ADDPRODUCT");
-                    pw.println(pInfo);
-                    pw.println(storeName);
-                    pw.flush();
-                    confirmed = in.nextLine();
-                } catch (Exception e1) {
-                    e1.printStackTrace();
-                }
-                if (confirmed.equals("ERROR")) {
-                    JOptionPane.showMessageDialog(null, "There is already a product with that name in your store",
+                boolean validInput = true;
+                if (productNameField.getText().contains(";")) {
+                    JOptionPane.showMessageDialog(null, "Product Name cannot contain a semicolon",
                      "ERROR", JOptionPane.ERROR_MESSAGE);
+                     validInput = false;
+                } else if (descriptionField.getText().contains(";")) {
+                    JOptionPane.showMessageDialog(null, "Description cannot contain a semicolon",
+                     "ERROR", JOptionPane.ERROR_MESSAGE);
+                     validInput = false;
+                } else if (quantityField.getText().contains(";")) {
+                    JOptionPane.showMessageDialog(null, "Description cannot contain a semicolon",
+                     "ERROR", JOptionPane.ERROR_MESSAGE);
+                     validInput = false;
+                } else if (priceField.getText().contains(";")) {
+                    JOptionPane.showMessageDialog(null, "Description cannot contain a semicolon",
+                     "ERROR", JOptionPane.ERROR_MESSAGE);
+                     validInput = false;
+                } 
+                try {
+                    int q = Integer.parseInt(quantityField.getText());
+                } catch (Exception e1) {
+                    JOptionPane.showMessageDialog(null, "Quanity must be a valid Integer",
+                     "ERROR", JOptionPane.ERROR_MESSAGE);
+                    validInput = false;
                 }
-                addProduct.dispose();
-                displayEditStore(storeName);
+
+                try {
+                    double d = Double.parseDouble(priceField.getText());
+                } catch (Exception e1) {
+                    JOptionPane.showMessageDialog(null, "Price must be a valid float",
+                     "ERROR", JOptionPane.ERROR_MESSAGE);
+                    validInput = false;
+                }
+
+
+                if (validInput) {
+                    String pInfo = "";
+                    pInfo += productNameField.getText() + ";";
+                    pInfo += storeName + ";";
+                    pInfo += descriptionField.getText() + ";";
+                    pInfo += quantityField.getText() + ";";
+                    pInfo += priceField.getText();
+                    System.out.println(pInfo);
+                    String confirmed = "";
+                    try {
+                        pw.println("ADDPRODUCT");
+                        pw.println(pInfo);
+                        pw.println(storeName);
+                        pw.flush();
+                        confirmed = in.nextLine();
+                    } catch (Exception e1) {
+                        e1.printStackTrace();
+                    }
+                    if (confirmed.equals("ERROR")) {
+                        JOptionPane.showMessageDialog(null, "There is already a product with that name in your store",
+                         "ERROR", JOptionPane.ERROR_MESSAGE);
+                    }
+                    addProduct.dispose();
+                    displayEditStore(storeName);    
+                } else {
+                    displayAddProduct(storeName);
+                }
                 
             }
         
