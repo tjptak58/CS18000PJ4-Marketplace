@@ -882,10 +882,15 @@ public class MarketPlaceServer implements Runnable {
                     String salesStoreName = in.nextLine();
                     String salesProdName = in.nextLine();
                     String sendBackInfo = "";
-                    //SENDING BACK STRING WITH INFO numberOfUnitsSold;TotalRevenueFromSales
+                    //SENDING BACK int WITH INFO numberOfUnitsSold
+                    int counter = 0;
                     for (int i = 0; i < marketPlace.size(); i++) {
                         if (marketPlace.get(i).getStoreName().equals(salesStoreName)) {
                             for (int j = 0; j < marketPlace.get(i).getPurchaseLog().size(); j++) {
+                                if (marketPlace.get(i).getPurchaseLog().get(j).getProductName().equals(salesProdName)) {
+                                    counter += 1;
+                                }
+
 
 
                             }
@@ -894,6 +899,9 @@ public class MarketPlaceServer implements Runnable {
                         }
 
                     }
+                    pw.println(counter); //SENDING INT
+                    pw.flush(); //FLUSHING!!!
+                    //Finished implementation
 
                 } else if (keyWord.equals("NUMINCART")) {
                     //Listen for sellerName
