@@ -114,7 +114,10 @@ public class BuyerInformation {
                         PrintWriter pw =                                            // 2nd statement
                                 new PrintWriter(echoSocket.getOutputStream(), true);
                         pw.println("CREATEACCBUYER");
-                        pw.write(username.getText() + "; " + password.getText() + "; " + email.getText()  + "\n");
+                        pw.println(username.getText());
+                        pw.println(password.getText());
+                        pw.println(email.getText());
+                      //  pw.write(username.getText() + "; " + password.getText() + "; " + email.getText()  + "\n");
 
 
 //
