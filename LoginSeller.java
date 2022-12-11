@@ -80,7 +80,9 @@ public class LoginSeller {
                         } else if (linesRead.contains("CONFIRM")) {
                             JOptionPane.showMessageDialog(null, "Login Successful", "Seller Information",
                                     JOptionPane.INFORMATION_MESSAGE);
+
                             pw.println("LOGOUT");
+                            pw.flush();
                             frame.dispose();
                             MarketPlaceClient marketPlaceClient=new MarketPlaceClient(4242, username.getText(), false,true);
                         }
