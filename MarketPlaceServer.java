@@ -962,8 +962,10 @@ public class MarketPlaceServer implements Runnable {
                     }
                     if (userInfoExists) {
                         pw.println("ERROR User Information Already Exists");
+                        pw.flush();
                     } else {
                         pw.println("CONFIRM");
+                        pw.flush();
                         synchronized (objectForBuyerListModification) {
                             buyerArrayList.add(new Buyer(buyerAccUsername, buyerAccPassword, buyerAccEmail, buyerAccUsername + "Cart.txt", buyerAccUsername + "History.txt"));
                         }
@@ -1007,8 +1009,10 @@ public class MarketPlaceServer implements Runnable {
                     }
                     if (userInfoExists) {
                         pw.println("ERROR User Information Already Exists");
+                        pw.flush();
                     } else {
                         pw.println("CONFIRM");
+                        pw.flush();
                         synchronized (objectForSellerListModification) {
                             sellerArrayList.add(new Seller(sellerAccUsername, sellerAccPassword, sellerAccEmail, sellerAccUsername + "FilePath.txt"));
                         }
