@@ -51,20 +51,19 @@ public class MarketPlaceClient extends JComponent implements Runnable {
         MarketPlaceClient.username = username;
         MarketPlaceClient.loggedInAsBuyer = loggedInAsBuyer;
         MarketPlaceClient.loggedInAsSeller = loggedInAsSeller;
-
     }
 
     public void run() {  //can't close, use shutdownOutput()
         try {
-            username = "tptak";
-            //username = "greg";
+            //username = "tptak";
+            username = "greg";
             socket = new Socket("localhost", 4242); //MarketplaceClient.portnumber
             pw = new PrintWriter(socket.getOutputStream());
             in = new Scanner(socket.getInputStream());
             oos = new ObjectOutputStream(socket.getOutputStream());
             ois = new ObjectInputStream(socket.getInputStream()); 
-            loggedInAsBuyer = true;
-            loggedInAsSeller = false;
+            loggedInAsBuyer = false;
+            loggedInAsSeller = true;
             if (loggedInAsBuyer) {
                 pw.println("GETSUPERSTORES");
                 pw.flush();
@@ -323,21 +322,27 @@ public class MarketPlaceClient extends JComponent implements Runnable {
                 product1Add.addActionListener(new ActionListener() {      
                     public void actionPerformed(ActionEvent e) {           //ACTION LISTENER - Add to cart Ask the user how many they want to buy
                         String s = JOptionPane.showInputDialog("How many items do you want to buy?");
-                        try {   
-                            pw.println("ADDTOCART");
-                            pw.println(product);
-                            pw.println(store);
-                            pw.println(Integer.parseInt(s));
-                            pw.println(username);
-                            pw.flush();
-                            String flag = in.nextLine(); //SERVERREQUEST - ADDTOCART
-                            if (flag.equals("ERROR")) {
-                                JOptionPane.showMessageDialog(null, "This item is out of stock for your purchase amount", 
-                                "ERROR", JOptionPane.ERROR_MESSAGE);
-                            }    
-                        } catch (Exception e1) {
-                            e1.printStackTrace();
+                        if (s == null) {
+                            buyerMain.dispose();
+                            buyerMain(productNames);
+                        } else {
+                            try {   
+                                pw.println("ADDTOCART");
+                                pw.println(product);
+                                pw.println(store);
+                                pw.println(s);
+                                pw.println(username);
+                                pw.flush();
+                                String flag = in.nextLine(); //SERVERREQUEST - ADDTOCART
+                                if (flag.equals("ERROR")) {
+                                    JOptionPane.showMessageDialog(null, "This item is out of stock for your purchase amount", 
+                                    "ERROR", JOptionPane.ERROR_MESSAGE);
+                                }    
+                            } catch (Exception e1) {
+                                e1.printStackTrace();
+                            }
                         }
+                        
                     }
                 });
                 product1.add(product1Add);
@@ -401,22 +406,21 @@ public class MarketPlaceClient extends JComponent implements Runnable {
         JPanel productInfoCentral = new JPanel();
         BoxLayout boxlayout = new BoxLayout(productInfoCentral, BoxLayout.Y_AXIS); //Add Product info
         productInfoCentral.setLayout(boxlayout);
-        String info = "";
+        ArrayList<String> info = new ArrayList<String>();
         try {
             pw.println("PRODUCTINFO");
             pw.println(product);
             pw.println(store);
             pw.flush();
-            info = in.nextLine(); //SERVERREQUEST PRODUCTINFO      
+            info = (ArrayList<String>) ois.readObject(); //SERVERREQUEST PRODUCTINFO      
         } catch (Exception e) {
             e.printStackTrace();
         }
-        String[] infoSplit = info.split(";");
-        JLabel productNameLabel = new JLabel(String.format("Product Name: %s" , infoSplit[0]));
-        JLabel storeNameLabel = new JLabel(String.format("Store Name: %s" , infoSplit[1]));
-        JLabel descriptionLabel = new JLabel(String.format("Description: %s" , infoSplit[2]));
-        JLabel quantityLabel = new JLabel(String.format("Quantity: %d" , infoSplit[3]));
-        JLabel priceLabel = new JLabel(String.format("Price: %.2f" , infoSplit[4]));
+        JLabel productNameLabel = new JLabel(String.format("Product Name: %s" , product));
+        JLabel storeNameLabel = new JLabel(String.format("Store Name: %s" , info.get(0)));
+        JLabel descriptionLabel = new JLabel(String.format("Description: %s" , info.get(1)));
+        JLabel quantityLabel = new JLabel(String.format("Quantity: %s" , info.get(2)));
+        JLabel priceLabel = new JLabel(String.format("Price: %s" , info.get(3)));
         productInfoCentral.add(productNameLabel);
         productInfoCentral.add(storeNameLabel);
         productInfoCentral.add(descriptionLabel);
@@ -451,9 +455,19 @@ public class MarketPlaceClient extends JComponent implements Runnable {
         contactSeller.addActionListener(new ActionListener() {      
             public void actionPerformed(ActionEvent e) {           //Send the user back to the buyer home
                 String output = "";
+                ArrayList<String> info = new ArrayList<String>();
+                try {
+                    pw.println("PRODUCTINFO");
+                    pw.println(product);
+                    pw.println(store);
+                    pw.flush();
+                    info = (ArrayList<String>) ois.readObject(); //SERVERREQUEST PRODUCTINFO      
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                }
                 try {
                     pw.println("CONTACTSELLER");
-                    pw.println(infoSplit[1]); //gets store title
+                    pw.println(info.get(1)); //gets store title
                     pw.flush();
                     var returned = (ArrayList<String>) ois.readObject(); //SERVERREQUEST CONTACTSELLER   
                     for (String name : returned) {
@@ -642,8 +656,6 @@ public class MarketPlaceClient extends JComponent implements Runnable {
                     try {
                         pw.println("PURCHASE");  //SERVERREQUEST PURCHASE
                         pw.println(username);
-                        pw.flush();
-                        cart.dispose();
                         pw.println("GETSUPERSTORES");
                         pw.flush();
                         superStores = (ArrayList<String>) ois.readObject(); //SERVERREQUEST GETSUPERSTORES
@@ -660,6 +672,7 @@ public class MarketPlaceClient extends JComponent implements Runnable {
                     } catch (Exception e1) {
                         e1.printStackTrace();
                     }
+                    cart.dispose();
                 }
             }
         
@@ -920,6 +933,7 @@ public class MarketPlaceClient extends JComponent implements Runnable {
                 } catch (Exception e1) {
                     e1.printStackTrace();
                 }
+                sellerMain.dispose();
                 sellerMain(myStoreNames); 
                 
             }
@@ -1233,17 +1247,16 @@ public class MarketPlaceClient extends JComponent implements Runnable {
      */
     public void displayEditProduct(String product , String storeString) {
         
-        String info = "";
+        ArrayList<String> info = new ArrayList<>();
         try {
             pw.println("PRODUCTINFO");
             pw.println(product);
             pw.println(storeString);
             pw.flush();
-            info = in.nextLine();   //SERVERREQUEST - PRODUCTINFO
+            info = (ArrayList<String>) ois.readObject();   //SERVERREQUEST - PRODUCTINFO
         } catch (Exception e) {
             e.printStackTrace();
         } 
-        String[] infoSplit = info.split(";");
         JFrame editProduct = new JFrame("THE MARKETPLACE");
         editProduct.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
@@ -1274,31 +1287,31 @@ public class MarketPlaceClient extends JComponent implements Runnable {
         
         JPanel productName = new JPanel(new FlowLayout());
         JLabel productNameText = new JLabel("Product Name: ");
-        JTextField productNameField = new JTextField(infoSplit[0]); //prepopulated with product name
+        JTextField productNameField = new JTextField(product); //prepopulated with product name
         productName.add(productNameText);
         productName.add(productNameField);
 
         JPanel storeName = new JPanel(new FlowLayout());
         JLabel storeNameText = new JLabel("Store Name: ");
-        JTextField storeNameField = new JTextField(infoSplit[1]); //prepopulated with store name
+        JTextField storeNameField = new JTextField(info.get(0)); //prepopulated with store name
         storeName.add(storeNameText);
         storeName.add(storeNameField);
 
         JPanel description = new JPanel(new FlowLayout());
         JLabel descriptionText = new JLabel("Description: ");
-        JTextField descriptionField = new JTextField(infoSplit[2]); //prepopulated with descirption
+        JTextField descriptionField = new JTextField(info.get(1)); //prepopulated with descirption
         description.add(descriptionText);
         description.add(descriptionField);
 
         JPanel quantity = new JPanel(new FlowLayout());
         JLabel quantityText = new JLabel("Quantity: ");
-        JTextField quantityField = new JTextField(infoSplit[3]); //prepopulated with descirption
+        JTextField quantityField = new JTextField(info.get(2)); //prepopulated with descirption
         quantity.add(quantityText);
         quantity.add(quantityField);
 
         JPanel price = new JPanel(new FlowLayout());
         JLabel priceText = new JLabel("Price: ");
-        JTextField priceField = new JTextField(infoSplit[4]); //prepopulated with descirption
+        JTextField priceField = new JTextField(info.get(3)); //prepopulated with descirption
         price.add(priceText);
         price.add(priceField);
 
@@ -1437,11 +1450,11 @@ public class MarketPlaceClient extends JComponent implements Runnable {
                      "ERROR", JOptionPane.ERROR_MESSAGE);
                      validInput = false;
                 } else if (quantityField.getText().contains(";")) {
-                    JOptionPane.showMessageDialog(null, "Description cannot contain a semicolon",
+                    JOptionPane.showMessageDialog(null, "Quantity cannot contain a semicolon",
                      "ERROR", JOptionPane.ERROR_MESSAGE);
                      validInput = false;
                 } else if (priceField.getText().contains(";")) {
-                    JOptionPane.showMessageDialog(null, "Description cannot contain a semicolon",
+                    JOptionPane.showMessageDialog(null, "Price cannot contain a semicolon",
                      "ERROR", JOptionPane.ERROR_MESSAGE);
                      validInput = false;
                 } 
