@@ -1,3 +1,5 @@
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 /**
  * A store class
@@ -43,6 +45,21 @@ public class Store {
         this.storeName = storeName;
         this.filePath = filePath;
         this.filePathToPurchaseLog = filePathToPurchaseLog;
+        try {
+            File f = new File (filePath);
+            if (!f.exists()) {
+                f.createNewFile();
+            }
+            File pf = new File (filePathToPurchaseLog);
+            if (!pf.exists()) {
+                pf.createNewFile();
+            }
+ 
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
+
         products = new ArrayList<Product>();
         storeRevenue = 0;
         purchaseLog = new ArrayList<Purchase>();

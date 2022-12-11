@@ -9,11 +9,10 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Scanner;
 
-import javax.swing.plaf.basic.BasicSplitPaneUI.KeyboardUpLeftHandler;
+//import javax.swing.plaf.basic.BasicSplitPaneUI.KeyboardUpLeftHandler;
 /*
  * 12/09/22
  * TODO
@@ -602,6 +601,9 @@ public class MarketPlaceServer implements Runnable {
                     Store addStore = new Store(addSellerName, addStoreName, addStorePath, addStoreLogPath); 
                     //Add store to marketPlace and to seller's list of stores
                     //PurchaseLog for this new store will be empty
+
+                    //Debugging 
+                    System.out.println(marketPlace.size());
                     
                     boolean storeNameExists = false;
                     for (int i = 0; i < marketPlace.size(); i++) {
@@ -624,11 +626,13 @@ public class MarketPlaceServer implements Runnable {
                                 }
                             }
                         }
+                        System.out.println(marketPlace.size() + " : SIZE AFTER ADDING STORE");
                         pw.println("CONFIRM");
                         pw.flush(); //FLUSHING!!!
                         ArrayList<String> addedList = new ArrayList<>();
                         for (int j = 0; j < marketPlace.size(); j++) {
                             addedList.add(marketPlace.get(j).getStoreName());
+                            System.out.println(marketPlace.get(j).getStoreName()); //DEBUGGING
                         }
                         oos.writeObject(addedList);
                         oos.flush();
@@ -901,8 +905,8 @@ public class MarketPlaceServer implements Runnable {
                     String buyerAccUsername = in.nextLine();
                     String buyerAccPassword = in.nextLine();
                     String buyerAccEmail = in.nextLine();
-                    String cart = in.nextLine();
-                    String history = in.nextLine();
+                    //String cart = in.nextLine();
+                    //String history = in.nextLine();
                     // Listens for username, password, email, cart, and history of buyer
                     //boolean userExists = false;
 
@@ -934,13 +938,16 @@ public class MarketPlaceServer implements Runnable {
                         }
                     }
                     if (userInfoExists) {
-                        pw.println("ERROR");
+                        pw.println("ERROR User Information Already Exists");
                     } else {
                         pw.println("CONFIRM");
+                        synchronized (objectForBuyerListModification) {
+                            buyerArrayList.add(new Buyer(buyerAccUsername, buyerAccPassword, buyerAccEmail, buyerAccUsername + "Cart.txt", buyerAccUsername + "History.txt"));
+                        }
                     }
 
 
-                    pw.flush();
+                    pw.flush(); //FLUSHING!!!
                     pw.close();
 
                 } else if (keyWord.equals("CREATEACCSELLER")) {
@@ -949,15 +956,40 @@ public class MarketPlaceServer implements Runnable {
                     String sellerAccEmail = in.nextLine();
                     // Listens for username, password, and email of buyer
 
-                    for (int i = 0; i < sellerArrayList.size(); i++) {
+                    /*for (int i = 0; i < sellerArrayList.size(); i++) {
                         if (sellerAccUsername.equals(sellerArrayList.get(i).getUsername())) {
                             pw.println("Username Already Exists");
                         } else if (sellerAccEmail.equals(sellerArrayList.get(i).getEmail())) {
                             pw.println("Email Already Exists");
                         } 
 
+                    } */
+                    boolean userInfoExists = false;
+                    for (int i = 0; i < buyerArrayList.size(); i++) {
+                        if (buyerArrayList.get(i).getUsername().equals(sellerAccUsername) || buyerArrayList.get(i).getEmail().equals(sellerAccEmail)) {
+                            userInfoExists = true;
+
+
+
+                        }
+                    } 
+                    //Traversing sellerArrayList too
+                    for (int i = 0; i < sellerArrayList.size(); i++) {
+                        if (sellerArrayList.get(i).getUsername().equals(sellerAccUsername) || sellerArrayList.get(i).getEmail().equals(sellerAccEmail)) {
+                            userInfoExists = true;
+
+                        }
                     }
-                    pw.flush();
+                    if (userInfoExists) {
+                        pw.println("ERROR User Information Already Exists");
+                    } else {
+                        pw.println("CONFIRM");
+                        synchronized (objectForSellerListModification) {
+                            sellerArrayList.add(new Seller(sellerAccUsername, sellerAccPassword, sellerAccEmail, sellerAccUsername + "FilePath.txt"));
+                        }
+                    }
+
+                    pw.flush(); //FLUSHING!!!
                     pw.close(); 
                     
                 } else if (keyWord.equals("LOGINBUYER")) {
@@ -1052,6 +1084,7 @@ public class MarketPlaceServer implements Runnable {
             for (int i = 0; i < buyerArrayList.size(); i++) {
                 pwbf.println(buyerArrayList.get(i).getUsername() + ";" + buyerArrayList.get(i).getPassword() + ";" + buyerArrayList.get(i).getEmail() + ";" + buyerArrayList.get(i).getCart() + ";" + buyerArrayList.get(i).getHistory());
                 pwbf.flush();
+                //Write to cart and history of buyer too
             }
             
             File sf = new File("seller.txt");
@@ -1069,6 +1102,17 @@ public class MarketPlaceServer implements Runnable {
             for (int i = 0; i < marketPlace.size(); i++) {
                 pwslf.println(marketPlace.get(i).getSellerName() + ";" + marketPlace.get(i).getStoreName() + ";" + marketPlace.get(i).getStoreRevenue() + ";" + marketPlace.get(i).getFilePath() + ";" + marketPlace.get(i).getFilePathToPurchaseLog());
                 pwslf.flush();
+                //Write to the products page and purchase log of each store too
+                File loopStoreFile = new File (marketPlace.get(i).getFilePath());
+                FileWriter loopStoreWriter = new FileWriter(loopStoreFile, false);
+                PrintWriter pwLoopStore = new PrintWriter(loopStoreWriter);
+                for (int j = 0; j < marketPlace.get(i).getProducts().size(); j++) {
+                    pwLoopStore.println(marketPlace.get(i).getProducts().get(j));
+
+
+                }
+                
+
             }
 
             //Closing all open streams
