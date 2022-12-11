@@ -5,6 +5,7 @@ import java.awt.event.*;
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Scanner;
 import javax.swing.*;
 public class SellerInformation {
 
@@ -35,16 +36,7 @@ public class SellerInformation {
     ArrayList<String> usernameAndPasswordSeller = new ArrayList<>();
 
     SellerInformation(){
-        String hostName = "localhost";
-        int portNumber = 4242; //do later
-try {
-    Socket echoSocket = new Socket(hostName, portNumber);        // 1st statement
-    PrintWriter pw =                                            // 2nd statement
-            new PrintWriter(echoSocket.getOutputStream(), true);
-    BufferedReader reader= new BufferedReader(new InputStreamReader(echoSocket.getInputStream()));
-} catch (IOException g) {
-                g.printStackTrace();
-            }
+
 
         // text
         JPanel textAtTop= new JPanel(new BorderLayout(10,10));
@@ -116,21 +108,22 @@ try {
 
 
 
-
-                        BufferedReader reader;
-                        reader = new BufferedReader(new InputStreamReader(echoSocket.getInputStream()));
+                        Scanner in = new Scanner(echoSocket.getInputStream());
+//                        BufferedReader reader;
+//                        reader = new BufferedReader(new InputStreamReader(echoSocket.getInputStream()));
                         String linesRead="";
 
-                            while ((linesRead = reader.readLine()) != null) {
+                                linesRead=in.nextLine();
                                 if ( linesRead.contains("ERROR User Information Already Exists")) {
                                     JOptionPane.showMessageDialog(null, "Error: Username already exists. Please Enter a new username", "Seller Information",
                                             JOptionPane.ERROR_MESSAGE);
 
                                 } else if (linesRead.contains("CONFIRM")) {
+                                   // System.out.println("hi");
                                     frame.dispose();
                                     AccountCreated accountCreated = new AccountCreated();
                                 }
-                            }
+
 
 //                            BufferedReader stdIn =                                       // 4th statement
 //                                    new BufferedReader(
