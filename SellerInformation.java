@@ -37,15 +37,11 @@ public class SellerInformation {
     SellerInformation(){
         String hostName = "localhost";
         int portNumber = 4242; //do later
-        Socket echoSocket ;
-        PrintWriter pw = null;
-        BufferedReader reader;
-        try {
-         // 1st statement
-    echoSocket = new Socket(hostName, portNumber);
-                                               // 2nd statement
-          pw=  new PrintWriter(echoSocket.getOutputStream(), true);
-    reader= new BufferedReader(new InputStreamReader(echoSocket.getInputStream()));
+try {
+    Socket echoSocket = new Socket(hostName, portNumber);        // 1st statement
+    PrintWriter pw =                                            // 2nd statement
+            new PrintWriter(echoSocket.getOutputStream(), true);
+    BufferedReader reader= new BufferedReader(new InputStreamReader(echoSocket.getInputStream()));
 } catch (IOException g) {
                 g.printStackTrace();
             }
@@ -104,13 +100,13 @@ public class SellerInformation {
                         flag=true;
                     }
                 if (!flag){
-//                    String hostName = "localhost";
-//                    int portNumber = 4242; //do later
-//
-//                    try {
-//                        Socket echoSocket = new Socket(hostName, portNumber);        // 1st statement
-//                        PrintWriter pw =                                            // 2nd statement
-//                                new PrintWriter(echoSocket.getOutputStream(), true);
+                    String hostName = "localhost";
+                    int portNumber = 4242; //do later
+
+                    try {
+                        Socket echoSocket = new Socket(hostName, portNumber);        // 1st statement
+                        PrintWriter pw =                                            // 2nd statement
+                                new PrintWriter(echoSocket.getOutputStream(), true);
                         pw.println("CREATEACCSELLER");
                         pw.println(username.getText());
                         pw.println(password.getText());
@@ -121,8 +117,8 @@ public class SellerInformation {
 
 
 
-//                        BufferedReader reader;
-//                        reader = new BufferedReader(new InputStreamReader(echoSocket.getInputStream()));
+                        BufferedReader reader;
+                        reader = new BufferedReader(new InputStreamReader(echoSocket.getInputStream()));
                         String linesRead="";
 
                             while ((linesRead = reader.readLine()) != null) {
@@ -141,9 +137,9 @@ public class SellerInformation {
 //                                            new InputStreamReader(System.in))
 
 //
-//                    } catch (IOException g) {
-//                        g.printStackTrace();
-//                    }
+                    } catch (IOException g) {
+                        g.printStackTrace();
+                    }
 
                 }
             }
