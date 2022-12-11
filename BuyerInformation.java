@@ -50,13 +50,13 @@ public class BuyerInformation {
         emailInformation.add(enterEmail, BorderLayout.LINE_START);
         emailInformation.add(email, BorderLayout.LINE_END);
         // purchase history
-        JPanel purchaseHistoryInformation = new JPanel(new BorderLayout(10, 10));
-        purchaseHistoryInformation.add(enterPurchaseHistoru, BorderLayout.LINE_START);
-        purchaseHistoryInformation.add(purchaseHistory, BorderLayout.LINE_END);
+//        JPanel purchaseHistoryInformation = new JPanel(new BorderLayout(10, 10));
+//        purchaseHistoryInformation.add(enterPurchaseHistoru, BorderLayout.LINE_START);
+        //purchaseHistoryInformation.add(purchaseHistory, BorderLayout.LINE_END);
         // shopping cart
-        JPanel shoppingCartInformation = new JPanel(new BorderLayout(10, 10));
-        shoppingCartInformation.add(enterShoppingCart, BorderLayout.LINE_START);
-        shoppingCartInformation.add(shoppingCart, BorderLayout.LINE_END);
+//        JPanel shoppingCartInformation = new JPanel(new BorderLayout(10, 10));
+//        shoppingCartInformation.add(enterShoppingCart, BorderLayout.LINE_START);
+//        shoppingCartInformation.add(shoppingCart, BorderLayout.LINE_END);
         // general panel
 
         JPanel createNewAccount = new JPanel();
@@ -114,7 +114,7 @@ public class BuyerInformation {
                         PrintWriter pw =                                            // 2nd statement
                                 new PrintWriter(echoSocket.getOutputStream(), true);
                         pw.println("CREATEACCBUYER");
-                        pw.write(username.getText() + "; " + password.getText() + "; " + email.getText() + "; " + purchaseHistory.getText() + shoppingCart.getText() + "\n");
+                        pw.write(username.getText() + "; " + password.getText() + "; " + email.getText()  + "\n");
 
 
 //
@@ -222,8 +222,8 @@ public class BuyerInformation {
         panelGeneral.add(usernameInformation);
         panelGeneral.add(passwordInformation);
         panelGeneral.add(emailInformation);
-        panelGeneral.add(purchaseHistoryInformation);
-        panelGeneral.add(shoppingCartInformation);
+      //  panelGeneral.add(purchaseHistoryInformation);
+    //    panelGeneral.add(shoppingCartInformation);
         panelGeneral.add(createNewAccount);
 
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
