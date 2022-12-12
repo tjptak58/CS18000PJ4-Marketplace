@@ -79,6 +79,12 @@ public class BuyerInformation {
                             JOptionPane.ERROR_MESSAGE);
                     flag = true;
                 }
+                if (username.getText().isEmpty()|| password.getText().isEmpty() || email.getText().isEmpty() ||
+                        purchaseHistory.getText().isEmpty() || shoppingCart.getText().isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Error: None of the Fields should be empty", "Seller Information",
+                            JOptionPane.ERROR_MESSAGE);
+                    flag = true;
+                }
 
 //                    if (purchaseHistory.getText().equals("buyer.txt") ||
 //                            purchaseHistory.getText().equals("seller.txt") || purchaseHistory.getText().equals("storeListFile.txt")) {
