@@ -15,6 +15,11 @@ Login and Create Account Classes (LoginOrCreateAccount, LoginSellerOrBuyer, Logi
 BuyerInformation, SellerInformation, AccountCreated)
 All of these were classes which went from one frame to another depending on what method was called upon when using the GUI. BuyerInformation and SellerInformation had all the information related to the buyer and seller when creating an account respectively. LoginOrCreateAccount is where the program starts on the client side asking the user if they want to login or create an account. LoginSeller and LoginBuyer are the login forms respecitvely for each class. Account Created is a new frame telling the user that the account was created.
 
+MarketPlaceServer Class:
+The main method first initializes an ArrayList of Buyers, an ArrayList of Sellers and an ArrayList of Store. The main method then enters an infinite while loop that waits for a client to connect to its ServerSocket. Once it accepts a connection, it starts a new thread for that connection which in turn calls the run method. The run method initializes input and output streams between the server and client and then enters a while loop that listens for a specific keyword from the client.
+Based on the keyword recieved, information is modified in the ArrayLists or information is retrieved from it. At each instance data is written onto the three permanent text files so that data persists even if the server crashes. 
+The run method exists the while loop if it recieves the keyword "LOGOUT" from the client.
+
 MarketPlaceClientClass:
 
 This class runs the GUI for the marketplace. This GUI inteacts with a buyer or a seller
