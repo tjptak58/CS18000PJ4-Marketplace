@@ -15,21 +15,16 @@ Login and Create Account Classes (LoginOrCreateAccount, LoginSellerOrBuyer, Logi
 BuyerInformation, SellerInformation, AccountCreated)
 All of these were classes which went from one frame to another depending on what method was called upon when using the GUI. BuyerInformation and SellerInformation had all the information related to the buyer and seller when creating an account respectively. LoginOrCreateAccount is where the program starts on the client side asking the user if they want to login or create an account. LoginSeller and LoginBuyer are the login forms respecitvely for each class. Account Created is a new frame telling the user that the account was created.
 
-Marketplace Class: 
-The main method, which starts with the login. The user has. the option to create an account or log in with an existing account. 
-They are asked to log in or create an account as a seller or buyer. 
-When creating an account there are specific attributes for both the seller and buyer.
-The attributes of the account are written to a file (seller.txt and buyer.txt). I
-t handles certain errors like if the username already exists in another account. 
-When logging in, if the username does not exist or the password is incorrect, 
-the program goes back to the beginning asking if they would like to create an account or login.
-After login the main method uses a menu to interact with the buyer or seller
+MarketPlaceClientClass:
+
+This class runs the GUI for the marketplace. This GUI inteacts with a buyer or a seller
 A seller can view their current stores, add or delete a store and can add, delete or modify products
 for an existing store
 A seller can also view a statistics dashboard for a particular store
-A  buyer can view all the products currently listed on the marketplace, add a product to their cart,
+A buyer can view all the products currently listed on the marketplace, add a product to their cart,
 remove a product from their cart.
 A buyer can contact the seller of a particular store and can checkout all the products in their cart at once
+Both buyers and sellers can sort their dashboards.
 
 Person Class:
 The Person class holds the generic information for a user. This info
