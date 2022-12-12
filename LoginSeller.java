@@ -46,7 +46,7 @@ public class LoginSeller {
                     Socket echoSocket = new Socket(hostName, portNumber);        // 1st statement
                     ObjectOutputStream oos = new ObjectOutputStream(echoSocket.getOutputStream());
                     PrintWriter pw =                                            // 2nd statement
-                            new PrintWriter(echoSocket.getOutputStream(), true);
+                            new PrintWriter(echoSocket.getOutputStream());
                     pw.println("LOGINSELLER");
                     pw.println(username.getText());
                     pw.println(password.getText());
@@ -78,10 +78,12 @@ public class LoginSeller {
                                     JOptionPane.ERROR_MESSAGE);
 
                         } else if (linesRead.contains("CONFIRM")) {
+
+                            pw.println("LOGOUT");
                             JOptionPane.showMessageDialog(null, "Login Successful", "Seller Information",
                                     JOptionPane.INFORMATION_MESSAGE);
 
-                            pw.println("LOGOUT");
+
                             pw.flush();
                             frame.dispose();
                             MarketPlaceClient marketPlaceClient=new MarketPlaceClient(4242, username.getText(), false,true);
