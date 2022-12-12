@@ -39,6 +39,9 @@ Test Status: Passed'
 8. User clicks back
 9. User clicks view Dashboard and should water Under Target
 10. User clicks edit account and selects password textbox and changes password
-11.  User selects logout, they are brought to
+11.  User selects logout, they are brought to the login or create account Page
+
+Test Status: Passed
+
 
 3. Logged in as a Buyer
