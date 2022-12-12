@@ -2,7 +2,7 @@
  
  
 1. User launches application
-2.User is asked to create account or login, user selects create account
+2. User is asked to create account or login, user selects create account
 3. User is asked if they are a seller or buyer. User selects seller
 4. User selects the username textbox
 5. user enters username via keyboard
@@ -10,8 +10,6 @@
 7. user enter password via keyboard
 6. user selects the email textbox
 7. user enter email via keyboard
-6. user selects the statistics file path textbox
-7. user enter statistics file path via keyboard
 8. user selects Create Account
 9. Frame launches saying Account Created
 10. User goes to login or create account frame. Selects login
@@ -44,4 +42,46 @@ Test Status: Passed'
 Test Status: Passed
 
 
-3. Logged in as a Buyer
+3.Logged in as a Buyer
+
+2. User is asked to create account or login, user selects create account
+3. User is asked if they are a seller or buyer. User selects buyer
+4. User selects the username textbox
+5. user enters username via keyboard
+6. user selects the password textbox
+7. user enter password via keyboard
+6. user selects the email textbox
+7. user enter email via keyboard
+8. user selects Create Account
+9. Frame launches saying Account Created
+10. User goes to login or create account frame. Selects login
+11. User is asked if the are a seller buyer. User selects buyer
+12. User selects the username textbox
+13. user enters username via keyboard
+14. user selects the password textbox
+15. user enter password via keyboard
+16. User selects login button
+17. User taken to new frame saying Login Successful
+18. The Marketplace launches
+19. Click Shop button next to target
+20. Click Info next to water
+21. Click Contact Seller + OK when the frame pops up
+22. Click Add to Cart and enter 2
+23. Click Back
+24. Click Back
+25. Click View Cart
+26. Click Checkout and confirm your purchase
+27. Click View Cart and it will be empty
+28. Click Back 
+29. Click Purchase History
+30. Click Export to File
+31. Click Edit Account
+32. Change account info
+33. Click Logout
+
+
+
+
+
+
+
