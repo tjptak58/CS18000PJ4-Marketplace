@@ -41,11 +41,6 @@ public class Seller extends Person{
      * Creates a new store for a seller and adds that store
      * to an arraylist of its current stores
      */
-    public void createStore(String sellerName , String storeName, String filePath) {
-        Store store = new Store(sellerName , storeName , filePath);
-        stores.add(store);
-    }
-
     public void createStore(Store s) {
         stores.add(s);
     }
