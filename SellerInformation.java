@@ -79,8 +79,8 @@ public class SellerInformation {
                             JOptionPane.ERROR_MESSAGE);
                     flag = true;
                 }
-                if (username.getText().isEmpty() || password.getText().isEmpty()
-                        || email.getText().isEmpty() || statistics.getText().isEmpty()) {
+                if (username.getText().equals("") || password.getText().equals("")
+                        || email.getText().equals("") || statistics.getText().equals("")) {
                     JOptionPane.showMessageDialog(null, "Error: None of the Fields should be empty", "Seller Information",
                             JOptionPane.ERROR_MESSAGE);
                     flag = true;
