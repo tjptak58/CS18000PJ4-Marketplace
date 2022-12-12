@@ -48,7 +48,7 @@ public class LoginBuyer {
                     Socket echoSocket = new Socket(hostName, portNumber);        // 1st statement
                     ObjectOutputStream oos = new ObjectOutputStream(echoSocket.getOutputStream());
                     PrintWriter pw =                                            // 2nd statement
-                            new PrintWriter(echoSocket.getOutputStream());
+                            new PrintWriter(echoSocket.getOutputStream(), true);
                     pw.println("LOGINBUYER");
                     pw.println(username.getText());
                     pw.println(password.getText());
