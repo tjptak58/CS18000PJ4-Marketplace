@@ -9,25 +9,24 @@ import java.util.Scanner;
 
 public class LoginBuyer {
 
-    JFrame frame=new JFrame();
+    JFrame frame = new JFrame();
 
-    JLabel enterYourUsername=new JLabel("Enter your username");
+    JLabel enterYourUsername = new JLabel("Enter your username");
 
 
+    JTextField username = new JTextField(20);
 
-    JTextField username =new JTextField(20);
+    JLabel enterYourPassword = new JLabel("Enter your password");
+    JTextField password = new JTextField(20);
 
-    JLabel enterYourPassword=new JLabel("Enter your password");
-    JTextField password=new JTextField(20);
+    JButton loginButton = new JButton("Login");
 
-    JButton loginButton=new JButton("Login");
-
-    JButton backButton=new JButton("Back to Main Menu");
+    JButton backButton = new JButton("Back to Main Menu");
 
 
     ArrayList<String> usernameAndPasswordBuyer = new ArrayList<>();
 
-    LoginBuyer(){
+    LoginBuyer() {
         JPanel usernameInformation = new JPanel(new BorderLayout(10, 10));
         usernameInformation.add(enterYourUsername, BorderLayout.LINE_START);
         usernameInformation.add(username, BorderLayout.LINE_END);
@@ -65,22 +64,22 @@ public class LoginBuyer {
 
                     Scanner in = new Scanner(echoSocket.getInputStream());
 
-                    String linesRead="";
+                    String linesRead = "";
 
-                    linesRead=in.nextLine();
-                        if ( linesRead.contains("ERROR")) {
-                            JOptionPane.showMessageDialog(null, "Error: Username and/or password is wrong. Please try again", "Seller Information",
-                                    JOptionPane.ERROR_MESSAGE);
+                    linesRead = in.nextLine();
+                    if (linesRead.contains("ERROR")) {
+                        JOptionPane.showMessageDialog(null, "Error: Username and/or password is wrong. Please try again", "Seller Information",
+                                JOptionPane.ERROR_MESSAGE);
 
-                        } else if (linesRead.contains("CONFIRM")) {
-                            JOptionPane.showMessageDialog(null, "Login Succesful.", "Seller Information",
-                                    JOptionPane.INFORMATION_MESSAGE);
+                    } else if (linesRead.contains("CONFIRM")) {
+                        JOptionPane.showMessageDialog(null, "Login Succesful.", "Seller Information",
+                                JOptionPane.INFORMATION_MESSAGE);
 
-                            pw.println("LOGOUT");
-                            pw.flush();
-                            frame.dispose();
-                            MarketPlaceClient marketPlaceClient=new MarketPlaceClient(4242, username.getText(), true,false);
-                        }
+                        pw.println("LOGOUT");
+                        pw.flush();
+                        frame.dispose();
+                        MarketPlaceClient marketPlaceClient = new MarketPlaceClient(4242, username.getText(), true, false);
+                    }
 
                 } catch (IOException f) {
                     f.printStackTrace();
@@ -117,13 +116,13 @@ public class LoginBuyer {
             }
         });
 
-        JPanel back=new JPanel();
+        JPanel back = new JPanel();
         back.add(backButton);
         backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 frame.dispose();
-                LoginOrCreateAccount loginOrCreateAccount=new LoginOrCreateAccount();
+                LoginOrCreateAccount loginOrCreateAccount = new LoginOrCreateAccount();
             }
         });
 
@@ -138,7 +137,6 @@ public class LoginBuyer {
         frame.setLocationRelativeTo(null);
         frame.add(generalPanel);
         frame.setVisible(true);
-
 
 
     }
