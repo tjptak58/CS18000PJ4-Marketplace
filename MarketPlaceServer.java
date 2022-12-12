@@ -12,12 +12,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
 
-//import javax.swing.plaf.basic.BasicSplitPaneUI.KeyboardUpLeftHandler;
+
 /*
  * 12/09/22
- * TODO
- * FileCreating wherever required
- * use gatekeeper object for createaccount part
+ * 
+ * 
+ * 
  * Check for filewriting wherever required
  * 
  */
@@ -197,11 +197,19 @@ public class MarketPlaceServer implements Runnable {
                 //Loop until client closes application or logs out
                 //Listening for KEYWORDS and sending information back
                 //LISTEN FOR WHEN APPLICATION IS CLOSED AND FOR REFRESH!
-                
                 String keyWord = in.nextLine();
+                /*try {
+                    keyWord = in.nextLine();
+
+                } catch (Exception e) {
+                    System.out.println("GOT ERROR");
+                } */
+                
+                /*int counterError = 0;
                 if (keyWord.charAt(0) == 'y') {
                     keyWord = keyWord.substring(1);
-                }
+                    counterError += 1;
+                } */
                 System.out.println(keyWord); //DEBUGGING
                 if (keyWord.equals("GETSUPERSTORES")) {
                     System.out.println("CLIENT CALLED GETSUPERSTORES");
@@ -440,6 +448,8 @@ public class MarketPlaceServer implements Runnable {
                                     
                                 }
                             }
+                            //Clearing shopping cart of ith buyer
+                            buyerArrayList.get(i).setShoppingCart(new ArrayList<Product>());
 
                         }
                     }

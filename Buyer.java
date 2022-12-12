@@ -326,7 +326,7 @@ public class Buyer extends Person{
         }
         curList.add(this.getUsername());
         p.setCustomerList(curList);
-        shoppingCart.remove(p);
+        //shoppingCart.remove(p);
         //BufferedReader bfr = new BufferedReader(new FileReader(new File()))
         try {
             PrintWriter pw = new PrintWriter(new FileWriter(new File(history) , false));
