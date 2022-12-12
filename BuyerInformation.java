@@ -79,8 +79,8 @@ public class BuyerInformation {
                             JOptionPane.ERROR_MESSAGE);
                     flag = true;
                 }
-                if (username.getText().isEmpty()|| password.getText().isEmpty() || email.getText().isEmpty() ||
-                        purchaseHistory.getText().isEmpty() || shoppingCart.getText().isEmpty()) {
+                if (username.getText().equals("")|| password.getText().equals("") || email.getText().equals("") ||
+                        purchaseHistory.getText().equals("") || shoppingCart.getText().equals("")) {
                     JOptionPane.showMessageDialog(null, "Error: None of the Fields should be empty", "Seller Information",
                             JOptionPane.ERROR_MESSAGE);
                     flag = true;
