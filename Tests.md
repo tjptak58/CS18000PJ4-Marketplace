@@ -29,7 +29,16 @@ Test Status: Passed'
 
 2  Logged in as a Seller
 
-1. 
-2.
+1. User clicks add store
+2. User enters store name Target and then clicks ok
+3. User clicks back and should see Target under your stores
+4. User clicks edit on Target
+5. User clicks add product on the top next to store name
+6. User enters Water in product name textbox, drink in the description textbox , 10 in the quantity textvox, 2.00 in the price textbox ll via keyboard and then clicks Create
+7. User should see Water under Products in: Target
+8. User clicks back
+9. User clicks view Dashboard and should water Under Target
+10. User clicks edit account and selects password textbox and changes password
+11.  User selects logout, they are brought to
 
 3. Logged in as a Buyer
