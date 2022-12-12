@@ -10,6 +10,8 @@ Shreya Kamath - Submitted Review and Planning Report on Brightspace.
 
 Tyler Ptak - Submitted Vocareum workspace.
 
+Vijay Vittal- Submitted Presentation Video
+
 
 Login and Create Account Classes (LoginOrCreateAccount, LoginSellerOrBuyer, LoginBuyer, LoginSeller, 
 BuyerInformation, SellerInformation, AccountCreated)
