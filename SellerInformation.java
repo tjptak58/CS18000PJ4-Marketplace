@@ -74,7 +74,7 @@ public class SellerInformation {
                     flag = true;
                 }
                 if (username.getText().contains(";")|| password.getText().contains(";")
-                        || email.getText().contains(";") ||statistics.getText().contains(";")) {
+                        || email.getText().contains(";")) {
                     JOptionPane.showMessageDialog(null, "Error: None of the Fields should contain a semi colin (;)", "Seller Information",
                             JOptionPane.ERROR_MESSAGE);
                     flag = true;
