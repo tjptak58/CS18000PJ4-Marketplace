@@ -294,7 +294,7 @@ public class MarketPlaceClient extends JComponent implements Runnable {
     * Creates the info page for a store
     */
     public void buyerViewStore(String storeName , ArrayList<String> products) {
-        JFrame buyerViewStore = new JFrame("THE MARKETPLACE");
+        JFrame buyerViewStore = new JFrame(storeName);
         buyerViewStore.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent windowEvent) {
@@ -492,7 +492,7 @@ public class MarketPlaceClient extends JComponent implements Runnable {
     */
     public void displayProductInfo(String product , String store) {
         
-        JFrame productInfo = new JFrame("THE MARKETPLACE");
+        JFrame productInfo = new JFrame(store);
         productInfo.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent windowEvent) {
@@ -610,8 +610,7 @@ public class MarketPlaceClient extends JComponent implements Runnable {
                     pw.println(store);
                     pw.flush();
                     var productNamesProxy = (ArrayList<String>) ois.readObject(); //SERVERREQUEST GETPRODCUTSINSTORE
-                    productNames.addAll(productNamesProxy);
-                    buyerViewStore(store , productNames);
+                    buyerViewStore(store , productNamesProxy);
                     productInfo.dispose();
                 } catch (Exception e1) {
                     e1.printStackTrace();
@@ -794,6 +793,7 @@ public class MarketPlaceClient extends JComponent implements Runnable {
                         pw.println("VIEWCART");
                         pw.flush();
                         ArrayList<String> view = (ArrayList<String>) ois.readObject(); //SERVERREQUEST VIEWCART
+                        cart.dispose();
                         displayCart(view);
                     } catch (Exception e1) {
                         e1.printStackTrace();
@@ -896,6 +896,7 @@ public class MarketPlaceClient extends JComponent implements Runnable {
                     } catch (Exception e1) {
                         e1.printStackTrace();
                     }    
+                    account.dispose();
                 }
                 if (loggedInAsBuyer) {
                     try {
@@ -1021,12 +1022,10 @@ public class MarketPlaceClient extends JComponent implements Runnable {
                             JOptionPane.showMessageDialog(null, "There is already a store with that name", "ERROR", JOptionPane.ERROR_MESSAGE);
                         } else {
                             String returned = in.nextLine();
-                            String[] split = returned.split(";");
-                            myStoreNames.clear();
-                            for (String sp : split) {
-                                myStoreNames.add(sp);
-                            }
-                            
+                            pw.println("VIEWSTORES");
+                            pw.println(username);
+                            pw.flush();
+                            myStoreNames = (ArrayList<String>) ois.readObject(); //SERVERREQUEST GETSUPERSTORES
                         }
                     }
                     
@@ -1368,7 +1367,7 @@ public class MarketPlaceClient extends JComponent implements Runnable {
         } catch (Exception e) {
             e.printStackTrace();
         } 
-        JFrame editProduct = new JFrame("THE MARKETPLACE");
+        JFrame editProduct = new JFrame(storeString);
         editProduct.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent windowEvent) {
@@ -1519,7 +1518,7 @@ public class MarketPlaceClient extends JComponent implements Runnable {
      */
     public void displayAddProduct(String storeName) {                               //UPDATE TO ADD EVERYTHING
 
-        JFrame addProduct = new JFrame("THE MARKETPLACE");
+        JFrame addProduct = new JFrame(storeName);
         addProduct.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent windowEvent) {
@@ -1636,6 +1635,7 @@ public class MarketPlaceClient extends JComponent implements Runnable {
                     addProduct.dispose();
                     displayEditStore(storeName);    
                 } else {
+                    addProduct.dispose();
                     displayAddProduct(storeName);
                 }
                 
@@ -1916,6 +1916,7 @@ public class MarketPlaceClient extends JComponent implements Runnable {
         try {
             pw.println("LOGOUT");
             pw.flush();
+            LoginOrCreateAccount loginOrCreateAccount= new LoginOrCreateAccount();
         } catch (Exception e) {
             e.printStackTrace();
         }
