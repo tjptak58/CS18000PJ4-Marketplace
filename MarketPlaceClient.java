@@ -51,19 +51,16 @@ public class MarketPlaceClient extends JComponent implements Runnable {
         MarketPlaceClient.username = username;
         MarketPlaceClient.loggedInAsBuyer = loggedInAsBuyer;
         MarketPlaceClient.loggedInAsSeller = loggedInAsSeller;
+        run();
     }
 
     public void run() {  //can't close, use shutdownOutput()
         try {
-            //username = "tptak";
-            username = "greg";
             socket = new Socket("localhost", 4242); //MarketplaceClient.portnumber
             pw = new PrintWriter(socket.getOutputStream());
             in = new Scanner(socket.getInputStream());
             oos = new ObjectOutputStream(socket.getOutputStream());
             ois = new ObjectInputStream(socket.getInputStream()); 
-            loggedInAsBuyer = false;
-            loggedInAsSeller = true;
             if (loggedInAsBuyer) {
                 pw.println("GETSUPERSTORES");
                 pw.flush();
