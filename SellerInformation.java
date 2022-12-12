@@ -79,6 +79,12 @@ public class SellerInformation {
                             JOptionPane.ERROR_MESSAGE);
                     flag = true;
                 }
+                if (username.getText().isEmpty() || password.getText().isEmpty()
+                        || email.getText().isEmpty() || statistics.getText().isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Error: None of the Fields should be empty", "Seller Information",
+                            JOptionPane.ERROR_MESSAGE);
+                    flag = true;
+                }
 //                    if (statistics.getText().equals("buyer.txt") ||
 //                           statistics.getText().equals("seller.txt") || statistics.getText().equals("storeListFile.txt")) {
 //                        JOptionPane.showMessageDialog(null, "Error: Can not use this txt file)", "Seller Information",
@@ -110,8 +116,7 @@ public class SellerInformation {
 
 
                         Scanner in = new Scanner(echoSocket.getInputStream());
-//                        BufferedReader reader;
-//                        reader = new BufferedReader(new InputStreamReader(echoSocket.getInputStream()));
+
                         String linesRead="";
 
                                 linesRead=in.nextLine();
