@@ -80,7 +80,7 @@ public class SellerInformation {
                     flag = true;
                 }
                 if (username.getText().equals("") || password.getText().equals("")
-                        || email.getText().equals("") || statistics.getText().equals("")) {
+                        || email.getText().equals("")) {
                     JOptionPane.showMessageDialog(null, "Error: None of the Fields should be empty", "Seller Information",
                             JOptionPane.ERROR_MESSAGE);
                     flag = true;
