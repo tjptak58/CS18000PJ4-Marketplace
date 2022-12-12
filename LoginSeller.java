@@ -46,12 +46,13 @@ public class LoginSeller {
                     Socket echoSocket = new Socket(hostName, portNumber);        // 1st statement
                     ObjectOutputStream oos = new ObjectOutputStream(echoSocket.getOutputStream());
                     PrintWriter pw =                                            // 2nd statement
-                            new PrintWriter(echoSocket.getOutputStream());
+                            new PrintWriter(echoSocket.getOutputStream(), true);
                     pw.println("LOGINSELLER");
+                    pw.flush();
                     pw.println(username.getText());
                     pw.println(password.getText());
 
-                   // pw.write(username.getText() + "; " + password.getText() + "\n");
+                    // pw.write(username.getText() + "; " + password.getText() + "\n");
 
 
 //
@@ -67,28 +68,27 @@ public class LoginSeller {
 //                    String linesRead = "";
                     Scanner in = new Scanner(echoSocket.getInputStream());
 
-                    String linesRead="";
+                    String linesRead = "";
 
-                    linesRead=in.nextLine();
+                    linesRead = in.nextLine();
 
-                  //  while ((linesRead = reader.readLine()) != null) {
+                    //  while ((linesRead = reader.readLine()) != null) {
+                    if (linesRead.contains("ERROR")) {
+                        JOptionPane.showMessageDialog(null, "Error: Username and/or password is wrong. Please try again", "Seller Information",
+                                JOptionPane.ERROR_MESSAGE);
 
-                        if (linesRead.contains("ERROR")) {
-                            JOptionPane.showMessageDialog(null, "Error: Username and/or password is wrong. Please try again", "Seller Information",
-                                    JOptionPane.ERROR_MESSAGE);
+                    } else if (linesRead.contains("CONFIRM")) {
 
-                        } else if (linesRead.contains("CONFIRM")) {
-
-                            pw.println("LOGOUT");
-                            JOptionPane.showMessageDialog(null, "Login Successful", "Seller Information",
-                                    JOptionPane.INFORMATION_MESSAGE);
+                        pw.println("LOGOUT");
+                        JOptionPane.showMessageDialog(null, "Login Successful", "Seller Information",
+                                JOptionPane.INFORMATION_MESSAGE);
 
 
-                            pw.flush();
-                            frame.dispose();
-                            MarketPlaceClient marketPlaceClient=new MarketPlaceClient(4242, username.getText(), false,true);
-                        }
-                  //  }
+                        pw.flush();
+                        frame.dispose();
+                        MarketPlaceClient marketPlaceClient = new MarketPlaceClient(4242, username.getText(), false, true);
+                    }
+                    //  }
                 } catch (IOException f) {
                     f.printStackTrace();
                 }
